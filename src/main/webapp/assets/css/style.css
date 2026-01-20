@@ -1,0 +1,177 @@
+:root {
+  --pink1: #f8d2e9;
+  --pink2: #eab8e8;
+  --purple1: #c4b5fd;
+  --purple2: #a78bfa;
+  --text-dark: #333;
+  --text-light: #777;
+  --bg-light: #faf9fc;
+  --card-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  --radius: 20px;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom right, #f8d2e9, #e6dafe);
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.container {
+  padding: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: white;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pink2) transparent;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--purple2);
+}
+
+.user-card {
+  background: var(--pink1);
+  padding: 14px;
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: var(--card-shadow);
+}
+
+.user-info span {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 15px;
+  margin: 6px 0;
+  border-radius: 12px;
+  background: #f4e7ff;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  background: #e0ceff;
+}
+
+/* Logout Button */
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ff6666;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 260px; /* space for sidebar */
+  padding: 25px;
+}
+
+/* WELCOME CARD */
+.welcome-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+}
+
+/* ===== Custom Scrollbar (Smooth Pastel) ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--pink2), var(--purple2));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--purple2), var(--pink2));
+}
+
+/* ===== IMAGE FIX (IMPORTANT) ===== */
+
+/* Prevent all images from stretching */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Fix sidebar logo image */
+.sidebar img,
+.logo img,
+.app-logo {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: contain;
+}
+
+body.auth-bg {
+    min-height: 100vh;
+    margin: 0;
+
+    /* FIX: push card downward so logo becomes visible */
+    padding-top: 80px !important;
+
+    display: flex;
+    align-items: flex-start;  /* WAS center — this caused the logo to go out of view */
+    justify-content: center;
+
+    background: linear-gradient(135deg, #f6a7d4 0%, #a9d6f7 100%);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto;
+}
+
+.auth-top {
+    margin-top: 10px !important; /* extra spacing above logo */
+}

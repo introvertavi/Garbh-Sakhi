@@ -1,0 +1,5164 @@
+/* Modern Pregnancy Wellness App - CSS */
+:root {
+    /* Updated to match style.css color scheme */
+    --primary-color: #ff7ba8;
+    --secondary-color: #a78bfa;
+    --accent-color: #67e8f9;
+    --success-color: #4ade80;
+    --warning-color: #fbbf24;
+    --danger-color: #f87171;
+    --light-bg: #fdf2f8;
+    --text-dark: #2d3748;
+    --text-light: #4a5568;
+    --text-muted: #718096;
+    --white: #ffffff;
+    --light-gray: #f7fafc;
+    --border-color: #e2e8f0;
+    --success: #48bb78;
+    --warning: #ed8936;
+    --error: #f56565;
+    
+    /* Pregnancy-specific colors */
+    --pregnancy-pink: #fce7f3;
+    --pregnancy-lavender: #f3e8ff;
+    --pregnancy-blue: #e0f2fe;
+    --pregnancy-peach: #fef3c7;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Layout Structure */
+.mobile-header {
+    display: none;
+    background: var(--white);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: var(--white);
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
+    transition: transform var(--transition-normal);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+}
+
+.app-logo {
+    height: 38px;
+    width: 38px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+
+.text-pink {
+    color: var(--primary-color);
+}
+
+.close-sidebar {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.close-sidebar:hover {
+    background: var(--light-gray);
+    color: var(--text-dark);
+}
+
+.user-profile {
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    margin: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.user-info h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.user-info p {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.nav-menu {
+    list-style: none;
+    padding: var(--spacing-lg);
+}
+
+.nav-item {
+    margin-bottom: var(--spacing-sm);
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    font-weight: 500;
+}
+
+.nav-item a:hover,
+.nav-item.active a {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--text-dark);
+    transform: translateX(5px);
+}
+
+.nav-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: var(--spacing-lg);
+}
+
+.logout-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--error), #e53e3e);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.main-content {
+  padding: 28px;
+  background: linear-gradient(
+      180deg,
+      rgba(255,255,255,0),
+      rgba(255,255,255,0)
+  );
+  min-height: calc(100vh - 80px);
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Welcome Header */
+.welcome-header {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.welcome-text h1 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcome-text p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+.pregnancy-progress {
+    display: flex;
+    align-items: center;
+}
+
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.circular-chart {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.circle-bg {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 2;
+}
+
+.circle {
+    fill: none;
+    stroke: url(#gradient);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.progress-percentage {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.progress-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.summary-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-header i {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+}
+
+.card-header h3 {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.card-content h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-dark);
+}
+
+.card-content p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.medicine-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.medicine-item:last-child {
+    border-bottom: none;
+}
+
+.time {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.text-success {
+    color: var(--success);
+}
+
+/* Emergency Contacts */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    color: var(--text-dark);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.emergency-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.emergency-section h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dark);
+}
+
+.emergency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.emergency-card {
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    border-left: 4px solid var(--primary-color);
+    transition: all var(--transition-fast);
+}
+
+.emergency-card.urgent {
+    border-left-color: var(--error);
+    background: linear-gradient(135deg, rgba(245, 101, 101, 0.1), rgba(245, 101, 101, 0.05));
+}
+
+.emergency-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.emergency-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.emergency-card.urgent .emergency-icon {
+    color: var(--error);
+}
+
+.emergency-info {
+    flex: 1;
+}
+
+.emergency-info h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.emergency-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.emergency-card.urgent .emergency-number {
+    color: var(--error);
+}
+
+.emergency-info p:last-child {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.call-btn {
+    background: linear-gradient(135deg, var(--success), #38a169);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.call-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.personal-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.contact-card {
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 4px solid var(--secondary-color);
+    transition: all var(--transition-fast);
+}
+
+.contact-card.primary {
+    border-left-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(244, 143, 177, 0.1), rgba(244, 143, 177, 0.05));
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.contact-info h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.contact-info p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+}
+
+.contact-number {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.contact-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.message-btn {
+    background: linear-gradient(135deg, var(--secondary-color), #9f7aea);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Baby Development */
+.baby-development {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.baby-development h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dark);
+}
+
+.development-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+.baby-size {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.size-visual {
+    font-size: 3rem;
+}
+
+.size-info h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.size-info p {
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+.development-milestones h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-dark);
+}
+
+.development-milestones ul {
+    list-style: none;
+}
+
+.development-milestones li {
+    padding: var(--spacing-sm) 0;
+    color: var(--text-light);
+    position: relative;
+    padding-left: var(--spacing-lg);
+}
+
+.development-milestones li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+        width: 100%;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .close-sidebar {
+        display: block;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: var(--spacing-lg);
+        padding-top: calc(60px + var(--spacing-lg));
+    }
+    
+    .welcome-header {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .welcome-text h1 {
+        font-size: 1.5rem;
+    }
+    
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .emergency-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .development-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .baby-size {
+        justify-content: center;
+    }
+    
+    .contact-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .contact-actions {
+        align-self: stretch;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+    }
+    
+    .main-content {
+        padding: var(--spacing-md);
+        padding-top: calc(60px + var(--spacing-md));
+    }
+    
+    .welcome-header,
+    .emergency-section,
+    .baby-development {
+        padding: var(--spacing-lg);
+    }
+    
+    .summary-card {
+        padding: var(--spacing-lg);
+    }
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+@media (max-width: 768px) {
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Utilities */
+.hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+}
+
+.notification-btn {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--error);
+    color: var(--white);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-section.active {
+    animation: fadeIn var(--transition-normal);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+button:focus,
+a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Weekly Health Guide Styles */
+.weekly-health-guide {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.health-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.health-section h4 {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.health-section i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.health-section p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Enhanced baby development section */
+.baby-development {
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.baby-development h4 {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.baby-development i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn var(--transition-normal);
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    animation: slideUp var(--transition-normal);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal form {
+    padding: var(--spacing-xl);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+}
+
+.form-group small {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: var(--spacing-xs);
+    display: block;
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--spacing-lg);
+}
+
+.btn-secondary {
+    background: var(--light-gray);
+    color: var(--text-dark);
+    border: 2px solid var(--border-color);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--error), #e53e3e);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Appointments Grid */
+.appointments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.appointment-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary-color);
+    transition: all var(--transition-fast);
+}
+
+.appointment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.appointment-card .card-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.appointment-card .card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-edit,
+.btn-delete {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 0.875rem;
+}
+
+.btn-edit {
+    color: var(--secondary-color);
+}
+
+.btn-edit:hover {
+    background: rgba(206, 147, 216, 0.1);
+}
+
+.btn-delete {
+    color: var(--error);
+}
+
+.btn-delete:hover {
+    background: rgba(245, 101, 101, 0.1);
+}
+
+/* Medicine Grid */
+.medicines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.medicine-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--secondary-color);
+    transition: all var(--transition-fast);
+}
+
+.medicine-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.medicine-card.active {
+    border-left-color: var(--success);
+}
+
+.medicine-card.completed {
+    border-left-color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* Settings Styles */
+.settings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.settings-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.settings-card h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dark);
+}
+
+.setting-item {
+    margin-bottom: var(--spacing-lg);
+}
+
+.setting-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.setting-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Profile Styles */
+.profile-container {
+    max-width: 600px;
+}
+
+.profile-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.profile-details {
+    padding: var(--spacing-xl);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row .label {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.detail-row .value {
+    color: var(--text-light);
+}
+
+/* Reports Grid */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.report-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--accent-color);
+    transition: all var(--transition-fast);
+}
+
+.report-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-view,
+.btn-download {
+    background: linear-gradient(135deg, var(--accent-color), #4299e1);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.btn-view:hover,
+.btn-download:hover {
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading States */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    color: var(--text-muted);
+}
+
+.loading::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: var(--spacing-sm);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--border-color);
+}
+
+/* Success/Error States */
+.alert {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.alert-success {
+    background: rgba(72, 187, 120, 0.1);
+    border-left: 4px solid var(--success);
+    color: #2f855a;
+}
+
+.alert-error {
+    background: rgba(245, 101, 101, 0.1);
+    border-left: 4px solid var(--error);
+    color: #c53030;
+}
+
+.alert-warning {
+    background: rgba(237, 137, 54, 0.1);
+    border-left: 4px solid var(--warning);
+    color: #c05621;
+}
+
+.alert-info {
+    background: rgba(66, 153, 225, 0.1);
+    border-left: 4px solid #4299e1;
+    color: #2b6cb0;
+}
+
+/* Enhanced Appointments Section */
+.appointments-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+}
+
+.calendar-widget-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    height: fit-content;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.calendar-year-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-md);
+}
+
+.calendar-year-nav .calendar-nav {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius-sm);
+}
+
+.calendar-nav {
+    background: var(--secondary-color);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.calendar-nav:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--spacing-sm);
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.weekday {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    padding: var(--spacing-sm);
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    font-weight: 500;
+}
+
+.calendar-day:hover {
+    background: var(--primary-color);
+}
+
+.calendar-day.today {
+    background: var(--primary-color);
+    color: var(--white);
+    font-weight: 700;
+}
+
+.calendar-day.has-appointment {
+    background: var(--secondary-color);
+    color: var(--text-dark);
+}
+
+.calendar-day.has-appointment::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.calendar-day.other-month {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Enhanced Medicine Tracker */
+.medicine-progress-overview {
+    margin-bottom: var(--spacing-xl);
+}
+
+.progress-card {
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress-header h3 {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.progress-date {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.progress-bar {
+    flex: 1;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--white);
+    border-radius: 6px;
+    transition: width var(--transition-normal);
+}
+
+.progress-percentage {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 0.875rem;
+}
+
+/* Enhanced Lab Reports */
+.report-categories {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    background: var(--white);
+    border: 2px solid var(--border-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: 500;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+}
+
+/* Weekly Tip Card */
+.weekly-tip-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary-color);
+}
+
+.tip-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tip-header i {
+    background: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.tip-header h3 {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.tip-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.tip-category {
+    display: inline-block;
+    background: var(--secondary-color);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* Enhanced Pregnancy Progress */
+.pregnancy-details {
+    margin-top: var(--spacing-lg);
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.detail-value {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+/* Mobile Responsive Design (Priority 💻📱) */
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding-top: 80px;
+    }
+    
+    .appointments-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .progress-stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .summary-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .report-categories {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .category-btn {
+        justify-content: center;
+        padding: var(--spacing-md);
+    }
+    
+    .calendar-widget-container {
+        order: 2;
+    }
+    
+    .appointments-list-container {
+        order: 1;
+    }
+    
+    /* Larger touch-friendly buttons */
+    .btn-primary, .btn-secondary {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 1rem;
+        min-height: 48px;
+    }
+    
+    .nav-item a {
+        padding: var(--spacing-lg);
+        font-size: 1.1rem;
+    }
+    
+    /* Collapsible cards on mobile */
+    .summary-card, .progress-card, .weekly-tip-card {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .pregnancy-progress {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .progress-circle {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .calendar-year-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .calendar-days {
+        gap: 2px;
+    }
+    
+    .calendar-day {
+        font-size: 0.875rem;
+        padding: var(--spacing-xs);
+    }
+    
+    .medicine-timeline {
+        padding: var(--spacing-sm);
+    }
+    
+    .progress-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+}
+
+/* ======================== */
+/* NEW FEATURES STYLES */
+/* ======================== */
+
+/* Notification System */
+.notification-btn {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.notification-btn:hover {
+    background: var(--light-gray);
+    transform: translateY(-2px);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--error);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    transform: translate(50%, -50%);
+}
+
+.notifications-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.notification-item:hover {
+    background: var(--light-gray);
+}
+
+.notification-item.unread {
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    border-left: 4px solid var(--primary-color);
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.notification-type {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.notification-type i {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+.notification-title {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.notification-message {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+.notification-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.btn-small {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--accent-color);
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.btn-small:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-small.btn-danger {
+    background: var(--error);
+    color: var(--white);
+}
+
+/* Personal Contacts */
+.emergency-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.emergency-section h3 {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.emergency-section h3 i {
+    color: var(--primary-color);
+}
+
+.empty-contacts {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--border-color);
+}
+
+.contact-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.contact-info h4 {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+}
+
+.contact-info p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.9rem;
+}
+
+.contact-number {
+    font-weight: 500;
+    color: var(--secondary-color) !important;
+}
+
+.contact-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.contact-actions button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.call-btn {
+    background: var(--success) !important;
+    color: var(--white) !important;
+}
+
+.message-btn {
+    background: var(--accent-color);
+    color: var(--text-dark);
+}
+
+.edit-btn {
+    background: var(--warning);
+    color: var(--white);
+}
+
+.delete-btn {
+    background: var(--error);
+    color: var(--white);
+}
+
+.contact-actions button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+/* Enhanced Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-dark);
+}
+
+.modal-body {
+    padding: var(--spacing-lg);
+}
+
+.modal-actions {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+/* Enhanced Progress Tracking */
+.progress-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress-date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.progress-bar-container {
+    margin-top: var(--spacing-lg);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: var(--light-gray);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--primary-color));
+    border-radius: 6px;
+    transition: width var(--transition-normal);
+}
+
+.progress-percentage {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-align: center;
+    display: block;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .contact-card {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .contact-actions {
+        justify-content: center;
+    }
+    
+    .progress-stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: var(--spacing-md);
+    }
+    
+    .notification-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+}
+
+/* Animation for medicine completion */
+@keyframes medicineComplete {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.medicine-completed {
+    animation: medicineComplete 0.3s ease;
+}
+
+/* Improved sidebar overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: none;
+    backdrop-filter: blur(2px);
+}
+
+/* Empty State Styles */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+.empty-state h4 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-dark);
+}
+
+.empty-state p {
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-state .btn-small {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--text-dark);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.empty-state .btn-small:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ICON FIX */
+.sidebar a i,
+.logout-btn i {
+  margin-right: 10px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.app-logo {
+  height: 36px;
+  margin-right: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 20px;
+}
+
+/* Sidebar polish */
+.sidebar {
+  padding-top: 30px;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.app-brand img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.brand-text {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.sidebar a {
+  transition: all 0.25s ease;
+}
+
+.sidebar a:hover {
+  background: #e6d9ff;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.25);
+}
+
+.sidebar a.active {
+  background: #d9c7ff;
+  border-left: 5px solid #a78bfa;
+  font-weight: 600;
+}
+
+.sidebar a i {
+  font-size: 18px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding: 10px;
+}
+
+.app-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-dark);
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.nav-item.active a {
+  background: #d9caff !important;
+  border-left: 5px solid #a78bfa;
+  font-weight: 600;
+}
+
+.nav-item a:hover {
+  background-color: #f0e6ff;
+  transform: translateX(4px);
+}
+
+/* === LOGO FIX === */
+.app-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+}
+
+/* === Logo Centering & Styling === */
+.center-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.app-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.logo-text {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.2;
+  opacity: 0.9;
+}
+
+/* === Logo Center Animation === */
+.center-logo {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-5px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* ------------------------- */
+/* MOBILE vs DESKTOP HEADER  */
+/* ------------------------- */
+
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    display: none; /* hidden on desktop */
+}
+
+/* SHOW burger only on mobile */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: inline-flex;
+    }
+}
+
+/* SIDEBAR LOGO CENTERED */
+.sidebar-logo {
+    text-align: center;
+    padding: 20px 0 10px;
+}
+
+.sidebar-logo .app-logo {
+    width: 80px;
+    height: auto;
+    border-radius: 16px;
+}
+
+.sidebar-logo .logo-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Hidden on mobile by default */
+#sidebar.mobile-hidden {
+    transform: translateX(-100%);
+}
+
+/* Show sidebar on mobile */
+@media (max-width: 768px) {
+    #sidebar {
+        transition: transform 0.3s ease;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        z-index: 1200;
+    }
+}
+
+/* =============================== */
+/*   CENTERED SIDEBAR LOGO FIX     */
+/* =============================== */
+
+/* Remove old brand-row styling completely */
+.sidebar-header,
+.brand-row {
+    display: none !important;
+}
+
+/* Use ONLY the new sidebar-logo block */
+.sidebar-logo {
+    text-align: center !important;
+    width: 100%;
+    padding: 25px 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logo image styling */
+.sidebar-logo .app-logo {
+    width: 85px;
+    height: auto;
+    border-radius: 18px;
+    margin-bottom: 6px;
+}
+
+/* App name styling */
+.sidebar-logo .logo-text {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #333;
+    text-align: center;
+}
+
+/* ====================================================== */
+/*  FINAL POLISHED SIDEBAR (DESKTOP + MOBILE) - v1.0      */
+/*  Safe override: Does NOT affect main UI                */
+/* ====================================================== */
+
+/* ---- BASIC SIDEBAR LAYOUT ---- */
+#sidebar {
+    width: 250px;
+    background: #ffffff;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.06);
+    z-index: 999;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+/* Shadow for mobile drawer */
+#overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 998;
+}
+
+/* ---- LOGO SECTION ---- */
+.sidebar-logo {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0 15px;
+}
+
+.sidebar-logo .app-logo {
+    width: 85px;
+    height: auto;
+    border-radius: 16px;
+}
+
+.sidebar-logo .logo-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+/* ---- NAV MENU ---- */
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.nav-item {
+    margin-bottom: 8px;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #444;
+    font-size: 15px;
+    border-radius: 10px;
+    transition: background 0.25s, color 0.25s;
+}
+
+.nav-item a i {
+    font-size: 20px;
+}
+
+/* Active menu item */
+.nav-item a.active {
+    background: #ffe4ef;
+    color: #d1417d;
+    font-weight: 600;
+}
+
+.nav-item a.active i {
+    color: #d1417d;
+}
+
+/* Hover */
+.nav-item a:hover {
+    background: #f8f8f8;
+}
+
+/* ---- MOBILE BEHAVIOR ---- */
+@media (max-width: 768px) {
+
+    /* Hide sidebar initially on mobile */
+    #sidebar.mobile-hidden {
+        transform: translateX(-100%);
+    }
+
+    #sidebar {
+        position: fixed;
+        height: 100vh;
+        transform: translateX(0);
+        z-index: 1200;
+    }
+
+    /* Show overlay when sidebar is opened */
+    #overlay.active {
+        display: block;
+    }
+}
+
+/* ---- DESKTOP BEHAVIOR ---- */
+@media (min-width: 769px) {
+    .mobile-menu-btn {
+        display: none !important; /* Hide hamburger icon */
+    }
+}
+
+/* ============================================= */
+/* FINAL LOGO CENTER FIX — OVERRIDES EVERYTHING  */
+/* ============================================= */
+
+.sidebar-header,
+.brand-row,
+.app-brand,
+.logo,
+.center-logo {
+    display: none !important;
+}
+
+/* Force only the new block to be visible */
+.sidebar-logo {
+    width: 100% !important;
+    padding: 20px 0 15px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* Logo image */
+.sidebar-logo .app-logo {
+    width: 85px !important;
+    height: auto !important;
+    border-radius: 16px !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* App name under logo */
+.sidebar-logo .logo-text {
+    display: block !important;
+    margin-top: 10px !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    color: #333 !important;
+    line-height: 1.2 !important;
+}
+
+/* ============================================ */
+/*   FINAL RESPONSIVE FIX FOR PROFILE + SIDEBAR */
+/* ============================================ */
+
+.main-content {
+    margin-left: 260px !important;
+    transition: 0.3s ease;
+}
+
+/* MOBILE: remove sidebar push */
+@media (max-width: 900px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 18px !important;
+    }
+}
+
+/* PROFILE GRID FIX */
+/* FINAL FIX — remove left empty gap */
+.profile-grid {
+    grid-template-columns: 1fr 2fr !important;
+}
+
+
+/* collapse grid into single column */
+@media (max-width: 1024px) {
+    .profile-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* form rows become stacked */
+@media (max-width: 768px) {
+    .row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* avatar size adjustment */
+@media (max-width: 600px) {
+    .avatar {
+        width: 140px !important;
+        height: 140px !important;
+        margin: 0 auto 16px !important;
+    }
+    .profile-card {
+        padding: 14px !important;
+    }
+}
+
+/* =============== SIDEBAR MOBILE =============== */
+#sidebar.mobile-hidden {
+    transform: translateX(-100%);
+}
+
+@media (max-width: 900px) {
+    #sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+        z-index: 1500;
+    }
+
+    #sidebar.active {
+        transform: translateX(0);
+    }
+
+    #overlay {
+        display: none;
+    }
+
+    #overlay.active {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(2px);
+        z-index: 1400;
+    }
+}
+
+/* -----------------------
+   MOBILE RULES (<=900px)
+   ----------------------- */
+@media (max-width: 900px) {
+
+  /* hide desktop-only items in sidebar (the 4 primary links) */
+  .hide-on-mobile { display: none !important; }
+
+  /* sidebar become off-canvas drawer */
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 280px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 0 8px 30px rgba(12,20,30,0.08);
+    transition: left .28s cubic-bezier(.2,.9,.2,1);
+    z-index: 1200;
+  }
+
+  .sidebar.sidebar-visible { left: 0; }
+
+  /* overlay */
+  #overlay {
+    display: none; /* shown by JS when open */
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.42);
+    z-index: 1100;
+  }
+
+  /* show hamburger */
+  .mobile-menu-btn { display: inline-flex; background:none; border:none; font-size:22px; padding:10px; }
+
+  /* center the title in header on mobile (hamburger sits left) */
+  .top-header { position: relative; padding-left: 56px; padding-right: 16px; }
+  .top-header .header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+    width: calc(100% - 110px); /* leaves space for hamburger */
+  }
+
+  /* bottom navigation - visible only on mobile */
+  .bottom-nav, #bottomNav {
+    display: flex !important;
+  }
+
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #ffffff;
+    border-top: 1px solid rgba(15,23,42,0.04);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1300;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav .bn-item,
+  #bottomNav .bn-item {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+    font-size:12px;
+    color:#6b7280;
+    text-decoration:none;
+  }
+  .bottom-nav .bn-item.active,
+  #bottomNav .bn-item.active { color: #ff7aa6; }
+
+  /* keep main content full-width with padding and leave space for bottom nav */
+  .main-content {
+    margin-left: 0 !important;
+    padding: 16px !important;
+    padding-bottom: 96px !important; /* room for bottom nav */
+  }
+
+  /* ensure sidebar/logo spacing looks good on mobile */
+  .sidebar-logo { padding: 18px 16px; text-align: left; }
+  .sidebar-logo .app-logo { width: 58px; height: auto; display:inline-block; vertical-align: middle; }
+  .sidebar-logo .logo-text { display:inline-block; margin-left:12px; font-size:18px; vertical-align: middle; }
+
+  /* hide desktop scrollbars if you used a custom one - optional */
+  .sidebar .nav-menu { overflow-y:auto; max-height: calc(100vh - 140px); padding-bottom: 24px; }
+
+  /* small adjustments */
+  .mobile-only { display:block; } /* if you use mobile-only classes */
+}
+/* -----------------------------
+   Mobile adjustments (<=900px)
+   Append to modern-style.css
+   ----------------------------- */
+
+/* Remove stray top line / default body spacing problems */
+html, body { margin: 0; padding: 0; }
+
+/* Overlay used by mobile sidebar */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.28);
+  z-index: 1100;
+  transition: opacity 0.22s ease;
+}
+
+/* Top header */
+.top-header {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  height: 64px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  /* keep the same pastel gradient as your app */
+  background: linear-gradient(135deg, #f6a7d4 0%, #a9d6f7 100%);
+  border-bottom: none; /* remove blue line */
+}
+
+/* left hamburger area */
+.mobile-menu-btn {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1210;
+  border-radius: 8px;
+}
+
+/* invisible bigger hit area that doesn't enlarge icon visually */
+.mobile-menu-btn .hamburger-hit {
+  position: absolute;
+  left: 0; top: 0;
+  width: 44px; height: 44px; /* larger touch target */
+  display: block;
+}
+
+/* icon style (keeps small but hits large) */
+.mobile-menu-btn i {
+  font-size: 22px;
+  color: #111827;
+  position: relative;
+  z-index: 1;
+}
+
+/* center title */
+.header-title {
+  font-weight: 700;
+  font-size: 20px;
+  color: #243041;
+  text-align: center;
+}
+
+/* sidebar mobile behavior */
+.sidebar {
+  --sidebar-width: 260px;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* mobile-only: hide desktop-only links */
+@media (max-width:900px) {
+  .hide-on-mobile { display: none !important; }
+
+  /* position sidebar as slide-in */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    transform: translateX(-110%);
+    z-index: 1250;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(12,20,30,0.12);
+    overflow-y: auto;
+    padding-bottom: 120px; /* leave room for bottom nav */
+  }
+
+  .sidebar.mobile-open,
+  .sidebar.mobile-open /* alternate class safe */ {
+    transform: translateX(0);
+  }
+
+  /* overlay visible when open (JS sets inline display:block) */
+  .mobile-overlay[style*="display: block"] { opacity:1; }
+
+  /* bottom nav */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 68px;
+    background: #fff;
+    display: flex;
+    gap: 0;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 4px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    z-index: 1300;
+    box-shadow: 0 -6px 20px rgba(12,20,30,0.06);
+  }
+
+  .bottom-nav .bn-item {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+  }
+
+  .bottom-nav .bn-item i { font-size: 20px; }
+  .bottom-nav .bn-active { color: #ff7aa6; } /* pastel pink active */
+  .bottom-nav .bn-active i { color: #ff7aa6; }
+
+  /* make page content avoid bottom nav by default (padding) */
+  .main-content { padding-bottom: 92px; }
+
+  /* ensure header doesn't overlap content */
+  body { padding-top: 72px; box-sizing: border-box; }
+}
+
+/* make hamburger clickable area obvious on hover */
+.mobile-menu-btn:hover { background: rgba(0,0,0,0.04); }
+
+/* make header sticky on desktop as well but smaller top padding */
+@media (min-width:901px) {
+  .top-header { position: sticky; top: 0; z-index: 900; }
+}
+
+/* ───────────────────────────────
+   MOBILE HEADER & HAMBURGER FIXES
+   ─────────────────────────────── */
+
+@media (max-width: 900px) {
+
+    /* Fix top header bar */
+    .top-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 58px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: linear-gradient(90deg, #f8c6dc, #c8d6ff);
+        z-index: 9999;
+
+        padding: 0 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    /* Push content down so it never hides under the header */
+    body, .main-content {
+        padding-top: 70px !important;
+    }
+
+    /* Hamburger container fix */
+    #mobileHamburger {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        width: 42px;
+        height: 42px;
+        padding: 8px;
+
+        border-radius: 10px;
+        background: rgba(255,255,255,0.5);
+        border: 1px solid rgba(255,255,255,0.4);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+        z-index: 10000;
+    }
+
+    #mobileHamburger i {
+        font-size: 24px;
+        color: #333;
+    }
+
+    /* Full click area */
+    #mobileHamburger:hover {
+        background: rgba(255,255,255,0.9);
+    }
+
+    /* Header Title */
+    .header-title {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        width: 100%;
+        color: #2d2d2d;
+        pointer-events: none; /* prevents blocking hamburger */
+    }
+
+    /* Sidebar overlay fix */
+    #overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.55);
+        z-index: 9998;
+        display: none;
+    }
+}
+
+/* ----------------------------
+   MOBILE / SIDEBAR / BOTTOM NAV
+   Applied only below 900px (mobile)
+   ---------------------------- */
+
+/* general helpers */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.38);
+  z-index: 1190;
+}
+
+/* make body not scroll when sidebar open */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* mobile-hidden hides sidebar on mobile */
+#sidebar.mobile-hidden {
+  transform: translateX(-110%);
+  transition: transform .28s ease;
+}
+
+/* default: show sidebar on desktop */
+@media (max-width: 900px) {
+  /* Hide some desktop-only items in the sidebar */
+  .hide-on-mobile { display: none !important; }
+
+  /* Ensure the sidebar sits above content */
+  #sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 260px;
+    z-index: 1200;
+    background: #fff;
+    transform: translateX(-110%); /* hidden by default */
+    box-shadow: 0 12px 30px rgba(20,20,30,0.12);
+    overflow-y: auto;
+  }
+
+  /* when visible */
+  #sidebar:not(.mobile-hidden) {
+    transform: translateX(0);
+  }
+
+  /* Make header nicer on mobile */
+  .top-header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1180;
+    background: linear-gradient(135deg, rgba(246,167,212,0.12), rgba(169,214,247,0.08));
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: none;
+  }
+
+  .top-header .header-title {
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    color: #243041;
+  }
+
+  /* Make hamburger big and fully clickable */
+  .mobile-menu-btn {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(0,0,0,0.04);
+    z-index: 1195;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    cursor: pointer;
+  }
+  .mobile-menu-btn i { font-size: 24px; color:#333; }
+
+  /* bottom nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    background: linear-gradient(180deg,#ffffff,#ffffff);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 -6px 20px rgba(20,20,30,0.06);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1205;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav .bn-item {
+    text-align: center;
+    font-size: 12px;
+    text-decoration: none;
+    color: #7b8490;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .bottom-nav .bn-item i { font-size:20px; }
+  .bottom-nav .bn-item.active { color:#ff7aa6; }
+
+  /* ensure main content has bottom padding to avoid overlap */
+  .main-content { padding-bottom: 110px; padding-top: 86px; }
+
+  /* hide native scrollbar overlay offset gap */
+  html, body { height: 100%; }
+}
+
+/* Desktop: ensure top header not overlaying content
+   (this avoids the thin top 'blue' stripe you saw) */
+@media (min-width: 901px) {
+  .top-header { position: relative; background: transparent; height: auto; padding: 0; }
+  .main-content { margin-left: 260px; padding-top: 28px; }
+  /* ensure overlay stays hidden on desktop */
+  #overlay { display:none; }
+}
+
+/* ------ FIX: MOBILE SIDEBAR HIDE/SHOW ------ */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 260px;
+        height: 100%;
+        background: #fff;
+        z-index: 10000;
+        transform: translateX(-100%);
+        transition: transform 0.35s ease-in-out;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    #overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        display: none;
+        z-index: 9999;
+    }
+
+    /* Top header */
+    .top-header {
+        position: sticky;
+        top: 0;
+        z-index: 99999;
+        background: linear-gradient(90deg,#ffb3cf,#b5d9ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 55px;
+        padding: 0 16px;
+    }
+
+    /* Hamburger */
+    #mobileHamburger {
+        position: absolute;
+        left: 10px;
+        border: none;
+        background: #fff;
+        padding: 10px 12px;
+        font-size: 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        z-index: 99999;
+    }
+
+    #mobileHamburger i {
+        pointer-events: none;
+    }
+
+}
+/* HIDE hamburger on desktop */
+#mobileHamburger {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    #mobileHamburger {
+        display: block;
+    }
+}
+/* MOBILE SIDEBAR BEHAVIOR */
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        width: 260px;
+        z-index: 9999;
+        background: #fff;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.mobile-visible {
+        left: 0;
+    }
+
+    #overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 9998;
+    }
+}
+
+/* ================================
+   PASTEL FLOATING HEADER
+   ================================ */
+.top-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+
+    /* BEAUTIFUL PASTEL GRADIENT */
+    background: linear-gradient(90deg, #ffe1f0, #e6d4ff, #c7efff);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2000;
+
+    border-bottom: 2px solid rgba(255,255,255,0.6);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #3d2b4a;
+}
+
+/* Hamburger stays on top of pastel header */
+.hamburger-btn {
+    position: absolute;
+    left: 18px;
+    font-size: 28px;
+    border: none;
+    background: none;
+    color: #4a3d55;
+}
+
+/* ================================
+   CONTENT SPACING FIX
+   ================================ */
+.content-wrapper {
+    margin-top: 90px;   /* Ensures header NEVER touches any card */
+    padding-bottom: 20px;
+}
+
+/* =========================================
+   FIX PROFILE EMPTY GAP + HEADER ALIGNMENT
+   PASTE AT THE VERY END OF modern-style.css
+   ========================================= */
+
+@media (min-width: 901px) {
+
+    /* Header must end where sidebar begins */
+    .top-header {
+        left: 260px !important;
+        width: calc(100% - 260px) !important;
+    }
+
+    /* Prevent content from sitting under header */
+    .main-content, .content-wrapper {
+        margin-left: 260px !important;
+        margin-top: 90px !important;
+        padding-top: 20px !important;
+    }
+
+    /* FIX empty gap on Profile page */
+    .profile-page-container {
+        display: grid;
+        grid-template-columns: 260px 1fr !important;
+        align-items: start;
+        gap: 20px;
+    }
+
+    /* Force cards to align properly under avatar */
+    .profile-card {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 900px) {
+
+    /* Mobile behaves normally */
+    .top-header {
+        left: 0 !important;
+        width: 100% !important;
+    }
+
+    .main-content, .content-wrapper {
+        margin-left: 0 !important;
+        margin-top: 80px !important;
+    }
+}
+
+/* 🟣 FINAL FIX FOR LEFT GAP */
+.profile-grid {
+    grid-template-columns: 1fr 2fr !important;
+}
+/* === FIX PROFILE PAGE GAP NEXT TO SIDEBAR === */
+
+.profile-card {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+}
+
+.profile-grid {
+    grid-template-columns: 360px 1fr !important;
+    width: 100% !important;
+}
+
+.main-content,
+.content-wrapper {
+    width: calc(100% - 250px) !important; /* sidebar width */
+    margin-left: 250px !important;
+}
+/* FORCE PROFILE PAGE TO REMOVE BLUE BAR + GAP */
+.content-wrapper,
+.main-content {
+    margin-left: 250px !important;  /* sidebar width */
+    width: calc(100% - 250px) !important;
+    max-width: calc(100% - 250px) !important;
+    padding-left: 0 !important;
+}
+
+/* REMOVE ANY CENTERING THAT CAUSES GAP */
+.profile-card {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* EXPAND GRID FULL WIDTH */
+.profile-grid {
+    width: 100% !important;
+}
+
+/* ====== Hotfix: remove stray vertical line + left gap ======
+   Paste this at the END of modern-style.css (DO NOT modify)  */
+
+/* 1) Ensure a single scroll container (body) and avoid nested scrollbars */
+html, body {
+  height: 100%;
+  overflow-x: hidden; /* no horizontal scroll */
+  -webkit-overflow-scrolling: auto;
+}
+
+/* Make sure sidebar handles its own scrolling and doesn't create an extra page track */
+#sidebar, .sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh !important;
+  width: 260px !important; /* must match header/content left offset */
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+/* Ensure header occupies the remaining width and starts where sidebar ends */
+.top-header {
+  left: 260px !important;
+  width: calc(100% - 260px) !important;
+  box-sizing: border-box;
+  border-bottom: none !important; /* remove blue line from header border */
+}
+
+/* Content sits directly to the right of the sidebar */
+.content-wrapper, .main-content {
+  margin-left: 260px !important;
+  margin-top: 90px !important;
+  padding-right: 24px; /* keep right padding for scrollbar */
+  box-sizing: border-box;
+  overflow: visible !important; /* avoid inner scrollbars inside content wrapper */
+}
+
+/* If any inner element accidentally creates a vertical scrollbar, hide its track */
+.content-wrapper * {
+  overflow: visible !important;
+}
+
+/* Hide any thin extra scrollbar track that may appear between sidebar & content on Chromium */
+.content-wrapper::-webkit-scrollbar,
+.profile-card::-webkit-scrollbar,
+.profile-grid::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+/* Make sure profile grid uses the correct columns (no intentional extra gap) */
+.profile-grid {
+  grid-template-columns: 320px 1fr !important;
+  gap: 24px !important;
+}
+
+/* Remove focus outline or leftover small element showing a blue pixel on top-left */
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile: revert to full width behavior (keeps hamburger logic intact) */
+@media (max-width: 900px) {
+  .top-header, .content-wrapper, .main-content {
+    left: 0 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-top: 72px !important;
+  }
+  #sidebar, .sidebar {
+    transform: translateX(-110%) !important;
+    width: 260px !important;
+  }
+}
+
+/* small safety: force no stray border-left on containers */
+.content-wrapper,
+.main-content,
+.profile-card {
+  border-left: 0 none !important;
+}
+/* FINAL FIX — REMOVE LEFT GAP ON PROFILE PAGE & ALL PAGES */
+.content-wrapper,
+.main-content {
+    margin-left: 260px !important; /* exactly sidebar width */
+    padding-left: 0 !important;
+}
+
+body.auth-bg {
+    min-height: 100vh;
+    margin: 0;
+
+    /* FIX: push card downward so logo becomes visible */
+    padding-top: 80px !important;
+
+    display: flex;
+    align-items: flex-start;  /* WAS center — this caused the logo to go out of view */
+    justify-content: center;
+
+    background: linear-gradient(135deg, #f6a7d4 0%, #a9d6f7 100%);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto;
+}
+
+.auth-top {
+    margin-top: 10px !important; /* extra spacing above logo */
+}
+
+/* ===== Global layout for Garbh Sakhi (header + sidebar) ===== */
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+  background: linear-gradient(180deg,#fff,#fbfbff);
+  padding: 22px 18px;
+  box-shadow: 2px 0 12px rgba(18,24,40,0.04);
+  z-index: 1000;
+  overflow: auto;
+}
+.sidebar .sidebar-logo { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.sidebar .app-logo { width:44px; height:44px; object-fit:contain; border-radius:8px; }
+.sidebar .logo-text { font-weight:700; color:#243041; }
+
+/* Nav */
+.nav-menu { list-style:none; padding:0; margin:0; }
+.nav-item { margin-bottom:6px; }
+.nav-item a { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; color:#566276; text-decoration:none; }
+.nav-item a .ri { font-size:18px; }
+.nav-item a.active, .nav-item a:hover { background:#f7f8fb; color:#243041; border-left:3px solid #ffd0e0; }
+
+/* Header */
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  height: 72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index: 900;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(12,20,30,0.04);
+}
+.hamburger-btn { position:absolute; left:18px; top:18px; background:none; border:none; font-size:20px; cursor:pointer; display:none; }
+.header-title { font-size:20px; font-weight:700; color:#243041; margin:0; }
+.header-actions { position:absolute; right:18px; display:flex; gap:10px; align-items:center; }
+.header-avatar { width:36px; height:36px; border-radius:8px; object-fit:cover; }
+
+/* Content wrapper (pages use this) */
+.content-wrapper {
+  margin-left: 260px;
+  padding: 22px;
+  padding-top: 100px; /* header height + spacing */
+  box-sizing: border-box;
+  background: transparent;
+  min-height: calc(100vh - 100px);
+}
+
+/* Overlay */
+#overlay { position:fixed; inset:0; background:rgba(0,0,0,0.35); opacity:0; visibility:hidden; transition:all .18s ease; z-index: 950; }
+#overlay.visible { opacity:1; visibility:visible; }
+
+/* Sidebar open for mobile */
+.sidebar.open { transform: translateX(0); }
+
+/* Mobile rules */
+@media (max-width:900px) {
+  .sidebar { width: 260px; transform: translateX(-100%); transition: transform .18s ease; }
+  .sidebar.open { transform: translateX(0); }
+  .top-header { left: 0; }
+  .hamburger-btn { display:block; }
+  .hide-on-mobile { display:none !important; }
+  .hide-on-desktop { display:flex !important; position:fixed; bottom:0; left:0; right:0; justify-content:space-around; background:#fff; border-top:1px solid #eee; padding:8px 6px; z-index:1000; }
+  .mobile-bottom-nav { display:flex; gap:8px; }
+}
+
+/* Floating Emergency FAB */
+.fab-emergency {
+  position: fixed;
+  right: 22px;
+  bottom: 90px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(180deg,#ff7aa6,#ff5a87);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(150,50,90,0.12);
+  z-index: 1100;
+  cursor: pointer;
+}
+/* ===== Global Layout Variables ===== */
+:root {
+  --header-height: 60px;       /* height of top header */
+  --sidebar-width: 260px;      /* width of sidebar */
+}
+
+/* ===== Page Layout Base ===== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  margin-top: var(--header-height); /* ensure content starts below header */
+}
+
+/* Optional: universal z-index layering */
+.top-header { z-index: 1100; }
+.sidebar { z-index: 1000; }
+.hamburger-sidebar { z-index: 1099; }
+.overlay { z-index: 1098; }
+
+/* =====================================
+   🔧 FINAL FIX — Remove gradient band above header
+   ===================================== */
+
+/* Remove default browser margin and enforce flush top alignment */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background-clip: border-box;
+}
+
+/* Body still keeps gradient background, but the header sits above it fully */
+body {
+  background: linear-gradient(135deg, #f6a7d4 0%, #a9d6f7 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =====================================
+   🩷 Header overlap fix with sidebar
+   ===================================== */
+
+/* Header sits visually above the sidebar */
+.top-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1200 !important;
+  height: 70px !important;
+  background: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Sidebar starts slightly *under* the header visually */
+.sidebar {
+  top: 50px !important; /* overlap by ~20px */
+  z-index: 1000 !important;
+}
+
+/* Sidebar logo moves up a little so it peeks out from under header */
+.sidebar-logo {
+  margin-top: 20px !important;
+}
+
+/* Optional: smooth shadow blending under the header */
+.sidebar::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05), transparent);
+  border-top-right-radius: 20px;
+}
+
+/* =======================================
+   ✅ FINAL MOBILE ENFORCEMENT (LAST LINE)
+   ======================================= */
+@media (max-width: 900px) {
+  /* Hide sidebar fully on mobile by default */
+  .sidebar {
+    display: none !important;
+    transform: none !important;
+    left: -100% !important;
+  }
+
+  /* Show sidebar only when toggled (optional class) */
+  .sidebar.mobile-visible {
+    display: block !important;
+    left: 0 !important;
+  }
+
+  /* Full width content */
+  .main-content, .content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 16px !important;
+    padding-bottom: 90px !important; /* space for bottom nav */
+  }
+
+  /* Show bottom navigation */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+  }
+
+  .bottom-nav a {
+    color: #666;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .bottom-nav a.active {
+    color: #ff7aa6;
+  }
+}
+/* =========================================
+   ✅ FINAL MOBILE FIX — Garbh Sakhi Layout
+   ========================================= */
+@media (max-width: 900px) {
+
+  /* Hide desktop sidebar fully */
+  .gs-sidebar,
+  .desktop-only {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Ensure content spans full width */
+  .content-wrapper,
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: calc(var(--gs-header-h) + 12px) !important;
+  }
+
+  /* Make header full width */
+  .gs-header {
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Activate bottom nav */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #243041;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .bottom-nav a i {
+    font-size: 1.3rem;
+  }
+
+  .bottom-nav a.active {
+    color: #ff4f93;
+  }
+}
+/* =============================================
+   🌸 ABSOLUTE FIX: Force hide desktop sidebar on mobile
+   ============================================= */
+@media screen and (max-width: 1024px) {
+  #sidebar,
+  .gs-sidebar,
+  aside.gs-sidebar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(-100%) !important;
+    position: fixed !important;
+    left: -100% !important;
+  }
+
+  /* Ensure drawer takes over */
+  #gsDrawer,
+  .gs-drawer {
+    display: block !important;
+  }
+
+  /* Header full width */
+  .gs-header {
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Content stretches full width */
+  .content-wrapper,
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Show bottom navigation */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+  }
+}
+/* =============================================
+   🌸 Garbh Sakhi – Mobile-Friendly Polish
+   ============================================= */
+
+@media (max-width: 900px) {
+
+  /* Background breathing room */
+  body {
+    background: linear-gradient(135deg, #ffe0ef 0%, #e6f2ff 100%) fixed;
+    overscroll-behavior-y: none;
+  }
+
+  /* Header */
+  .gs-header {
+    height: 60px;
+    padding: 0 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .gs-title {
+    font-size: 18px;
+  }
+
+  /* Welcome / dashboard card spacing */
+  .welcome-card {
+    padding: 16px;
+    margin-top: 70px;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  }
+
+  /* Cards grid simplified for phones */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 80px; /* space above bottom nav */
+  }
+  .grid .card {
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  /* Content wrapper unified padding */
+  .content-wrapper,
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 12px 14px 90px 14px !important;
+    box-sizing: border-box;
+  }
+
+  /* Profile page grid collapse */
+  .profile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Avatar scale */
+  .avatar {
+    width: 160px;
+    height: 160px;
+  }
+
+  /* Buttons responsive */
+  button,
+  .btn-save,
+  .btn-ghost {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  /* Floating emergency button */
+  .fab-emergency {
+    bottom: 80px; /* above bottom nav */
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(255,79,147,0.3);
+  }
+
+  /* Bottom nav improvements */
+  .bottom-nav {
+    height: 60px;
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.95);
+  }
+  .bottom-nav a {
+    font-size: 0.8rem;
+  }
+  .bottom-nav a i {
+    font-size: 1.3rem;
+  }
+  .bottom-nav a.active {
+    color: #ff4f93;
+    font-weight: 600;
+  }
+  .bottom-nav a:active {
+    transform: translateY(1px);
+    opacity: 0.9;
+  }
+
+  /* Hide scrollbars for cleaner mobile feel */
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+}
+
+/* ==========================================================
+   🌸 Garbh Sakhi — Layout Unifier (Desktop vs Mobile)
+   Paste at the VERY END of modern-style.css
+   ========================================================== */
+
+:root{
+  --gs-sidebar-w: 260px;
+  --gs-header-h: 64px;
+  --gs-bottomnav-h: 64px;
+}
+
+/* ---------- Desktop (>=901px) ---------- */
+@media (min-width: 901px) {
+
+  /* Desktop sidebar visible; mobile drawer/bottom-nav hidden */
+  .gs-sidebar { display: block !important; }
+  .bottom-nav { display: none !important; }
+
+  /* Header sits to right of sidebar */
+  .gs-header {
+    left: var(--gs-sidebar-w) !important;
+    width: calc(100% - var(--gs-sidebar-w)) !important;
+    height: var(--gs-header-h) !important;
+    z-index: 1100;
+  }
+
+  /* Content offset beside sidebar and under header */
+  .content-wrapper,
+  .main-content {
+    margin-left: var(--gs-sidebar-w) !important;
+    padding-top: calc(var(--gs-header-h) + 16px) !important;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------- Mobile (<=900px) ---------- */
+@media (max-width: 900px) {
+
+  /* Hide desktop sidebar entirely; use drawer from header */
+  .gs-sidebar,
+  #sidebar,
+  aside.gs-sidebar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Full-width header */
+  .gs-header {
+    left: 0 !important;
+    width: 100% !important;
+    height: var(--gs-header-h) !important;
+    z-index: 1100;
+  }
+
+  /* Full-width content with safe padding for header + bottom nav */
+  .content-wrapper,
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 14px 14px calc(var(--gs-bottomnav-h) + 26px) 14px !important;
+    padding-top: calc(var(--gs-header-h) + 12px) !important;
+    box-sizing: border-box;
+  }
+
+  /* Bottom navigation visible */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--gs-bottomnav-h);
+    z-index: 2000;
+    backdrop-filter: blur(12px);
+  }
+
+  /* Keep FAB above bottom nav */
+  .fab-emergency {
+    bottom: calc(var(--gs-bottomnav-h) + 18px) !important;
+    right: 20px !important;
+  }
+
+  /* Phone-friendly cards/grid defaults */
+  .grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .grid .card, .welcome-card { border-radius: 16px; padding: 16px; }
+}
+
+/* ---------- Consistency helpers (both) ---------- */
+
+/* Ensure nothing resurrects the sidebar on mobile */
+@media (max-width: 900px) {
+  .desktop-sidebar { display: none !important; }
+}
+
+/* Z-index sanity */
+.gs-header { z-index: 1100; }
+.bottom-nav { z-index: 2000; }
+/* ==========================================================
+   🌸 Garbh Sakhi – Card Spacing & Mobile Visual Fix
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+  /* ---------- Dashboard Cards ---------- */
+  .welcome-card {
+    width: 100%;
+    border-radius: 18px;
+    padding: 18px 16px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+  }
+
+  .welcome-card h1 {
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .welcome-card p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 80px; /* prevent overlap with bottom nav */
+  }
+
+  .grid .card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  /* ---------- Profile Card Fix ---------- */
+  .profile-card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    margin-bottom: 90px;
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .avatar-wrap {
+    text-align: center;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffe0ef, #e6f2ff);
+  }
+
+  .avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 20px;
+    margin: 0 auto;
+  }
+
+  .profile-card h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .field label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  input, textarea {
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #e8e9ee;
+  }
+
+  .actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-save {
+    background: #ff8ab4;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+  }
+
+  .btn-ghost {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px 18px;
+  }
+
+  /* Ensure text doesn't stretch too wide */
+  .content-wrapper {
+    width: 100%;
+    padding: 14px;
+  }
+}
+/* ==========================================================
+   🌸 Garbh Sakhi Modern Style (Final Unified Version)
+   ========================================================== */
+
+:root {
+  --gs-sidebar-w: 260px;
+  --gs-header-h: 64px;
+  --gs-bottomnav-h: 64px;
+}
+
+/* ===== General Layout ===== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #fce6f0, #e6f3ff);
+  color: #243041;
+}
+
+.content-wrapper {
+  padding: calc(var(--gs-header-h) + 20px) 30px 100px;
+  margin-left: var(--gs-sidebar-w);
+  box-sizing: border-box;
+}
+
+/* ===== Card System ===== */
+.gs-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(20, 28, 40, 0.06);
+  padding: 20px;
+}
+
+.welcome-card h1 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+
+.dash-card {
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+}
+
+/* ===== Grid System ===== */
+.gs-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.gs-grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.md\:gs-grid-1 {
+  grid-template-columns: 1fr !important;
+}
+
+/* ===== Profile Layout ===== */
+.profile-left .avatar-wrap {
+  background: linear-gradient(135deg, #ffe0ef, #e6f2ff);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.profile-left .avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 6px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(20, 28, 40, 0.06);
+}
+
+.avatar-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.profile-summary {
+  list-style: none;
+  padding: 0;
+  margin-top: 14px;
+  text-align: center;
+  display: grid;
+  gap: 6px;
+}
+
+/* ===== Form Elements ===== */
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e8e9ee;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  background: #ff8ab4;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 600;
+}
+
+.btn-ghost {
+  background: #fff;
+  border: 1px solid #d0d0d5;
+  border-radius: 12px;
+  padding: 10px 18px;
+}
+
+/* ===== Responsive Fixes ===== */
+@media (max-width: 900px) {
+  .gs-sidebar {
+    display: none !important;
+  }
+
+  .content-wrapper {
+    margin-left: 0 !important;
+    width: 100%;
+    padding: calc(var(--gs-header-h) + 16px) 16px calc(var(--gs-bottomnav-h) + 20px);
+  }
+
+  .gs-grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .welcome-card h1 {
+    font-size: 20px;
+  }
+
+  .profile-left .avatar {
+    width: 160px;
+    height: 160px;
+  }
+
+  .row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   ✅ FINAL AUTHORITATIVE LAYOUT FIX
+   This OVERRIDES all previous sidebar/mobile rules
+   ========================================================= */
+
+/* -------- GLOBAL SAFETY -------- */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* -------- DESKTOP (>=901px) -------- */
+@media (min-width: 901px) {
+
+  /* Sidebar fixed on desktop */
+  .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 260px !important;
+    height: 100vh !important;
+    transform: none !important;
+    display: block !important;
+    z-index: 1000 !important;
+  }
+
+  /* Header starts after sidebar */
+  .top-header {
+    left: 260px !important;
+    width: calc(100% - 260px) !important;
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1100 !important;
+  }
+
+  /* Content aligned correctly */
+  .main-content,
+  .content-wrapper {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    padding-top: 90px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Bottom nav hidden on desktop */
+  .bottom-nav {
+    display: none !important;
+  }
+}
+
+/* -------- MOBILE (<=900px) -------- */
+@media (max-width: 900px) {
+
+  /* ❌ FORCE HIDE DESKTOP SIDEBAR */
+  .sidebar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateX(-100%) !important;
+    pointer-events: none !important;
+  }
+
+  /* ✅ FULL WIDTH CONTENT */
+  .main-content,
+  .content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 16px !important;
+    padding-top: 80px !important;
+    padding-bottom: 90px !important; /* space for bottom nav */
+    box-sizing: border-box !important;
+  }
+
+  /* ✅ FULL WIDTH HEADER */
+  .top-header {
+    left: 0 !important;
+    width: 100% !important;
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1200 !important;
+  }
+
+  /* ✅ SHOW BOTTOM NAV */
+  .bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 64px !important;
+    z-index: 1300 !important;
+    background: #fff !important;
+  }
+}
+
+/* -------- PROFILE PAGE FIX -------- */
+.profile-card,
+.profile-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Ensure profile grid collapses on mobile */
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =====================================================
+   ✅ PROFILE PAGE – FINAL UNIFIED LAYOUT (PIXEL SAFE)
+   Matches screenshot exactly
+   ===================================================== */
+
+/* PAGE GRID */
+.profile-page {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  align-items: start;
+  width: 100%;
+}
+
+/* BOTH CARDS — SAME VISUAL SYSTEM */
+.profile-card,
+.profile-form-card {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  padding: 22px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* REMOVE OLD CONSTRAINTS */
+.profile-container {
+  max-width: none !important;
+}
+
+/* MOBILE — STACK, SAME WIDTH */
+@media (max-width: 900px) {
+  .profile-page {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .profile-card,
+  .profile-form-card {
+    padding: 18px;
+  }
+}
+
+/* ================================
+   PROFILE PAGE – FINAL DESKTOP FIX
+   ================================ */
+
+@media (min-width: 901px) {
+
+  /* Content already accounts for sidebar – DO NOT center */
+  .profile-page .content-wrapper {
+    margin-left: 260px;               /* sidebar width */
+    padding: 90px 32px 40px;          /* header-safe spacing */
+  }
+
+  /* TRUE layout: sidebar | card | form */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 460px 1fr; /* wider profile card */
+    gap: 24px;
+    width: 100%;
+    margin: 0;                        /* ❌ NO auto centering */
+    max-width: none;                  /* ❌ NO max-width */
+  }
+
+  /* Profile card */
+  .profile-page .profile-left {
+    padding: 28px;
+    text-align: left;
+  }
+
+  .profile-page .profile-summary {
+    margin-top: 20px;
+    padding-left: 4px;
+    text-align: left;
+  }
+
+  .profile-page .profile-summary li {
+    margin: 8px 0;
+    font-size: 15px;
+  }
+
+  /* Form card slightly tighter */
+  .profile-page .profile-form {
+    padding: 22px;
+  }
+}
+
+/* ================================
+   MOBILE – UNTOUCHED
+   ================================ */
+
+@media (max-width: 900px) {
+
+  .profile-page .content-wrapper {
+    margin-left: 0;
+    padding: 80px 14px 90px;
+  }
+
+  .profile-page .profile-grid {
+    display: block;
+  }
+
+  .profile-page .profile-left,
+  .profile-page .profile-form {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .profile-page .row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   PROFILE PAGE – NO GAP BETWEEN CARDS
+   DESKTOP ONLY
+   ========================================= */
+@media (min-width: 901px) {
+
+  /* Content already offset by sidebar */
+  .profile-page .content-wrapper {
+    margin-left: 260px;
+    padding: 90px 32px 40px;
+  }
+
+  /* Grid: sidebar | profile | form */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 460px 1fr; /* profile wider, form squeezed */
+    gap: 0 !important;                /* 🔥 REMOVE SPACE */
+    width: 100%;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* LEFT CARD */
+  .profile-page .profile-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 28px;
+  }
+
+  /* RIGHT CARD */
+  .profile-page .profile-form {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 22px;
+  }
+}
+
+/* =========================================
+   PROFILE PAGE – FULL WIDTH CARDS
+   DESKTOP ONLY
+   ========================================= */
+@media (min-width: 901px) {
+
+  /* Content area after sidebar */
+  .profile-page .content-wrapper {
+    margin-left: var(--gs-sidebar-w);
+    padding: calc(var(--gs-header-h) + 24px) 32px 40px;
+    width: calc(100vw - var(--gs-sidebar-w));
+    box-sizing: border-box;
+  }
+
+  /* Grid must occupy ALL available width */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 520px 1fr; /* ⬅️ BIGGER profile card */
+    gap: 0 !important;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  /* Make both cards visually strong */
+  .profile-page .profile-left,
+  .profile-page .profile-form {
+    min-height: calc(100vh - var(--gs-header-h) - 80px);
+  }
+
+  /* Remove seam radius so they feel merged */
+  .profile-page .profile-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 32px;
+  }
+
+  .profile-page .profile-form {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 28px 32px;
+  }
+}
+/* =========================================================
+   PROFILE PAGE — FINAL DESKTOP LAYOUT (EXACT MATCH)
+   ========================================================= */
+@media (min-width: 901px) {
+
+  /* 1. Kill ALL width limits */
+  .content-wrapper,
+  .profile-page,
+  .profile-page .profile-grid {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* 2. Correct sidebar offset */
+  .profile-page .content-wrapper {
+    margin-left: var(--gs-sidebar-w);
+    padding: calc(var(--gs-header-h) + 24px) 32px 32px;
+    box-sizing: border-box;
+  }
+
+  /* 3. Main grid — THIS IS THE KEY */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 480px minmax(0, 1fr);
+    gap: 0; /* ❌ NO SPACE BETWEEN CARDS */
+    align-items: stretch;
+  }
+
+  /* 4. Make both cards look merged */
+  .profile-page .profile-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 28px;
+  }
+
+  .profile-page .profile-form {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 28px;
+  }
+
+  /* 5. Profile summary alignment (left like screenshot) */
+  .profile-page .profile-summary {
+    text-align: left;
+    padding-left: 4px;
+    margin-top: 22px;
+  }
+
+  .profile-page .profile-summary li {
+    margin: 8px 0;
+    font-size: 15px;
+  }
+
+  /* 6. Make avatar card visually dominant */
+  .profile-page .avatar-wrap {
+    padding: 22px;
+  }
+
+  .profile-page .avatar {
+    width: 240px;
+    height: 240px;
+  }
+
+  /* 7. Form fields spacing like screenshot */
+  .profile-page .profile-form .field {
+    margin-bottom: 16px;
+  }
+
+  .profile-page .row-2 {
+    gap: 16px;
+  }
+}
+
+/* =========================================================
+   PROFILE PAGE – FORCE FULL-WIDTH LAYOUT (DESKTOP)
+   Sidebar | Profile Card | Profile Form
+   ========================================================= */
+@media (min-width: 901px) {
+
+  /* 1️⃣ Remove global width restrictions */
+  .profile-page,
+  .profile-page .content-wrapper {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* 2️⃣ Push content after sidebar correctly */
+  .profile-page .content-wrapper {
+    margin-left: var(--gs-sidebar-w) !important;
+    padding: calc(var(--gs-header-h) + 24px) 24px 40px 24px !important;
+    box-sizing: border-box;
+  }
+
+  /* 3️⃣ Make grid fill available screen */
+  .profile-page .profile-grid {
+    display: grid !important;
+    grid-template-columns: 480px minmax(0, 1fr) !important;
+    gap: 0 !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  /* 4️⃣ Make both cards BIG and equal height */
+  .profile-page .profile-left,
+  .profile-page .profile-form {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  /* 5️⃣ Remove visual gap between cards */
+  .profile-page .profile-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .profile-page .profile-form {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  /* 6️⃣ Give profile card more breathing room */
+  .profile-page .profile-left {
+    padding: 32px !important;
+  }
+
+  /* 7️⃣ Align profile details properly */
+  .profile-page .profile-summary {
+    text-align: left !important;
+    padding-left: 4px;
+  }
+
+  .profile-page .profile-summary li {
+    margin: 10px 0;
+    font-size: 15px;
+  }
+
+  /* 8️⃣ Slightly compress form so card feels larger */
+  .profile-page .profile-form {
+    padding: 24px !important;
+  }
+}
+/* =========================================================
+   PROFILE PAGE – FORM BACKGROUND + FULL HEIGHT FIX
+   ========================================================= */
+@media (min-width: 901px) {
+
+  /* 1️⃣ Make form card solid and visible */
+  .profile-page .profile-form {
+    background: #ffffff !important;
+    box-shadow: 0 18px 40px rgba(20,28,40,0.08);
+  }
+
+  /* 2️⃣ Make both cards stretch to same height */
+  .profile-page .profile-grid {
+    align-items: stretch !important;
+  }
+
+  .profile-page .profile-left,
+  .profile-page .profile-form {
+    height: 100% !important;
+    min-height: 100% !important;
+  }
+
+  /* 3️⃣ Prevent gradient bleed behind form */
+  .profile-page {
+    background: linear-gradient(
+      135deg,
+      #fde7f3 0%,
+      #f3ecff 50%,
+      #e6f4ff 100%
+    );
+  }
+
+  /* 4️⃣ Improve form spacing so it fills visually */
+  .profile-page .profile-form form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .profile-page .profile-form .actions {
+    margin-top: auto; /* push buttons to bottom */
+  }
+}
+
+/* ================= PROFILE PAGE – FINAL FIX ================= */
+
+/* Allow full-width usage */
+.profile-page .content-wrapper {
+  max-width: none !important;
+}
+
+/* Let grid occupy entire available space */
+.profile-page .profile-grid {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* LEFT card stays same */
+.profile-page .profile-left {
+  z-index: 2;
+}
+
+/* RIGHT side form EXPANDS + gets proper background */
+.profile-page .profile-form {
+  width: 100% !important;
+  background: #ffffff !important;      /* 👈 THIS WAS MISSING */
+  box-shadow: none !important;          /* remove inner card feel */
+  border-radius: 0 22px 22px 0 !important;
+  padding: 32px 40px !important;
+}
+
+/* Remove visual separation between cards */
+@media (min-width: 901px) {
+  .profile-page .profile-grid {
+    grid-template-columns: 460px 1fr !important;
+    gap: 0 !important;
+  }
+
+  .profile-page .profile-left {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+/* Ensure form inputs stretch properly */
+.profile-page .profile-form input,
+.profile-page .profile-form textarea {
+  width: 100%;
+}
+/* ================= ONE CONTINUOUS PROFILE CARD FIX ================= */
+@media (min-width: 901px) {
+
+  /* 1️⃣ Make grid act like ONE card */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 0; /* IMPORTANT: no gap between card & form */
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(20,28,40,0.08);
+    overflow: hidden;
+  }
+
+  /* 2️⃣ Left profile section (no shadow, no radius on right) */
+  .profile-page .profile-left {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* 3️⃣ Right form section becomes PART of same white card */
+  .profile-page .profile-form {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 32px 48px 36px 32px;
+  }
+
+  /* 4️⃣ Form rows MUST stay in one line */
+  .profile-page .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  /* 5️⃣ Inputs stretch properly */
+  .profile-page .profile-form input,
+  .profile-page .profile-form textarea {
+    width: 100%;
+  }
+
+  /* 6️⃣ Buttons stay INSIDE bottom-right of white card */
+  .profile-page .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 28px;
+  }
+}
+
+/* ================= FINAL PROFILE LAYOUT FIX ================= */
+@media (min-width: 901px) {
+
+  /* 1️⃣ Let the white card fill the page */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    width: 100%;
+    max-width: calc(100vw - var(--gs-sidebar-w) - 64px);
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(20,28,40,0.08);
+    overflow: hidden;
+  }
+
+  /* 2️⃣ Left profile card stays clean */
+  .profile-page .profile-left {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 28px;
+  }
+
+  /* 3️⃣ Right form EXPANDS FULLY */
+  .profile-page .profile-form {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 32px 56px 40px 40px;
+    width: 100%;
+  }
+
+  /* 4️⃣ Force proper 2-column form layout */
+  .profile-page .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  /* 5️⃣ Inputs MUST stretch */
+  .profile-page .profile-form input,
+  .profile-page .profile-form textarea {
+    width: 100%;
+  }
+
+  /* 6️⃣ Buttons stay INSIDE white card bottom */
+  .profile-page .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 32px;
+  }
+}
+
+/* ======================================================================
+   PROFILE PAGE – FINAL WORKING DESKTOP FIX (PASTE AT VERY BOTTOM)
+   ====================================================================== */
+
+@media (min-width: 901px) {
+
+  /* 🔹 1. Respect fixed SIDEBAR + HEADER */
+  .profile-page .content-wrapper {
+    margin-left: var(--gs-sidebar-w);
+    padding-top: var(--gs-header-h);
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    max-width: none;
+  }
+
+  /* 🔹 2. ONE single continuous white card */
+  .profile-page .profile-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    width: 100%;
+    max-width: calc(100vw - var(--gs-sidebar-w) - 64px);
+    margin: 0 auto;
+
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(20,28,40,0.08);
+    overflow: hidden;
+
+    gap: 0; /* ❗ NO SPACE between profile card & form */
+  }
+
+  /* 🔹 3. LEFT profile card (part of same white card) */
+  .profile-page .profile-left {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 28px;
+  }
+
+  /* 🔹 4. RIGHT profile form EXPANDS FULLY */
+  .profile-page .profile-form {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 32px 56px 40px 40px;
+    width: 100%;
+  }
+
+  /* 🔹 5. Force proper 2-column form rows */
+  .profile-page .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  /* 🔹 6. Inputs stretch correctly */
+  .profile-page .profile-form input,
+  .profile-page .profile-form textarea {
+    width: 100%;
+  }
+
+  /* 🔹 7. Buttons stay INSIDE bottom-right of white card */
+  .profile-page .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 32px;
+  }
+}
