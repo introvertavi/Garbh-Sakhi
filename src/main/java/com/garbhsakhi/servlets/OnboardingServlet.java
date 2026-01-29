@@ -2,16 +2,14 @@ package com.garbhsakhi.servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import com.garbhsakhi.dao.DatabaseConnection;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Date;
 
 @WebServlet("/onboarding")
 public class OnboardingServlet extends HttpServlet {
@@ -22,35 +20,50 @@ public class OnboardingServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            resp.sendRedirect("login.jsp");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
-        int userId = (int) session.getAttribute("userId");
+        int userId = ((Number) session.getAttribute("userId")).intValue();
 
-        // MAIN PROFILE FIELDS
-        String fullName = req.getParameter("full_name");
-        String phone = req.getParameter("phone");
-        String age = req.getParameter("age");
-        String dueDate = req.getParameter("due_date");
+        // -------- READ & TRIM INPUTS --------
+        String fullName = trim(req.getParameter("full_name"));
+        String phone = trim(req.getParameter("phone"));
+        String ageStr = trim(req.getParameter("age"));
+        String dueDateStr = trim(req.getParameter("due_date"));
 
-        String doctor = req.getParameter("doctor_name");
-        String hospital = req.getParameter("hospital_name");
-        String complications = req.getParameter("complications");
+        String doctor = trim(req.getParameter("doctor_name"));
+        String hospital = trim(req.getParameter("hospital_name"));
+        String complications = trim(req.getParameter("complications"));
 
-        // EMERGENCY CONTACTS
-        String ec1Name = req.getParameter("ec1_name");
-        String ec1Phone = req.getParameter("ec1_phone");
+        String ec1Name = trim(req.getParameter("ec1_name"));
+        String ec1Phone = trim(req.getParameter("ec1_phone"));
 
-        String ec2Name = req.getParameter("ec2_name");
-        String ec2Phone = req.getParameter("ec2_phone");
+        String ec2Name = trim(req.getParameter("ec2_name"));
+        String ec2Phone = trim(req.getParameter("ec2_phone"));
 
-        String ec3Name = req.getParameter("ec3_name");
-        String ec3Phone = req.getParameter("ec3_phone");
+        String ec3Name = trim(req.getParameter("ec3_name"));
+        String ec3Phone = trim(req.getParameter("ec3_phone"));
+
+        // -------- DEBUG (REMOVE AFTER TESTING) --------
+        System.out.println("Onboarding for userId=" + userId);
+        System.out.println("Full Name = " + fullName);
+        System.out.println("Age = " + ageStr);
+        System.out.println("Due Date = " + dueDateStr);
 
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // 1️⃣ UPDATE USER PROFILE
+            conn.setAutoCommit(false); // 🔒 TRANSACTION START
+
+            Integer age = (ageStr != null && !ageStr.isBlank())
+                    ? Integer.parseInt(ageStr)
+                    : null;
+
+            Date dueDate = (dueDateStr != null && !dueDateStr.isBlank())
+                    ? Date.valueOf(dueDateStr)
+                    : null;
+
+            // -------- UPDATE USERS --------
             String updateUserSql = """
                 UPDATE users SET
                     full_name = ?,
@@ -64,62 +77,78 @@ public class OnboardingServlet extends HttpServlet {
                 WHERE id = ?
             """;
 
-            PreparedStatement psUser = conn.prepareStatement(updateUserSql);
+            try (PreparedStatement ps = conn.prepareStatement(updateUserSql)) {
+                ps.setString(1, fullName);
+                ps.setString(2, phone);
 
-            psUser.setString(1, fullName);
-            psUser.setString(2, phone);
-            psUser.setString(3, age);
-            psUser.setString(4, dueDate);
-            psUser.setString(5, doctor);
-            psUser.setString(6, hospital);
-            psUser.setString(7, complications);
-            psUser.setInt(8, userId);
+                if (age != null) ps.setInt(3, age);
+                else ps.setNull(3, java.sql.Types.INTEGER);
 
-            psUser.executeUpdate();
+                if (dueDate != null) ps.setDate(4, dueDate);
+                else ps.setNull(4, java.sql.Types.DATE);
 
-            // 2️⃣ INSERT EMERGENCY CONTACTS
+                ps.setString(5, doctor);
+                ps.setString(6, hospital);
+                ps.setString(7, complications);
+                ps.setInt(8, userId);
+
+                ps.executeUpdate();
+            }
+
+            // -------- CLEAR OLD EMERGENCY CONTACTS --------
+            try (PreparedStatement del = conn.prepareStatement(
+                    "DELETE FROM emergency_contacts WHERE user_id = ?")) {
+                del.setInt(1, userId);
+                del.executeUpdate();
+            }
+
+            // -------- INSERT EMERGENCY CONTACTS --------
             String insertEC = """
                 INSERT INTO emergency_contacts (user_id, name, phone, relation)
                 VALUES (?, ?, ?, ?)
             """;
 
-            PreparedStatement psEC = conn.prepareStatement(insertEC);
+            try (PreparedStatement psEC = conn.prepareStatement(insertEC)) {
 
-            // Contact 1
-            if (ec1Name != null && ec1Phone != null) {
-                psEC.setInt(1, userId);
-                psEC.setString(2, ec1Name);
-                psEC.setString(3, ec1Phone);
-                psEC.setString(4, "Primary");
-                psEC.addBatch();
+                if (isFilled(ec1Name, ec1Phone))
+                    addEC(psEC, userId, ec1Name, ec1Phone, "Primary");
+
+                if (isFilled(ec2Name, ec2Phone))
+                    addEC(psEC, userId, ec2Name, ec2Phone, "Secondary");
+
+                if (isFilled(ec3Name, ec3Phone))
+                    addEC(psEC, userId, ec3Name, ec3Phone, "Backup");
+
+                psEC.executeBatch();
             }
 
-            // Contact 2
-            if (ec2Name != null && ec2Phone != null) {
-                psEC.setInt(1, userId);
-                psEC.setString(2, ec2Name);
-                psEC.setString(3, ec2Phone);
-                psEC.setString(4, "Secondary");
-                psEC.addBatch();
-            }
-
-            // Contact 3
-            if (ec3Name != null && ec3Phone != null) {
-                psEC.setInt(1, userId);
-                psEC.setString(2, ec3Name);
-                psEC.setString(3, ec3Phone);
-                psEC.setString(4, "Backup");
-                psEC.addBatch();
-            }
-
-            psEC.executeBatch();
-
-            // 3️⃣ REDIRECT TO DASHBOARD
+            conn.commit(); // ✅ SUCCESS
             resp.sendRedirect(req.getContextPath() + "/dashboard.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect("onboarding.jsp?error=db");
+            resp.sendRedirect(req.getContextPath() + "/onboarding.jsp?error=db");
         }
     }
+
+    // -------- HELPERS --------
+
+    private String trim(String s) {
+        return (s == null) ? null : s.trim();
+    }
+
+    private boolean isFilled(String name, String phone) {
+        return name != null && phone != null &&
+               !name.isBlank() && !phone.isBlank();
+    }
+
+    private void addEC(PreparedStatement ps, int userId,
+                       String name, String phone, String relation) throws Exception {
+        ps.setInt(1, userId);
+        ps.setString(2, name);
+        ps.setString(3, phone);
+        ps.setString(4, relation);
+        ps.addBatch();
+    }
 }
+

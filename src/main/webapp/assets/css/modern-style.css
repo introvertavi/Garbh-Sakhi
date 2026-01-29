@@ -5162,3 +5162,18 @@ html, body {
     margin-top: 32px;
   }
 }
+/* ===== ABSOLUTE VISIBILITY OVERRIDE ===== */
+body {
+  overflow: auto !important;
+}
+
+.app-layout,
+.app-container,
+.layout,
+.main,
+.wrapper {
+  position: relative !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}

@@ -2,10 +2,7 @@ package com.garbhsakhi.servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import com.garbhsakhi.dao.DatabaseConnection;
 import com.garbhsakhi.util.PasswordUtil;
@@ -26,10 +23,18 @@ public class SignupServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        // ✅ Basic validation
+        if (name == null || email == null || password == null ||
+            name.isEmpty() || email.isEmpty() || password.isEmpty()) {
 
-            String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            response.sendRedirect(request.getContextPath() + "/signup.jsp?error=empty");
+            return;
+        }
+
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, name);
             stmt.setString(2, email);
@@ -38,24 +43,30 @@ public class SignupServlet extends HttpServlet {
             int rows = stmt.executeUpdate();
 
             if (rows > 0) {
-                ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int userId = rs.getInt(1);
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int userId = rs.getInt(1);
 
-                    HttpSession session = request.getSession();
-                    session.setAttribute("userId", userId);
-                    session.setAttribute("email", email);
+                        HttpSession session = request.getSession(true);
+                        session.setAttribute("userId", userId);
+                        session.setAttribute("email", email);
 
-                    System.out.println("Signup success: " + email);
+                        System.out.println("✅ Signup success: " + email);
 
-                    response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
-                    return;
+                        response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
+                        return;
+                    }
                 }
             }
+
+            // fallback
+            response.sendRedirect(request.getContextPath() + "/signup.jsp?error=unknown");
 
         } catch (Exception e) {
             System.out.println("❌ SIGNUP FAILED --> " + e.getMessage());
             e.printStackTrace();
+
+            // duplicate email or DB error
             response.sendRedirect(request.getContextPath() + "/signup.jsp?error=db");
         }
     }
