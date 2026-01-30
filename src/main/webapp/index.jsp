@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="assets/css/modern-style.css">
 
   <style>
-    /* Auth pages: Use same gradient as dashboard */
     body.auth-bg {
       min-height: 100vh;
       margin: 0;
@@ -21,6 +20,7 @@
       background: linear-gradient(135deg, #f6a7d4 0%, #a9d6f7 100%);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
+
     .auth-card {
       width: 100%;
       max-width: 480px;
@@ -31,10 +31,12 @@
       box-sizing: border-box;
       margin: 24px;
     }
+
     .auth-top {
       text-align: center;
       margin-bottom: 8px;
     }
+
     .auth-logo {
       width: 88px;
       height: auto;
@@ -42,12 +44,14 @@
       display: inline-block;
       box-shadow: 0 6px 18px rgba(12,20,30,0.06);
     }
+
     .auth-title {
       font-size: 24px;
       margin: 12px 0 6px;
       color: #243041;
       font-weight: 700;
     }
+
     .auth-sub {
       color: #4b5563;
       margin-bottom: 18px;
@@ -60,6 +64,7 @@
       justify-content:center;
       margin-top: 12px;
     }
+
     .btn-primary {
       background: linear-gradient(180deg,#ffb3cf,#ff7aa6);
       color:#fff;
@@ -70,7 +75,11 @@
       cursor:pointer;
       box-shadow: 0 6px 18px rgba(255,122,150,0.18);
     }
-    .link-muted { color:#2b6cb0; text-decoration:underline; }
+
+    .link-muted {
+      color:#2b6cb0;
+      text-decoration:underline;
+    }
 
     @media (max-width:420px){
       .auth-card { padding:18px; margin:12px; border-radius:12px; }
@@ -78,6 +87,7 @@
     }
   </style>
 </head>
+
 <body class="auth-bg">
 
   <div class="auth-card" role="main" aria-labelledby="landingTitle">
@@ -88,7 +98,9 @@
     </div>
 
     <div style="text-align:center;">
-      <button class="btn-primary" onclick="location.href='signup.jsp'">Create Account</button>
+      <button class="btn-primary" onclick="location.href='signup.jsp'">
+        Create Account
+      </button>
     </div>
 
     <div class="cta" style="margin-top:18px;">
