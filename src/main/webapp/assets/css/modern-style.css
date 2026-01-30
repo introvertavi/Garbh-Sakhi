@@ -1,4 +1,24 @@
-/* Modern Pregnancy Wellness App - CSS */
+/* ===== GLOBAL LAYOUT FIX (DO NOT REMOVE) ===== */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.content-wrapper,
+.page-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.center-stack {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 :root {
     /* Updated to match style.css color scheme */
     --primary-color: #ff7ba8;
@@ -5176,4 +5196,74 @@ body {
   height: auto !important;
   min-height: 100vh !important;
   overflow: visible !important;
+}
+/* ================= PROFILE LAYOUT FIX ================= */
+
+.profile-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Grid */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start; /* ✅ important */
+}
+
+/* Cards */
+.profile-left,
+.profile-form {
+  height: calc(100vh - var(--gs-header-h) - 48px); /* fit window */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* LEFT CARD */
+.profile-left {
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+.profile-left .profile-summary {
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+/* RIGHT CARD (FORM) */
+.profile-form form {
+  flex: 1;
+  overflow-y: auto;   /* ✅ scroll inside card */
+  padding-right: 4px;
+}
+
+/* Smooth scrollbar */
+.profile-form form::-webkit-scrollbar {
+  width: 6px;
+}
+.profile-form form::-webkit-scrollbar-thumb {
+  background: rgba(255, 143, 178, 0.4);
+  border-radius: 6px;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-left,
+  .profile-form {
+    height: auto;
+    overflow: visible;
+  }
+
+  .profile-form form {
+    overflow: visible;
+  }
 }

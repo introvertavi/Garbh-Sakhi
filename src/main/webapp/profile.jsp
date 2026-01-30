@@ -29,22 +29,22 @@
     request.setAttribute("pageTitle", "Profile");
 %>
 
-<!-- ================= LOAD CSS FIRST (STEP 1 FIX) ================= -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/style.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/modern-style.css">
 
-<!-- ================= LAYOUT INCLUDES ================= -->
 <jsp:include page="components/header.jsp" />
 <jsp:include page="components/sidebar.jsp" />
 <jsp:include page="components/bottom-nav.jsp" />
 <jsp:include page="components/fab-emergency.jsp" />
 
-<div class="profile-page">
-  <div class="content-wrapper">
+<!-- ================= PROFILE ================= -->
+<div class="content-wrapper">
+
+  <div class="profile-container">
 
     <section class="profile-grid">
 
-      <!-- ================= LEFT : PROFILE CARD ================= -->
+      <!-- LEFT : PROFILE SUMMARY -->
       <div class="gs-card profile-left">
 
         <div class="avatar-wrap">
@@ -76,7 +76,7 @@
 
       </div>
 
-      <!-- ================= RIGHT : FORM CARD ================= -->
+      <!-- RIGHT : PROFILE FORM -->
       <div class="gs-card profile-form">
 
         <h2>Your Profile</h2>
@@ -136,11 +136,35 @@
       </div>
 
     </section>
+
   </div>
 </div>
 
+<!-- ================= PROFILE PAGE CSS ================= -->
+<style>
+.profile-container{
+  max-width:1100px;
+  margin:0 auto;
+  padding:24px;
+  box-sizing:border-box;
+}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:24px;
+}
+
+@media (max-width:900px){
+  .profile-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
 <script>
-  const avatarInput = document.getElementById('avatarInput');
-  document.getElementById('changeAvatarBtn')
-    ?.addEventListener('click', () => avatarInput.click());
+const avatarInput = document.getElementById('avatarInput');
+document.getElementById('changeAvatarBtn')
+  ?.addEventListener('click', () => avatarInput.click());
 </script>
+
