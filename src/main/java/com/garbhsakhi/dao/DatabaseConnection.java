@@ -6,12 +6,6 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/garbh_sakhi?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-
-    private static final String USER = "garbh_sakhi";
-    private static final String PASSWORD = "Avinash@1080";
-
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -21,6 +15,35 @@ public class DatabaseConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+
+        // 🔹 Railway environment variables
+        String host = System.getenv("MYSQLHOST");
+        String port = System.getenv("MYSQLPORT");
+        String database = System.getenv("MYSQLDATABASE");
+        String user = System.getenv("MYSQLUSER");
+        String password = System.getenv("MYSQLPASSWORD");
+
+        String url;
+
+        // 🔹 If running locally (Railway vars not present)
+        if (host == null || port == null || database == null) {
+            url = "jdbc:mysql://localhost:3306/garbh_sakhi"
+                + "?useSSL=false"
+                + "&allowPublicKeyRetrieval=true"
+                + "&serverTimezone=UTC";
+
+            user = "garbh_sakhi";
+            password = "Avinash@1080";
+        } 
+        // 🔹 If running on Railway
+        else {
+            url = "jdbc:mysql://" + host + ":" + port + "/" + database
+                + "?useSSL=false"
+                + "&allowPublicKeyRetrieval=true"
+                + "&serverTimezone=UTC";
+        }
+
+        return DriverManager.getConnection(url, user, password);
     }
 }
+
