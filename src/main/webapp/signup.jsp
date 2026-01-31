@@ -74,26 +74,34 @@
       <div class="auth-sub">Join Garbh Sakhi – Your AI pregnancy wellness companion.</div>
     </div>
 
-    <form action="auth/signup" method="post" novalidate>
-      <div class="row">
-        <div class="field">
-          <label for="name">Full name</label>
-          <input id="name" name="name" type="text" required placeholder="Your full name" />
-        </div>
+    <form action="${pageContext.request.contextPath}/auth/signup" method="post" novalidate>
 
-        <div class="field">
-          <label for="email">Email address</label>
-          <input id="email" name="email" type="email" required placeholder="you@example.com" />
-        </div>
-      </div>
+  <div class="row">
+    <div class="field">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" required placeholder="Your full name" />
+    </div>
 
-      <div class="field">
-        <label for="password">Create password</label>
-        <input id="password" name="password" type="password" required placeholder="Choose a secure password" />
-      </div>
+    <div class="field">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" required placeholder="you@example.com" />
+    </div>
+  </div>
 
-      <button type="submit" class="btn-primary">Sign Up</button>
-    </form>
+  <div class="field">
+    <label for="password">Create password</label>
+    <input id="password" name="password" type="password" required placeholder="Choose a secure password" />
+  </div>
+
+  <button type="submit" class="btn-primary">Sign Up</button>
+</form>
+<% String error = request.getParameter("error"); %>
+<% if ("empty".equals(error)) { %>
+  <p style="color:red; text-align:center;">Please fill all fields.</p>
+<% } else if ("db".equals(error)) { %>
+  <p style="color:red; text-align:center;">Email already exists or database error.</p>
+<% } %>
+
 
     <div class="small-link">
       <p>Already have an account? <a href="login.jsp">Login</a></p>

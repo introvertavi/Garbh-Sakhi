@@ -9,35 +9,22 @@ import java.sql.Date;
 
 public class UserDAO {
 
-    // SIGNUP
-    public static boolean register(String name, String email, String password, String phone) {
-        String sql = "INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)";
+    // =========================
+    // SIGNUP (users table only)
+    // =========================
+    public static Integer register(String email, String hashedPassword) {
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, name);
-            ps.setString(2, email);
-            ps.setString(3, password);
-            ps.setString(4, phone);
-
-            return ps.executeUpdate() == 1;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // LOGIN → returns userId
-    public static Integer login(String email, String password) {
-        String sql = "SELECT id FROM users WHERE email=? AND password=?";
+        String sql = """
+            INSERT INTO users (email, password)
+            VALUES (?, ?)
+            RETURNING id
+        """;
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, password);
+            ps.setString(2, hashedPassword);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -50,17 +37,56 @@ public class UserDAO {
         return null;
     }
 
-    // ✅ OVERLOAD FOR JSP (FIXES Integer vs int ISSUE)
-    public static User getUserById(Integer userId) {
-        if (userId == null) return null;
-        return getUserById(userId.intValue());
+    // =========================
+    // LOGIN
+    // =========================
+    public static Integer login(String email, String hashedPassword) {
+
+        String sql = """
+            SELECT id
+            FROM users
+            WHERE email = ? AND password = ?
+        """;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, hashedPassword);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    // DASHBOARD / PROFILE
+    // =========================
+    // USER + PROFILE (DASHBOARD)
+    // =========================
     public static User getUserById(int userId) {
+
         User user = null;
 
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = """
+            SELECT
+                u.id,
+                u.email,
+                p.full_name,
+                p.age,
+                p.due_date,
+                p.doctor_name,
+                p.hospital_name,
+                p.complications,
+                p.profile_complete
+            FROM users u
+            LEFT JOIN user_profile p ON u.id = p.user_id
+            WHERE u.id = ?
+        """;
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -71,9 +97,7 @@ public class UserDAO {
             if (rs.next()) {
                 user = new User();
                 user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPhone(rs.getString("phone"));
                 user.setFullName(rs.getString("full_name"));
                 user.setAge(rs.getInt("age"));
 
@@ -83,7 +107,7 @@ public class UserDAO {
                 user.setDoctorName(rs.getString("doctor_name"));
                 user.setHospitalName(rs.getString("hospital_name"));
                 user.setComplications(rs.getString("complications"));
-                user.setProfileComplete(rs.getInt("profile_complete"));
+                user.setProfileComplete(rs.getBoolean("profile_complete"));
             }
 
         } catch (Exception e) {
@@ -91,5 +115,11 @@ public class UserDAO {
         }
 
         return user;
+    }
+
+    // JSP safety overload
+    public static User getUserById(Integer userId) {
+        if (userId == null) return null;
+        return getUserById(userId);
     }
 }
