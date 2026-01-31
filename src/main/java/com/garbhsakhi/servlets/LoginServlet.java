@@ -1,14 +1,11 @@
 package com.garbhsakhi.servlets;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
 import com.garbhsakhi.dao.DatabaseConnection;
 import com.garbhsakhi.util.PasswordUtil;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,36 +22,61 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT id, password, profile_complete FROM users WHERE email = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
+        if (email == null || password == null ||
+            email.isBlank() || password.isBlank()) {
 
-            ResultSet rs = stmt.executeQuery();
+            response.sendRedirect(request.getContextPath() + "/login.jsp?error=empty");
+            return;
+        }
 
-            if (rs.next()) {
-                int userId = rs.getInt("id");
-                String dbPassword = rs.getString("password");
-                int profileComplete = rs.getInt("profile_complete");
+        String userSql = """
+            SELECT id, password
+            FROM users
+            WHERE email = ?
+        """;
 
-                // Check password
-                if (password.equals(dbPassword) || PasswordUtil.verify(password, dbPassword)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(userSql)) {
 
-                    HttpSession session = request.getSession();
-                    session.setAttribute("userId", userId);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
 
-                    // 👇 NEW LOGIC
-                    if (profileComplete == 0) {
-                        response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
-                        return;
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                        return;
-                    }
-                }
+            if (!rs.next()) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+                return;
             }
 
-            response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+            int userId = rs.getInt("id");
+            String hashedPassword = rs.getString("password");
+
+            // ✅ PASSWORD CHECK (ONLY HASHED)
+            if (!PasswordUtil.verify(password, hashedPassword)) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+                return;
+            }
+
+            // ✅ CREATE SESSION
+            HttpSession session = request.getSession(true);
+            session.setAttribute("userId", userId);
+            session.setAttribute("email", email);
+
+            // ✅ CHECK PROFILE COMPLETION
+            String profileSql = """
+                SELECT profile_complete
+                FROM user_profile
+                WHERE user_id = ?
+            """;
+
+            try (PreparedStatement ps2 = conn.prepareStatement(profileSql)) {
+                ps2.setInt(1, userId);
+                ResultSet rs2 = ps2.executeQuery();
+
+                if (rs2.next() && rs2.getBoolean("profile_complete")) {
+                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
