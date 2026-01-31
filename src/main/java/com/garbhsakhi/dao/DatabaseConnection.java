@@ -8,42 +8,31 @@ public class DatabaseConnection {
 
     static {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            // ✅ PostgreSQL JDBC Driver
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("MySQL JDBC Driver not found", e);
+            throw new RuntimeException("PostgreSQL JDBC Driver not found", e);
         }
     }
 
     public static Connection getConnection() throws SQLException {
 
-        // 🔹 Railway environment variables
-        String host = System.getenv("MYSQLHOST");
-        String port = System.getenv("MYSQLPORT");
-        String database = System.getenv("MYSQLDATABASE");
-        String user = System.getenv("MYSQLUSER");
-        String password = System.getenv("MYSQLPASSWORD");
+        // ✅ Render environment variables
+        String host = System.getenv("DB_HOST");
+        String port = System.getenv("DB_PORT");
+        String database = System.getenv("DB_NAME");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
 
-        String url;
-
-        // 🔹 If running locally (Railway vars not present)
-        if (host == null || port == null || database == null) {
-            url = "jdbc:mysql://localhost:3306/garbh_sakhi"
-                + "?useSSL=false"
-                + "&allowPublicKeyRetrieval=true"
-                + "&serverTimezone=UTC";
-
-            user = "garbh_sakhi";
-            password = "Avinash@1080";
-        } 
-        // 🔹 If running on Railway
-        else {
-            url = "jdbc:mysql://" + host + ":" + port + "/" + database
-                + "?useSSL=false"
-                + "&allowPublicKeyRetrieval=true"
-                + "&serverTimezone=UTC";
+        // ❌ DO NOT allow localhost fallback in production
+        if (host == null || port == null || database == null ||
+            user == null || password == null) {
+            throw new RuntimeException("Database environment variables are not set");
         }
+
+        // ✅ PostgreSQL JDBC URL
+        String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
 
         return DriverManager.getConnection(url, user, password);
     }
 }
-
