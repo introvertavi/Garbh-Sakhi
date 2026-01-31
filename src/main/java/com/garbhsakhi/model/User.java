@@ -54,4 +54,8 @@ public class User {
 
     public int getProfileComplete() { return profileComplete; }
     public void setProfileComplete(int profileComplete) { this.profileComplete = profileComplete; }
+    public void setProfileComplete(boolean boolean1) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'setProfileComplete'");
+    }
 }
