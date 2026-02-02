@@ -1,6 +1,7 @@
 package com.garbhsakhi.servlets;
 
 import com.garbhsakhi.dao.DatabaseConnection;
+import com.garbhsakhi.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,57 +16,70 @@ import java.sql.Date;
 public class OnboardingServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
-        int userId = (int) session.getAttribute("userId");
+        // ✅ SINGLE user object
+        User user = (User) session.getAttribute("user");
+        int userId = user.getId();
 
-        String fullName = req.getParameter("full_name");
-        int age = Integer.parseInt(req.getParameter("age"));
-        Date dueDate = Date.valueOf(req.getParameter("due_date"));
-        String doctor = req.getParameter("doctor_name");
-        String hospital = req.getParameter("hospital_name");
-        String complications = req.getParameter("complications");
+        // ✅ FORM DATA
+        String fullName = request.getParameter("full_name");
+        int age = Integer.parseInt(request.getParameter("age"));
+        Date dueDate = Date.valueOf(request.getParameter("due_date"));
+        String doctor = request.getParameter("doctor_name");
+        String hospital = request.getParameter("hospital_name");
+        String complications = request.getParameter("complications");
 
         String sql = """
-            INSERT INTO user_profile
-            (user_id, full_name, age, due_date, doctor_name, hospital_name, complications, profile_complete)
-            VALUES (?, ?, ?, ?, ?, ?, ?, true)
-            ON CONFLICT (user_id)
-            DO UPDATE SET
-                full_name = EXCLUDED.full_name,
-                age = EXCLUDED.age,
-                due_date = EXCLUDED.due_date,
-                doctor_name = EXCLUDED.doctor_name,
-                hospital_name = EXCLUDED.hospital_name,
-                complications = EXCLUDED.complications,
+            UPDATE users
+            SET
+                full_name = ?,
+                age = ?,
+                due_date = ?,
+                doctor_name = ?,
+                hospital_name = ?,
+                complications = ?,
                 profile_complete = true
+            WHERE id = ?
         """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, userId);
-            ps.setString(2, fullName);
-            ps.setInt(3, age);
-            ps.setDate(4, dueDate);
-            ps.setString(5, doctor);
-            ps.setString(6, hospital);
-            ps.setString(7, complications);
+            ps.setString(1, fullName);
+            ps.setInt(2, age);
+            ps.setDate(3, dueDate);
+            ps.setString(4, doctor);
+            ps.setString(5, hospital);
+            ps.setString(6, complications);
+            ps.setInt(7, userId);
 
             ps.executeUpdate();
 
-            resp.sendRedirect(req.getContextPath() + "/dashboard.jsp");
+            // 🔥 UPDATE SESSION USER (ONCE, CORRECTLY)
+            user.setFullName(fullName);
+            user.setAge(age);
+            user.setDueDate(dueDate.toString());
+            user.setDoctorName(doctor);
+            user.setHospitalName(hospital);
+            user.setComplications(complications);
+            user.setProfileComplete(true);
+
+            session.setAttribute("user", user);
+
+            // ✅ REDIRECT
+            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect(req.getContextPath() + "/onboarding.jsp?error=db");
+            response.sendRedirect(request.getContextPath() + "/onboarding.jsp?error=db");
         }
     }
 }

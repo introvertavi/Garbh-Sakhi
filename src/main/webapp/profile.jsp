@@ -1,15 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.garbhsakhi.dao.UserDAO" %>
 <%@ page import="com.garbhsakhi.model.User" %>
 <%@ page import="com.garbhsakhi.util.PregnancyUtil" %>
 <%@ page session="true" %>
 
 <%
+    // ✅ AUTH CHECK (SESSION-BASED)
     Integer userId = (Integer) session.getAttribute("userId");
-    if (userId == null) { response.sendRedirect("login.jsp"); return; }
+    User user = (User) session.getAttribute("user");
 
-    User user = UserDAO.getUserById(userId);
-    if (user == null) { response.sendRedirect("login.jsp"); return; }
+    if (userId == null || user == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 
     int pregWeek = 0;
     String trimester = "N/A";
@@ -81,7 +83,7 @@
 
         <h2>Your Profile</h2>
 
-        <form action="profile" method="post">
+        <form action="profile" method="post" enctype="multipart/form-data">
 
           <div class="field">
             <label>Full name</label>
@@ -168,3 +170,6 @@ document.getElementById('changeAvatarBtn')
   ?.addEventListener('click', () => avatarInput.click());
 </script>
 
+<form action="<%= request.getContextPath() %>/logout" method="get">
+    <button type="submit">Logout</button>
+</form>

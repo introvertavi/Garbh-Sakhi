@@ -18,6 +18,7 @@
 
     <div class="center-stack">
 
+      <!-- APP PREFERENCES -->
       <div class="gs-card settings-card">
         <h3>App Preferences</h3>
 
@@ -38,21 +39,44 @@
         </div>
       </div>
 
+      <!-- ACCOUNT -->
       <div class="gs-card settings-card">
         <h3>Account</h3>
-        <a href="#" class="link">Change Password</a><br>
-        <a href="logout" class="link danger">Logout</a>
-      </div>
 
+        <a href="<%= request.getContextPath() %>/change-password.jsp" class="link">
+          Change Password
+        </a>
+
+        <!-- LOGOUT -->
+        <form action="<%= request.getContextPath() %>/logout"
+              method="get"
+              style="margin-top:14px;">
+          <button type="submit"
+                  class="btn-danger"
+                  style="width:auto;padding:8px 16px;border-radius:12px;">
+            Logout
+          </button>
+        </form>
+      </div> <!-- ✅ ACCOUNT CLOSED PROPERLY -->
+
+      <!-- DANGER ZONE (SEPARATE CARD) -->
       <div class="gs-card settings-card danger-zone">
         <h3>Danger Zone</h3>
-        <button class="btn-danger">Delete Account</button>
+
+        <form action="<%= request.getContextPath() %>/delete-account"
+              method="post"
+              onsubmit="return confirm('This action is irreversible. Delete account?');">
+          <button class="btn-danger">
+            Delete Account
+          </button>
+        </form>
       </div>
 
     </div>
 
   </div>
 </div>
+
 
 <style>
 /* PAGE CONTAINER */
@@ -110,7 +134,6 @@
   flex-direction:column;
   gap:20px;
 }
-
 
 /* CARDS */
 .settings-card{
@@ -187,4 +210,3 @@
   cursor:pointer;
 }
 </style>
-

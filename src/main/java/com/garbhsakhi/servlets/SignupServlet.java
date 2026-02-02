@@ -1,6 +1,6 @@
 package com.garbhsakhi.servlets;
 
-import com.garbhsakhi.dao.UserDAO;
+import com.garbhsakhi.dao.DatabaseConnection;
 import com.garbhsakhi.util.PasswordUtil;
 
 import jakarta.servlet.ServletException;
@@ -8,6 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @WebServlet("/auth/signup")
 public class SignupServlet extends HttpServlet {
@@ -16,7 +20,6 @@ public class SignupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String name = request.getParameter("name"); // stored later in onboarding
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -27,25 +30,49 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        String hashedPassword = PasswordUtil.hash(password);
+        // 🔐 ALWAYS HASH WITH BCrypt
+        String hashed = PasswordUtil.hash(password);
 
-        Integer userId = UserDAO.register(email, hashedPassword);
+        String sql = """
+            INSERT INTO users (email, password)
+            VALUES (?, ?)
+            RETURNING id
+        """;
 
-        if (userId == null) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, hashed);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+                    int userId = rs.getInt(1);
+
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("userId", userId);
+
+                    response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
+                    return;
+                }
+            }
+
             response.sendRedirect(request.getContextPath() + "/signup.jsp?error=db");
-            return;
+
+        } catch (SQLException e) {
+
+            // 🔴 DUPLICATE EMAIL (UNIQUE CONSTRAINT)
+            if (e.getMessage() != null && e.getMessage().contains("unique")) {
+                response.sendRedirect(request.getContextPath() + "/signup.jsp?error=exists");
+            } else {
+                e.printStackTrace();
+                response.sendRedirect(request.getContextPath() + "/signup.jsp?error=db");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/signup.jsp?error=db");
         }
-
-        // create session
-        HttpSession session = request.getSession(true);
-        session.setAttribute("userId", userId);
-        session.setAttribute("email", email);
-
-        // name will be saved in onboarding (user_profile)
-        session.setAttribute("tempName", name);
-
-        System.out.println("✅ Signup success: " + email);
-
-        response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
     }
 }

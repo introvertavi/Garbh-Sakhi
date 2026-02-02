@@ -1,6 +1,7 @@
 package com.garbhsakhi.servlets;
 
 import com.garbhsakhi.dao.DatabaseConnection;
+import com.garbhsakhi.model.User;
 import com.garbhsakhi.util.PasswordUtil;
 
 import jakarta.servlet.ServletException;
@@ -24,54 +25,78 @@ public class LoginServlet extends HttpServlet {
 
         if (email == null || password == null ||
             email.isBlank() || password.isBlank()) {
-
             response.sendRedirect(request.getContextPath() + "/login.jsp?error=empty");
             return;
         }
 
-        String userSql = """
-            SELECT id, password
+        String sql = """
+            SELECT
+                id,
+                email,
+                name,
+                full_name,
+                age,
+                due_date,
+                doctor_name,
+                hospital_name,
+                complications,
+                password,
+                profile_complete
             FROM users
             WHERE email = ?
         """;
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(userSql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
 
-            if (!rs.next()) {
-                response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
-                return;
-            }
+            try (ResultSet rs = ps.executeQuery()) {
 
-            int userId = rs.getInt("id");
-            String hashedPassword = rs.getString("password");
+                if (!rs.next()) {
+                    response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+                    return;
+                }
 
-            // ✅ PASSWORD CHECK (ONLY HASHED)
-            if (!PasswordUtil.verify(password, hashedPassword)) {
-                response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
-                return;
-            }
+                String storedPassword = rs.getString("password");
 
-            // ✅ CREATE SESSION
-            HttpSession session = request.getSession(true);
-            session.setAttribute("userId", userId);
-            session.setAttribute("email", email);
+                // 🔐 NULL / EMPTY SAFETY
+                if (storedPassword == null || storedPassword.isBlank()) {
+                    System.err.println("❌ Login failed: NULL password for " + email);
+                    response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+                    return;
+                }
 
-            // ✅ CHECK PROFILE COMPLETION
-            String profileSql = """
-                SELECT profile_complete
-                FROM user_profile
-                WHERE user_id = ?
-            """;
+                // 🔐 PASSWORD VERIFY (SHA-256 + BCrypt)
+                if (!PasswordUtil.verify(password, storedPassword)) {
+                    response.sendRedirect(request.getContextPath() + "/login.jsp?error=invalid");
+                    return;
+                }
 
-            try (PreparedStatement ps2 = conn.prepareStatement(profileSql)) {
-                ps2.setInt(1, userId);
-                ResultSet rs2 = ps2.executeQuery();
+                // ✅ BUILD USER OBJECT
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setName(rs.getString("name"));
+                user.setFullName(rs.getString("full_name"));
+                user.setAge(rs.getInt("age"));
 
-                if (rs2.next() && rs2.getBoolean("profile_complete")) {
+                if (rs.getDate("due_date") != null) {
+                    user.setDueDate(rs.getDate("due_date").toString());
+                }
+
+                user.setDoctorName(rs.getString("doctor_name"));
+                user.setHospitalName(rs.getString("hospital_name"));
+                user.setComplications(rs.getString("complications"));
+                user.setProfileComplete(rs.getBoolean("profile_complete"));
+
+                // ✅ SESSION
+                HttpSession session = request.getSession(true);
+                session.setAttribute("userId", user.getId());
+                session.setAttribute("user", user);
+
+                // ✅ ROUTING
+                if (user.isProfileComplete()) {
                     response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
@@ -79,8 +104,10 @@ public class LoginServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
+            System.err.println("🔥 LOGIN DB ERROR for email: " + email);
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/login.jsp?error=db");
         }
     }
 }
+

@@ -1,11 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.garbhsakhi.model.User" %>
+
 <%
+    // ✅ AUTH CHECK
     Integer userIdObj = (Integer) session.getAttribute("userId");
-    if (userIdObj == null) {
+    User user = (User) session.getAttribute("user");
+
+    if (userIdObj == null || user == null) {
         response.sendRedirect("login.jsp");
         return;
     }
+
+    // ✅ IMPORTANT: SKIP ONBOARDING IF ALREADY COMPLETE
+    if (user.isProfileComplete()) {
+        response.sendRedirect("dashboard.jsp");
+        return;
+    }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

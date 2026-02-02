@@ -74,3 +74,7 @@
   .content-wrapper, .main-content{ margin-left:0; padding-top:calc(var(--gs-header-h) + 12px); }
 }
 </style>
+<form action="<%= request.getContextPath() %>/logout" method="get">
+    <button type="submit">Logout</button>
+</form>
+

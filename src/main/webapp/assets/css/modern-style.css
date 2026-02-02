@@ -5267,3 +5267,284 @@ body {
     overflow: visible;
   }
 }
+/* ================= DASHBOARD PREGNANCY PROGRESS ================= */
+
+.welcome-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  margin-bottom: 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.welcome-text p {
+  margin-top: 8px;
+  color: #475569;
+}
+
+.pregnancy-ring {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.pregnancy-ring svg {
+  transform: rotate(-90deg);
+}
+
+.pregnancy-ring circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.pregnancy-ring .ring-bg {
+  stroke: #f1f5f9;
+}
+
+.pregnancy-ring .ring-progress {
+  stroke: #fb7185; /* soft pregnancy pink */
+  stroke-linecap: round;
+  stroke-dasharray: 264;
+  stroke-dashoffset: calc(264 - (264 * var(--percent)) / 100);
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.pregnancy-ring .ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #334155;
+  font-size: 14px;
+}
+
+.pregnancy-ring .ring-text span {
+  font-size: 11px;
+  margin-left: 2px;
+  color: #64748b;
+}
+
+/* Mobile stacking */
+@media (max-width: 640px) {
+  .welcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pregnancy-ring {
+    margin-top: 12px;
+  }
+}
+/* ===== PAGE LAYOUT (GLOBAL) ===== */
+.page-container{
+  padding-top:80px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  box-sizing:border-box;
+}
+
+/* CONTENT WIDTH */
+.content-wrapper{
+  width:100%;
+  max-width:720px;
+  padding-left:16px;
+  padding-right:64px;
+}
+
+/* DESKTOP SIDEBAR OFFSET */
+@media(min-width:901px){
+  .page-container{
+    padding-left:260px; /* sidebar width */
+  }
+
+  .content-wrapper{
+    padding-right:140px;
+  }
+}
+
+/* LARGE SCREENS */
+@media(min-width:1280px){
+  .content-wrapper{
+    padding-right:180px;
+  }
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .page-container{
+    padding-left:0;
+    padding-bottom:90px; /* bottom nav */
+  }
+
+  .content-wrapper{
+    padding-left:16px;
+    padding-right:16px;
+  }
+}
+
+/* STACK */
+.center-stack{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+/* ===== PASSWORD FIELD ===== */
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 44px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+.toggle-eye:hover {
+  color: #ff4f93;
+}
+
+/* ===== STRENGTH METER ===== */
+.strength-meter {
+  margin-top: 6px;
+}
+
+.strength-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.strength-text {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+/* strength states */
+.strength-weak { background: #ef4444; }
+.strength-medium { background: #f59e0b; }
+.strength-strong { background: #22c55e; }
+/* REQUIRED for eye icon positioning */
+.password-field {
+  position: relative;
+}
+
+.password-field .toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+.password-field .toggle-eye:hover {
+  color: #ff4f93;
+}
+
+.password-field input {
+  padding-right: 42px; /* space for eye icon */
+}
+/* ===== PASSWORD FIELD FIX ===== */
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 42px; /* space for eye icon */
+}
+
+.password-field .toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #9ca3af;
+  z-index: 2;
+}
+
+.password-field .toggle-eye:hover {
+  color: #ff4f93;
+}
+/* ============================= */
+/* PASSWORD FIELD WITH EYE ICON */
+/* ============================= */
+
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 44px; /* space for eye icon */
+}
+
+.password-field .toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.password-field .toggle-eye:hover {
+  color: #ff4f93;
+}
+/* ============================= */
+/* PERFECT PASSWORD EYE ALIGN */
+/* ============================= */
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 46px;
+}
+
+.password-input-wrapper .toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.password-input-wrapper .toggle-eye:hover {
+  color: #ff4f93;
+}

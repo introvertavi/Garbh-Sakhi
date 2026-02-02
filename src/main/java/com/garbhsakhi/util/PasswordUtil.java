@@ -1,28 +1,56 @@
 package com.garbhsakhi.util;
 
+import org.mindrot.jbcrypt.BCrypt;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class PasswordUtil {
 
-    public static String hash(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes());
+    // =========================
+    // VERIFY PASSWORD
+    // Supports SHA-256 (legacy) + BCrypt (current)
+    // =========================
+    public static boolean verify(String plainPassword, String storedHash) {
 
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                hexString.append(String.format("%02x", b));
+        try {
+            if (storedHash == null || storedHash.isBlank()) {
+                return false;
             }
 
-            return hexString.toString();
+            // BCrypt
+            if (storedHash.startsWith("$2a$") || storedHash.startsWith("$2b$")) {
+                return BCrypt.checkpw(plainPassword, storedHash);
+            }
 
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            // SHA-256 (legacy)
+            return sha256(plainPassword).equals(storedHash);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public static boolean verify(String password, String storedHash) {
-        return hash(password).equals(storedHash);
+    // =========================
+    // HASH NEW PASSWORD (BCrypt ONLY)
+    // =========================
+    public static String hash(String plainPassword) {
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+    }
+
+    // =========================
+    // SHA-256 HELPER (LEGACY)
+    // =========================
+    private static String sha256(String input) throws Exception {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hash = md.digest(input.getBytes("UTF-8"));
+
+        StringBuilder hex = new StringBuilder();
+        for (byte b : hash) {
+            String h = Integer.toHexString(0xff & b);
+            if (h.length() == 1) hex.append('0');
+            hex.append(h);
+        }
+        return hex.toString();
     }
 }

@@ -230,3 +230,7 @@ function toggleDrawer() {
 gsHam?.addEventListener('click', toggleDrawer);
 gsOverlay?.addEventListener('click', closeDrawer);
 </script>
+<form action="<%= request.getContextPath() %>/logout" method="get">
+    <button type="submit">Logout</button>
+</form>
+
