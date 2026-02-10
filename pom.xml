@@ -38,11 +38,13 @@
         </dependency>
 
         <!-- MySQL -->
-        <dependency>
+       <dependency>
     <groupId>org.postgresql</groupId>
     <artifactId>postgresql</artifactId>
-    <version>42.7.2</version>
+    <version>42.7.3</version>
 </dependency>
+
+
 <dependency>
     <groupId>org.mindrot</groupId>
     <artifactId>jbcrypt</artifactId>

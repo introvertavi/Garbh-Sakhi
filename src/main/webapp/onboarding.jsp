@@ -90,7 +90,15 @@
                 <input type="number" name="age" required>
             </div>
         </div>
+<div class="field">
+  <label>Username</label>
+  <input type="text" name="username" placeholder="Choose a username" required />
+</div>
 
+<div class="field">
+  <label>Phone Number</label>
+  <input type="tel" name="phone" placeholder="9-digit mobile number" required />
+</div>
         <div class="row">
             <div class="field">
                 <label>Due Date</label>
@@ -113,6 +121,7 @@
             <label>Complications (if any)</label>
             <textarea name="complications"></textarea>
         </div>
+
 
         <button class="btn-primary" type="submit">Finish Setup</button>
     </form>

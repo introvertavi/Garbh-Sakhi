@@ -34,7 +34,7 @@
       <div class="gs-card emergency-card">
         <div>
           <h3>Primary Contact</h3>
-          <p>Name: Contact Name</p>
+          <p>Name: Husband</p>
           <p>Phone: +91 98765 43210</p>
         </div>
         <a href="tel:+919876543210" class="btn-call">Call</a>
@@ -43,7 +43,7 @@
       <div class="gs-card emergency-card">
         <div>
           <h3>Secondary Contact</h3>
-          <p>Name: Contact Name</p>
+          <p>Name: Mother</p>
           <p>Phone: +91 91234 56789</p>
         </div>
         <a href="tel:+919123456789" class="btn-call">Call</a>

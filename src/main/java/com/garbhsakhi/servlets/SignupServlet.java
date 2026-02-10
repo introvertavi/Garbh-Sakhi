@@ -1,6 +1,8 @@
 package com.garbhsakhi.servlets;
 
 import com.garbhsakhi.dao.DatabaseConnection;
+import com.garbhsakhi.dao.UserDAO;
+import com.garbhsakhi.model.User;
 import com.garbhsakhi.util.PasswordUtil;
 
 import jakarta.servlet.ServletException;
@@ -30,12 +32,11 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        // 🔐 ALWAYS HASH WITH BCrypt
-        String hashed = PasswordUtil.hash(password);
+        String hashedPassword = PasswordUtil.hash(password);
 
         String sql = """
-            INSERT INTO users (email, password)
-            VALUES (?, ?)
+            INSERT INTO users (email, password, profile_complete)
+            VALUES (?, ?, false)
             RETURNING id
         """;
 
@@ -43,16 +44,21 @@ public class SignupServlet extends HttpServlet {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
-            ps.setString(2, hashed);
+            ps.setString(2, hashedPassword);
 
             try (ResultSet rs = ps.executeQuery()) {
 
                 if (rs.next()) {
                     int userId = rs.getInt(1);
 
+                    // ✅ LOAD FULL USER OBJECT
+                    User user = UserDAO.getUserById(userId);
+
                     HttpSession session = request.getSession(true);
                     session.setAttribute("userId", userId);
+                    session.setAttribute("user", user);
 
+                    // ✅ NEW USER → ONBOARDING
                     response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
                     return;
                 }
@@ -62,8 +68,7 @@ public class SignupServlet extends HttpServlet {
 
         } catch (SQLException e) {
 
-            // 🔴 DUPLICATE EMAIL (UNIQUE CONSTRAINT)
-            if (e.getMessage() != null && e.getMessage().contains("unique")) {
+            if (e.getMessage() != null && e.getMessage().toLowerCase().contains("unique")) {
                 response.sendRedirect(request.getContextPath() + "/signup.jsp?error=exists");
             } else {
                 e.printStackTrace();

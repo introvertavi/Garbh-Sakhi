@@ -115,7 +115,8 @@
       </div>
     <% } %>
 
-    <form action="auth/login" method="post" novalidate>
+   <form method="post" action="${pageContext.request.contextPath}/auth/login">
+
 
   <div class="field">
     <label for="email">Email address</label>

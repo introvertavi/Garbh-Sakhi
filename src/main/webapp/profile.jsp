@@ -65,12 +65,34 @@
           </div>
         </div>
 
+        <!-- ✅ UPDATED: Username + Phone display (ONLY CHANGE) -->
         <ul class="profile-summary">
-          <li class="name"><strong><%= user.getFullName() %></strong></li>
-          <li>Age: <%= user.getAge() %></li>
-          <li>Phone: <%= user.getPhone() %></li>
+          <li class="name">
+            <strong><%= user.getFullName() != null ? user.getFullName() : "-" %></strong>
+          </li>
+
+          <li>
+            Username:
+            <%= (user.getName() != null && !user.getName().isBlank())
+                  ? user.getName()
+                  : "-" %>
+          </li>
+
+          <li>
+            Age:
+            <%= user.getAge() > 0 ? user.getAge() : "-" %>
+          </li>
+
+          <li>
+            Phone:
+            <%= (user.getPhone() != null && !user.getPhone().isBlank())
+                  ? user.getPhone()
+                  : "-" %>
+          </li>
+
           <li>Pregnancy: Week <%= pregWeek %></li>
           <li>Trimester: <%= trimester %></li>
+
           <% if (babyFruit != null) { %>
             <li>Baby size: <%= babyFruit %></li>
           <% } %>
@@ -173,3 +195,4 @@ document.getElementById('changeAvatarBtn')
 <form action="<%= request.getContextPath() %>/logout" method="get">
     <button type="submit">Logout</button>
 </form>
+

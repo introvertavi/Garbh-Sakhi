@@ -29,19 +29,20 @@ public class ProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // ✅ AUTH CHECK (CORRECT)
+        // ✅ AUTH CHECK (USE session.user ONLY)
         HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+
+        if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
-        User user = (User) session.getAttribute("user");
         int userId = user.getId();
 
         // ✅ FORM DATA
         String fullName = req.getParameter("full_name");
-        String username = req.getParameter("username");
+        String username = req.getParameter("username"); // maps to users.name
         String phone = req.getParameter("phone");
         String dueDate = req.getParameter("due_date");
         String doctor = req.getParameter("doctor_name");
@@ -58,13 +59,14 @@ public class ProfileServlet extends HttpServlet {
 
         String avatarPath = null;
 
-        // ✅ AVATAR UPLOAD
+        // ✅ AVATAR UPLOAD (unchanged)
         Part avatarPart = req.getPart("avatar");
         if (avatarPart != null && avatarPart.getSize() > 0) {
 
-            String filename = "avatar_" + userId + "_" + System.currentTimeMillis()
-                    + avatarPart.getSubmittedFileName()
-                            .substring(avatarPart.getSubmittedFileName().lastIndexOf('.'));
+            String ext = avatarPart.getSubmittedFileName()
+                    .substring(avatarPart.getSubmittedFileName().lastIndexOf('.'));
+
+            String filename = "avatar_" + userId + "_" + System.currentTimeMillis() + ext;
 
             String appPath = getServletContext().getRealPath("/");
             File uploadDir = new File(appPath, UPLOAD_DIR);
@@ -101,12 +103,17 @@ public class ProfileServlet extends HttpServlet {
 
             ps.setString(i++, fullName);
             ps.setString(i++, username);
-            if (age != null) ps.setInt(i++, age); else ps.setNull(i++, java.sql.Types.INTEGER);
+
+            if (age != null) ps.setInt(i++, age);
+            else ps.setNull(i++, java.sql.Types.INTEGER);
+
             ps.setString(i++, phone);
+
             if (dueDate == null || dueDate.isBlank())
                 ps.setNull(i++, java.sql.Types.DATE);
             else
                 ps.setDate(i++, java.sql.Date.valueOf(dueDate));
+
             ps.setString(i++, doctor);
             ps.setString(i++, hospital);
             ps.setString(i++, complications);
@@ -116,10 +123,10 @@ public class ProfileServlet extends HttpServlet {
             ps.setInt(i++, userId);
             ps.executeUpdate();
 
-            // ✅ UPDATE SESSION USER
+            // ✅ UPDATE SESSION USER (ONLY WHAT WAS CHANGED)
             user.setFullName(fullName);
             user.setName(username);
-            user.setAge(age != null ? age : 0);
+            if (age != null) user.setAge(age);
             user.setPhone(phone);
             user.setDueDate(dueDate);
             user.setDoctorName(doctor);

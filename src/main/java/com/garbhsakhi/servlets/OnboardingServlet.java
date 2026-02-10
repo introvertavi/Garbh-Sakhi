@@ -33,8 +33,10 @@ public class OnboardingServlet extends HttpServlet {
         String fullName = request.getParameter("full_name");
         int age = Integer.parseInt(request.getParameter("age"));
         Date dueDate = Date.valueOf(request.getParameter("due_date"));
-        String doctor = request.getParameter("doctor_name");
+        String phone = request.getParameter("phone");
+        String username = request.getParameter("username");
         String hospital = request.getParameter("hospital_name");
+        String doctor = request.getParameter("doctor_name");
         String complications = request.getParameter("complications");
 
         String sql = """

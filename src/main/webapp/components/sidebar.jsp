@@ -69,12 +69,13 @@
 .content-wrapper, .main-content{
   margin-left:var(--gs-sidebar-w);
   padding-top:calc(var(--gs-header-h) + 24px);
+  position: relative;
+  z-index: 1;
 }
+
 @media (max-width:900px){
   .content-wrapper, .main-content{ margin-left:0; padding-top:calc(var(--gs-header-h) + 12px); }
 }
 </style>
-<form action="<%= request.getContextPath() %>/logout" method="get">
-    <button type="submit">Logout</button>
-</form>
+
 

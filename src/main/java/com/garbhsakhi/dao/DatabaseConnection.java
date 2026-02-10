@@ -2,30 +2,23 @@ package com.garbhsakhi.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    static {
+    private static final String URL =
+            "jdbc:postgresql://localhost:5432/garbh_sakhi";
+
+    private static final String USER = "garbh_sakhi_user";
+    private static final String PASSWORD = "avinash";
+
+    public static Connection getConnection() {
         try {
             Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("PostgreSQL JDBC Driver not found", e);
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("DB connection failed", e);
         }
-    }
-
-    public static Connection getConnection() throws SQLException {
-
-        String url = System.getenv("DB_URL");
-        String user = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASSWORD");
-
-        if (url == null || user == null || password == null) {
-            throw new RuntimeException(
-                "Missing DB env vars: DB_URL, DB_USER, DB_PASSWORD"
-            );
-        }
-
-        return DriverManager.getConnection(url, user, password);
     }
 }
+
