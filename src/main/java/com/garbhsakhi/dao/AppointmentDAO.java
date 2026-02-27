@@ -3,7 +3,6 @@ package com.garbhsakhi.dao;
 import com.garbhsakhi.model.Appointment;
 import java.sql.*;
 import java.util.*;
-import java.time.*;
 import java.sql.Date;
 
 public class AppointmentDAO {
