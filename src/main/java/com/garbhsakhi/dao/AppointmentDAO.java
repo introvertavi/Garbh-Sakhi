@@ -183,4 +183,94 @@ public static void updateMissedAppointments(int userId){
         e.printStackTrace();
     }
 }
+// ======================================================
+// DASHBOARD METHODS (SAFE ADDITION - NO EXISTING CHANGE)
+// ======================================================
+
+// ✅ GET TODAY APPOINTMENTS (Dashboard Preview)
+public static List<Appointment> getTodayAppointments(int userId){
+
+    List<Appointment> list = new ArrayList<>();
+
+    String sql = """
+        SELECT * FROM appointments
+        WHERE user_id = ?
+        AND appointment_date = CURRENT_DATE
+        AND status != 'COMPLETED'
+        ORDER BY appointment_time ASC
+    """;
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            Appointment a = new Appointment();
+
+            a.setId(rs.getInt("id"));
+            a.setUserId(rs.getInt("user_id"));
+            a.setTitle(rs.getString("title"));
+            a.setDoctorName(rs.getString("doctor_name"));
+            a.setHospitalName(rs.getString("hospital_name"));
+            a.setAppointmentDate(rs.getDate("appointment_date").toLocalDate());
+            a.setAppointmentTime(rs.getTime("appointment_time").toLocalTime());
+            a.setNotes(rs.getString("notes"));
+            a.setStatus(rs.getString("status"));
+
+            list.add(a);
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+
+// ✅ GET UPCOMING APPOINTMENTS (Dashboard Preview)
+public static List<Appointment> getUpcomingAppointments(int userId){
+
+    List<Appointment> list = new ArrayList<>();
+
+    String sql = """
+        SELECT * FROM appointments
+        WHERE user_id = ?
+        AND appointment_date > CURRENT_DATE
+        AND status != 'COMPLETED'
+        ORDER BY appointment_date ASC, appointment_time ASC
+    """;
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            Appointment a = new Appointment();
+
+            a.setId(rs.getInt("id"));
+            a.setUserId(rs.getInt("user_id"));
+            a.setTitle(rs.getString("title"));
+            a.setDoctorName(rs.getString("doctor_name"));
+            a.setHospitalName(rs.getString("hospital_name"));
+            a.setAppointmentDate(rs.getDate("appointment_date").toLocalDate());
+            a.setAppointmentTime(rs.getTime("appointment_time").toLocalTime());
+            a.setNotes(rs.getString("notes"));
+            a.setStatus(rs.getString("status"));
+
+            list.add(a);
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+
+    return list;
+}
 }
