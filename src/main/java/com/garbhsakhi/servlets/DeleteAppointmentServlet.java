@@ -3,7 +3,6 @@ package com.garbhsakhi.servlets;
 import com.garbhsakhi.dao.AppointmentDAO;
 import com.garbhsakhi.model.User;
 
-import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
