@@ -144,4 +144,43 @@ public class AppointmentDAO {
 
         }catch(Exception e){e.printStackTrace();}
     }
+
+   // ✅ MARK APPOINTMENT AS COMPLETED
+public static void markCompleted(int id){
+
+    String sql = "UPDATE appointments SET status='COMPLETED' WHERE id=?";
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1,id);
+        ps.executeUpdate();
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
+
+
+// ✅ AUTO MOVE OLD APPOINTMENTS TO MISSED
+public static void updateMissedAppointments(int userId){
+
+    String sql = """
+        UPDATE appointments
+        SET status='MISSED'
+        WHERE user_id=?
+        AND appointment_date < CURRENT_DATE
+        AND status='UPCOMING'
+    """;
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1,userId);
+        ps.executeUpdate();
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
 }

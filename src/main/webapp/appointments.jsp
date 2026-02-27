@@ -5,33 +5,35 @@
 <%@ page session="true" %>
 
 <%
-    // 🔐 AUTH CHECK
-    User user = (User) session.getAttribute("user");
-    if (user == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+User user = (User) session.getAttribute("user");
+if (user == null) {
+    response.sendRedirect("login.jsp");
+    return;
+}
 
-    // 🛡️ ENSURE PAGE IS OPENED VIA SERVLET
-    if (request.getAttribute("appointments") == null) {
-        response.sendRedirect("appointments");
-        return;
-    }
+/* ✅ Always ensure servlet loads data */
+if (request.getAttribute("todayAppointments") == null) {
+    response.sendRedirect("appointments");
+    return;
+}
 
-    request.setAttribute("pageTitle", "Appointments");
+request.setAttribute("pageTitle", "Appointments");
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/modern-style.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/modern-style.css">
 
-    <!-- CALENDAR -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- ✅ ICON FIX (NEW) -->
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body>
@@ -42,99 +44,105 @@
 <jsp:include page="components/fab-emergency.jsp" />
 
 <div class="main-content">
-  <div style="max-width:1100px;margin:0 auto;padding:24px;">
+<div style="max-width:1100px;margin:0 auto;padding:24px;">
 
-    <div class="gs-card">
+<div class="gs-card">
 
-      <!-- HEADER -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <h2>📅 Appointments</h2>
-        <a href="add-appointments.jsp" class="btn-primary">+ Add Appointment</a>
-      </div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<h2>📅 Appointments</h2>
+<a href="add-appointments.jsp" class="btn-primary">+ Add Appointment</a>
+</div>
 
-      <!-- LAYOUT -->
-      <div class="appt-layout">
+<div class="appt-layout">
 
-        <!-- CALENDAR -->
-        <div class="calendar-mini gs-card">
-          <h3 class="calendar-title">Select Date</h3>
-          <div class="calendar-box">
-            <input type="text" id="appointmentCalendar" class="calendar-input">
-          </div>
-        </div>
+<!-- CALENDAR -->
+<div class="calendar-mini gs-card">
+<h3 class="calendar-title">Select Date</h3>
+<div class="calendar-box">
+<input type="text" id="appointmentCalendar" class="calendar-input">
+</div>
+</div>
 
-        <!-- APPOINTMENT LIST -->
-        <div class="appt-list gs-card">
-          <h3 style="margin-bottom:16px;">Upcoming Appointments</h3>
+<!-- APPOINTMENTS -->
+<div class="appt-list gs-card">
 
-          <%
-              List<Appointment> appointments =
-                  (List<Appointment>) request.getAttribute("appointments");
+<%
+List<Appointment> today =
+(List<Appointment>) request.getAttribute("todayAppointments");
 
-              if (appointments.isEmpty()) {
-          %>
-              <p class="muted">No appointments yet.</p>
-          <%
-              } else {
-                  for (Appointment a : appointments) {
-          %>
+List<Appointment> upcoming =
+(List<Appointment>) request.getAttribute("upcomingAppointments");
 
-          <div class="appointment-item">
+List<Appointment> missed =
+(List<Appointment>) request.getAttribute("missedAppointments");
+%>
 
-            <!-- DATE BADGE -->
-            <div class="appt-date">
-              <span class="day"><%= a.getAppointmentDate().getDayOfMonth() %></span>
-              <span class="month">
-                <%= a.getAppointmentDate().getMonth().toString().substring(0,3) %>
-              </span>
-            </div>
+<!-- ================= TODAY ================= -->
+<h3 style="margin-bottom:12px;">Today's Appointments</h3>
 
-            <!-- INFO -->
-            <div class="appt-info">
-              <strong><%= a.getTitle() %></strong>
+<%
+if (today == null || today.isEmpty()) {
+%>
+<p class="muted">No appointments today.</p>
+<%
+} else {
+for (Appointment a : today) {
+%>
 
-              <p class="muted">
-                <%= a.getDoctorName() %> • <%= a.getAppointmentTime() %>
-              </p>
+<%@ include file="appointment-card.jsp" %>
 
-              <p class="muted small"><%= a.getHospitalName() %></p>
+<%
+}}
+%>
 
-              <!-- STATUS -->
-              <span class="status-badge <%= a.getStatus().toLowerCase() %>">
-                <%= a.getStatus() %>
-              </span>
-            </div>
+<!-- ================= UPCOMING ================= -->
+<h3 style="margin:20px 0 12px;">Upcoming Appointments</h3>
 
-            <!-- ACTIONS -->
-            <div class="appt-actions">
-              <a href="edit-appointment?id=<%= a.getId() %>" class="btn-icon">✏️</a>
+<%
+if (upcoming == null || upcoming.isEmpty()) {
+%>
+<p class="muted">No upcoming appointments.</p>
+<%
+} else {
+for (Appointment a : upcoming) {
+%>
 
-              <form method="post" action="delete-appointment"
-                    onsubmit="return confirm('Delete this appointment?');">
-                <input type="hidden" name="id" value="<%= a.getId() %>">
-                <button type="submit" class="btn-icon danger">🗑️</button>
-              </form>
-            </div>
+<%@ include file="appointment-card.jsp" %>
 
-          </div>
+<%
+}}
+%>
 
-          <%
-                  }
-              }
-          %>
-        </div>
+<!-- ================= MISSED ================= -->
+<h3 style="margin:20px 0 12px;color:#e5484d;">Missed Appointments</h3>
 
-      </div>
-    </div>
-  </div>
+<%
+if (missed == null || missed.isEmpty()) {
+%>
+<p class="muted">No missed appointments.</p>
+<%
+} else {
+for (Appointment a : missed) {
+%>
+
+<%@ include file="appointment-card.jsp" %>
+
+<%
+}}
+%>
+
+</div>
+</div>
+</div>
+</div>
 </div>
 
 <script>
-  flatpickr("#appointmentCalendar", {
-    inline: true,
-    defaultDate: "today",
-    dateFormat: "d-m-Y"
-  });
+flatpickr("#appointmentCalendar", {
+inline:true,
+defaultDate:"today",
+dateFormat:"d-m-Y"
+});
 </script>
 
 </body>

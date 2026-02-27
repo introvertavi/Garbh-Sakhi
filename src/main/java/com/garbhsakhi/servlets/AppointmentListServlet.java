@@ -6,18 +6,19 @@ import com.garbhsakhi.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/appointments")
 public class AppointmentListServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws IOException, ServletException {
 
         User user = (User) request.getSession().getAttribute("user");
@@ -27,10 +28,36 @@ public class AppointmentListServlet extends HttpServlet {
             return;
         }
 
-        List<Appointment> appointments =
+        // auto update missed
+        AppointmentDAO.updateMissedAppointments(user.getId());
+
+        List<Appointment> all =
                 AppointmentDAO.getAppointmentsByUser(user.getId());
 
-        request.setAttribute("appointments", appointments);
-        request.getRequestDispatcher("appointments.jsp").forward(request, response);
+        List<Appointment> today = new ArrayList<>();
+        List<Appointment> upcoming = new ArrayList<>();
+        List<Appointment> missed = new ArrayList<>();
+
+        LocalDate now = LocalDate.now();
+
+        for (Appointment a : all) {
+
+            if ("MISSED".equalsIgnoreCase(a.getStatus())) {
+                missed.add(a);
+            }
+            else if (a.getAppointmentDate().equals(now)) {
+                today.add(a);
+            }
+            else {
+                upcoming.add(a);
+            }
+        }
+
+        request.setAttribute("todayAppointments", today);
+        request.setAttribute("upcomingAppointments", upcoming);
+        request.setAttribute("missedAppointments", missed);
+
+        request.getRequestDispatcher("appointments.jsp")
+               .forward(request, response);
     }
 }
