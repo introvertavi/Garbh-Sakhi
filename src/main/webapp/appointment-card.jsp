@@ -49,10 +49,14 @@
             && !"MISSED".equalsIgnoreCase(appt.getStatus())) {
         %>
 
-        <form method="post" action="complete-appointment" style="display:inline;">
-            <input type="hidden" name="id" value="<%= appt.getId() %>">
-            <input type="checkbox" onchange="this.form.submit()">
-        </form>
+        <form method="post" action="complete-appointment" class="complete-form" style="display:inline;">
+    <input type="hidden" name="id" value="<%= appt.getId() %>">
+
+    <label class="complete-checkbox">
+        <input type="checkbox" onchange="markCompleted(this)">
+        <span class="checkmark"></span>
+    </label>
+</form>
 
         <%
         }

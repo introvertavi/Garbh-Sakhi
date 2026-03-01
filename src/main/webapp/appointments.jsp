@@ -144,6 +144,48 @@ defaultDate:"today",
 dateFormat:"d-m-Y"
 });
 </script>
+<script>
+function markCompleted(checkbox) {
 
+    const card = checkbox.closest(".appointment-item");
+
+    // animation
+    card.classList.add("completing");
+
+    setTimeout(() => {
+        checkbox.closest("form").submit();
+    }, 600); // animation duration
+}
+</script>
+<script>
+flatpickr("#appointmentCalendar", {
+inline:true,
+defaultDate:"today",
+dateFormat:"d-m-Y"
+});
+
+// ✅ completion animation (ONLY ADDITION)
+function markCompleted(checkbox) {
+
+    const card = checkbox.closest(".appointment-item");
+
+    if(card){
+        card.classList.add("completing");
+    }
+
+    setTimeout(() => {
+        checkbox.closest("form").submit();
+    }, 600);
+}
+</script>
+<script>
+// =============================
+// AUTO REFRESH EVERY 60 SECONDS
+// =============================
+setInterval(() => {
+    fetch("appointments?refresh=true")
+        .then(() => location.reload());
+}, 60000); // 1 minute
+</script>
 </body>
 </html>

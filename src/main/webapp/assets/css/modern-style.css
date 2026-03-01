@@ -6024,3 +6024,256 @@ body {
     transform:translateY(-4px);
     box-shadow:0 10px 22px rgba(0,0,0,0.08);
 }
+/* completion animation */
+.appointment-item.completing {
+    opacity: 0.5;
+    transform: scale(0.98);
+    transition: all 0.6s ease;
+}
+
+/* custom checkbox */
+.complete-checkbox input {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #7c9cff;
+    border-radius: 6px;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+}
+
+.complete-checkbox input:checked + .checkmark {
+    background: #22c55e;
+    border-color: #22c55e;
+}
+
+.complete-checkbox input:checked + .checkmark::after {
+    content: "✓";
+    color: white;
+    position: absolute;
+    left: 4px;
+    top: -1px;
+    font-size: 14px;
+}
+/* MOBILE APPOINTMENT FIX */
+@media (max-width: 768px) {
+
+    .appointment-item {
+        padding: 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .appt-layout {
+        gap: 14px;
+    }
+
+    .appt-info strong {
+        font-size: 15px;
+    }
+
+    .appt-info .muted {
+        font-size: 13px;
+    }
+
+    .appt-actions {
+        gap: 8px;
+    }
+
+    .appt-date {
+        min-width: 52px;
+    }
+}
+.appointment-item.completing {
+    opacity: 0.5;
+    transform: scale(0.98);
+    transition: all 0.6s ease;
+}
+
+/* =========================
+   APPOINTMENT ACTIONS SIZE
+========================= */
+
+.appt-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Bigger checkbox */
+.complete-checkbox .checkmark {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+}
+
+/* check icon size */
+.complete-checkbox input:checked + .checkmark::after {
+    font-size: 16px;
+    left: 6px;
+    top: 1px;
+}
+
+/* Bigger edit/delete buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* nicer hover feel */
+.btn-icon:hover {
+    transform: scale(1.08);
+    transition: 0.2s ease;
+}
+
+/* =========================
+   BIGGER CHECKBOX + ACTIONS
+========================= */
+
+.appt-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* make real checkbox bigger */
+.appt-actions input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #22c55e; /* pastel green */
+    transform: scale(1.2);
+}
+
+/* bigger edit/delete buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* smooth hover */
+.btn-icon:hover {
+    transform: scale(1.08);
+    transition: 0.2s ease;
+}
+/* =========================
+   BIGGER CHECKBOX + ACTIONS
+========================= */
+
+.appt-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* make real checkbox bigger */
+.appt-actions input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #22c55e; /* pastel green */
+    transform: scale(1.2);
+}
+
+/* bigger edit/delete buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* smooth hover */
+.btn-icon:hover {
+    transform: scale(1.08);
+    transition: 0.2s ease;
+}
+
+/* =========================
+   BIGGER CHECKBOX + ACTIONS
+========================= */
+
+.appt-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* make real checkbox bigger */
+.appt-actions input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #22c55e; /* pastel green */
+    transform: scale(1.2);
+}
+
+/* bigger edit/delete buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* smooth hover */
+.btn-icon:hover {
+    transform: scale(1.08);
+    transition: 0.2s ease;
+}
+
+/* =========================
+   BIGGER CHECKBOX + ACTIONS
+========================= */
+
+.appt-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* make real checkbox bigger */
+.appt-actions input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #22c55e; /* pastel green */
+    transform: scale(1.2);
+}
+
+/* bigger edit/delete buttons */
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* smooth hover */
+.btn-icon:hover {
+    transform: scale(1.08);
+    transition: 0.2s ease;
+}

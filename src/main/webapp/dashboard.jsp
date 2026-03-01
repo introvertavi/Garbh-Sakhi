@@ -7,8 +7,6 @@
 <%@ page session="true" %>
 
 <%
-/* ================= AUTH CHECK ================= */
-
 Integer userId = (Integer) session.getAttribute("userId");
 if (userId == null) {
     response.sendRedirect("login.jsp");
@@ -21,8 +19,6 @@ if (user != null && !user.isProfileComplete()) {
     response.sendRedirect("onboarding.jsp");
     return;
 }
-
-/* ================= PREGNANCY DATA ================= */
 
 int pregWeek = 0;
 String babyFruit = "";
@@ -38,8 +34,6 @@ if (user != null && user.getDueDate() != null && !user.getDueDate().isBlank()) {
     pregnancyPercent = (int)Math.round((pregWeek / 40.0) * 100);
     if (pregnancyPercent > 100) pregnancyPercent = 100;
 }
-
-/* ================= LOAD APPOINTMENTS ================= */
 
 Appointment todayPreview = null;
 Appointment upcomingPreview = null;
@@ -65,6 +59,20 @@ try {
 }
 
 request.setAttribute("pageTitle","Dashboard");
+/* ================= DYNAMIC GREETING ================= */
+
+java.time.LocalTime currentTime = java.time.LocalTime.now();
+String greetingText;
+
+if(currentTime.isBefore(java.time.LocalTime.NOON)){
+    greetingText = "Good Morning ☀️";
+}
+else if(currentTime.isBefore(java.time.LocalTime.of(17,0))){
+    greetingText = "Good Afternoon 🌤";
+}
+else{
+    greetingText = "Good Evening 🌙";
+}
 %>
 
 <!DOCTYPE html>
@@ -76,63 +84,6 @@ request.setAttribute("pageTitle","Dashboard");
 
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/modern-style.css">
-
-<style>
-
-/* ===== Welcome Card ===== */
-
-.welcome-card{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.welcome-text h2{
-    margin-bottom:14px;
-}
-
-.detail-line{
-    margin:6px 0;
-    font-size:15px;
-}
-
-.detail-label{
-    color:#6b7280;
-}
-
-.detail-value{
-    font-weight:600;
-    margin-left:6px;
-}
-
-/* ===== Appointment Upgrade ===== */
-
-.dashboard-appointment{
-    transition:all .25s ease;
-}
-
-.dashboard-appointment:hover{
-    transform:translateY(-4px);
-    box-shadow:0 10px 22px rgba(0,0,0,0.08);
-}
-
-.appointment-meta{
-    margin-top:10px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.appt-label{
-    font-size:12px;
-    font-weight:600;
-    color:#5b6df6;
-    background:#eef1ff;
-    padding:4px 10px;
-    border-radius:20px;
-}
-
-</style>
 
 </head>
 
@@ -146,13 +97,11 @@ request.setAttribute("pageTitle","Dashboard");
 <div class="main-content">
 <div style="max-width:1100px;margin:0 auto;padding:24px;">
 
-<!-- ================= WELCOME CARD ================= -->
-
 <div class="welcome-card">
 
 <div class="welcome-text">
 
-<h2>👋 Welcome, <%= user.getFullName() %></h2>
+<h2><%= greetingText %>, <%= user.getFullName() %> 👋</h2>
 
 <div class="detail-line">
 <span class="detail-label">Due Date:</span>
@@ -186,23 +135,13 @@ request.setAttribute("pageTitle","Dashboard");
 
 </div>
 
-<!-- ================= GRID ================= -->
-
 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
-
-<!-- 💡 DAILY HEALTH TIP -->
 
 <div style="grid-column:1/-1;background:#fff;padding:22px;border-radius:14px;border-left:5px solid #ffd166;">
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
 <b>💡 Daily Health Tip</b>
 
-<span style="background:#fff4cc;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;">
-Week <%= pregWeek %>
-</span>
-</div>
-
-<p class="text-muted" style="margin:0;line-height:1.6;">
+<p class="text-muted" style="margin-top:10px;">
 <%= dailyTip %>
 </p>
 
@@ -255,6 +194,9 @@ java.time.LocalDate d = preview.getAppointmentDate();
 <%= preview.getAppointmentTime() %>
 </p>
 
+<!-- ✅ COUNTDOWN (FIXED POSITION) -->
+<p id="countdown" class="text-muted" style="margin-top:6px;"></p>
+
 <p class="text-muted" style="margin:0;">
 <%= preview.getHospitalName() %>
 </p>
@@ -288,12 +230,10 @@ No upcoming appointments scheduled.
 
 </div>
 
-<!-- 💊 MEDICINES -->
 <div style="background:#fff;padding:20px;border-radius:14px;">
 💊 Today’s Medicines
 </div>
 
-<!-- 🧪 LAB REPORT -->
 <div style="background:#fff;padding:20px;border-radius:14px;">
 🧪 Recent Lab Report
 </div>
@@ -302,6 +242,41 @@ No upcoming appointments scheduled.
 
 </div>
 </div>
+
+<!-- ===== COUNTDOWN SCRIPT (UNCHANGED LOGIC) ===== -->
+<script>
+(function(){
+
+const apptTime = '<%= preview != null ? preview.getAppointmentTime().toString() : "" %>';
+if(!apptTime) return;
+
+function updateCountdown(){
+
+    const el = document.getElementById("countdown");
+    if(!el) return;
+
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+    const target = new Date(today + "T" + apptTime);
+
+    const diff = target - now;
+
+    if(diff <= 0){
+        el.innerText = "⏳ Starting now";
+        return;
+    }
+
+    const hrs = Math.floor(diff / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+
+    el.innerText = "⏳ Starts in " + hrs + "h " + mins + "m";
+}
+
+updateCountdown();
+setInterval(updateCountdown,60000);
+
+})();
+</script>
 
 </body>
 </html>
