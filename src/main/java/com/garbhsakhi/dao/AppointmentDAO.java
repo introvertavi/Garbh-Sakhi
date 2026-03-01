@@ -166,12 +166,18 @@ public static void markCompleted(int id){
 public static void updateMissedAppointments(int userId){
 
     String sql = """
-        UPDATE appointments
-        SET status='MISSED'
-        WHERE user_id=?
-        AND appointment_date < CURRENT_DATE
-        AND status='UPCOMING'
-    """;
+    UPDATE appointments
+    SET status='MISSED'
+    WHERE user_id=?
+    AND status='UPCOMING'
+    AND (
+        appointment_date < CURRENT_DATE
+        OR (
+            appointment_date = CURRENT_DATE
+            AND appointment_time < CURRENT_TIME
+        )
+    )
+""";
 
     try(Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)){
@@ -272,5 +278,47 @@ public static List<Appointment> getUpcomingAppointments(int userId){
     }
 
     return list;
+}
+// ✅ GET NEXT TODAY APPOINTMENT (Dashboard card)
+public static Appointment getNextTodayAppointment(int userId){
+
+    String sql = """
+        SELECT * FROM appointments
+        WHERE user_id = ?
+        AND appointment_date = CURRENT_DATE
+        AND status = 'UPCOMING'
+        ORDER BY appointment_time ASC
+        LIMIT 1
+    """;
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        if(rs.next()){
+
+            Appointment a = new Appointment();
+
+            a.setId(rs.getInt("id"));
+            a.setUserId(rs.getInt("user_id"));
+            a.setTitle(rs.getString("title"));
+            a.setDoctorName(rs.getString("doctor_name"));
+            a.setHospitalName(rs.getString("hospital_name"));
+            a.setAppointmentDate(rs.getDate("appointment_date").toLocalDate());
+            a.setAppointmentTime(rs.getTime("appointment_time").toLocalTime());
+            a.setNotes(rs.getString("notes"));
+            a.setStatus(rs.getString("status"));
+
+            return a;
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+
+    return null;
 }
 }

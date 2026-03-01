@@ -55,13 +55,19 @@ public class DashboardServlet extends HttpServlet {
                         upcomingAppointments.get(0));
             }
 
+            // ✅ NEW (required for smart dashboard card)
+            Appointment nextToday =
+                    AppointmentDAO.getNextTodayAppointment(user.getId());
+
+            request.setAttribute("nextTodayAppointment", nextToday);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("dashboardError",
                     "Unable to load dashboard data.");
         }
 
-        // ✅ KEEP YOUR JSP LOCATION (UNCHANGED)
+        // ✅ KEEP JSP LOCATION
         request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp")
                 .forward(request, response);
     }
