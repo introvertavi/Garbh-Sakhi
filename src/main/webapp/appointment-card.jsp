@@ -1,57 +1,76 @@
 <%@ page import="com.garbhsakhi.model.Appointment" %>
 
+<%
+    Appointment appt = a;   // local reference (cleaner + safer)
+%>
+
 <div class="appointment-item">
 
-<div class="appt-date">
-<span class="day"><%= a.getAppointmentDate().getDayOfMonth() %></span>
-<span class="month">
-<%= a.getAppointmentDate().getMonth().toString().substring(0,3) %>
-</span>
-</div>
+    <!-- DATE -->
+    <div class="appt-date">
+        <span class="day">
+            <%= appt.getAppointmentDate() != null
+                    ? appt.getAppointmentDate().getDayOfMonth()
+                    : "" %>
+        </span>
 
-<div class="appt-info">
+        <span class="month">
+            <%= appt.getAppointmentDate() != null
+                    ? appt.getAppointmentDate().getMonth()
+                        .toString().substring(0,3)
+                    : "" %>
+        </span>
+    </div>
 
-<strong><%= a.getTitle() %></strong>
+    <!-- INFO -->
+    <div class="appt-info">
 
-<p class="muted">
-<%= a.getDoctorName() %> • <%= a.getAppointmentTime() %>
-</p>
+        <strong><%= appt.getTitle() %></strong>
 
-<p class="muted small"><%= a.getHospitalName() %></p>
+        <p class="muted">
+            <%= appt.getDoctorName() %> &bull; <%= appt.getAppointmentTime() %>
+        </p>
 
-<span class="status-badge <%= a.getStatus().toLowerCase() %>">
-<%= a.getStatus() %>
-</span>
+        <p class="muted small">
+            <%= appt.getHospitalName() %>
+        </p>
 
-</div>
+        <span class="status-badge <%= appt.getStatus().toLowerCase() %>">
+            <%= appt.getStatus() %>
+        </span>
 
-<div class="appt-actions">
+    </div>
 
-<%
-if (!"COMPLETED".equalsIgnoreCase(a.getStatus())
- && !"MISSED".equalsIgnoreCase(a.getStatus())) {
-%>
-<form method="post" action="complete-appointment" style="display:inline;">
-<input type="hidden" name="id" value="<%= a.getId() %>">
-<input type="checkbox" onchange="this.form.submit()">
-</form>
-<%
-}
-%>
+    <!-- ACTIONS -->
+    <div class="appt-actions">
 
-<!-- ✅ EDIT ICON FIX -->
-<a href="edit-appointment?id=<%= a.getId() %>" class="btn-icon">
-    <i class="bi bi-pencil"></i>
-</a>
+        <%
+        if (!"COMPLETED".equalsIgnoreCase(appt.getStatus())
+            && !"MISSED".equalsIgnoreCase(appt.getStatus())) {
+        %>
 
-<!-- ✅ DELETE ICON FIX -->
-<form method="post" action="delete-appointment">
-<input type="hidden" name="id" value="<%= a.getId() %>">
-<button type="submit" class="btn-icon danger">
-    <i class="bi bi-trash"></i>
-</button>
-</form>
+        <form method="post" action="complete-appointment" style="display:inline;">
+            <input type="hidden" name="id" value="<%= appt.getId() %>">
+            <input type="checkbox" onchange="this.form.submit()">
+        </form>
 
-</div>
+        <%
+        }
+        %>
+
+        <!-- EDIT -->
+        <a href="edit-appointment?id=<%= appt.getId() %>" class="btn-icon">
+            <i class="bi bi-pencil"></i>
+        </a>
+
+        <!-- DELETE -->
+        <form method="post" action="delete-appointment" style="display:inline;">
+            <input type="hidden" name="id" value="<%= appt.getId() %>">
+            <button type="submit" class="btn-icon danger">
+                <i class="bi bi-trash"></i>
+            </button>
+        </form>
+
+    </div>
 
 </div>

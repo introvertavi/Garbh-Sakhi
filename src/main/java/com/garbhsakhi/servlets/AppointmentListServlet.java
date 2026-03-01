@@ -21,6 +21,10 @@ public class AppointmentListServlet extends HttpServlet {
                          HttpServletResponse response)
             throws IOException, ServletException {
 
+        // ✅ Correct UTF-8 handling (SAFE)
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         User user = (User) request.getSession().getAttribute("user");
 
         if (user == null) {
@@ -28,7 +32,7 @@ public class AppointmentListServlet extends HttpServlet {
             return;
         }
 
-        // auto update missed
+        // Auto update missed appointments
         AppointmentDAO.updateMissedAppointments(user.getId());
 
         List<Appointment> all =
