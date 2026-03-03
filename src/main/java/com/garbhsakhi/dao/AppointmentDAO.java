@@ -321,4 +321,30 @@ public static Appointment getNextTodayAppointment(int userId){
 
     return null;
 }
+// ================= DASHBOARD STATS =================
+public static int getAppointmentCount(int userId, String status){
+
+    String sql = """
+        SELECT COUNT(*) FROM appointments
+        WHERE user_id=? AND status=?
+    """;
+
+    try(Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)){
+
+        ps.setInt(1, userId);
+        ps.setString(2, status);
+
+        ResultSet rs = ps.executeQuery();
+
+        if(rs.next()){
+            return rs.getInt(1);
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+
+    return 0;
+}
 }

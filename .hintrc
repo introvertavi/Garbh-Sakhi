@@ -8,7 +8,10 @@
       {
         "ignore": [
           "backdrop-filter",
-          "-webkit-overflow-scrolling"
+          "-webkit-overflow-scrolling",
+          "scrollbar-width",
+          "scrollbar-color",
+          "scrollbar-width: thin"
         ]
       }
     ]

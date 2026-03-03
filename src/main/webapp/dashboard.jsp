@@ -20,6 +20,8 @@ if (user != null && !user.isProfileComplete()) {
     return;
 }
 
+/* ================= PREGNANCY DATA ================= */
+
 int pregWeek = 0;
 String babyFruit = "";
 int pregnancyPercent = 0;
@@ -35,6 +37,8 @@ if (user != null && user.getDueDate() != null && !user.getDueDate().isBlank()) {
     if (pregnancyPercent > 100) pregnancyPercent = 100;
 }
 
+/* ================= APPOINTMENTS ================= */
+
 Appointment todayPreview = null;
 Appointment upcomingPreview = null;
 
@@ -45,34 +49,43 @@ try {
     List<Appointment> todayList =
             AppointmentDAO.getTodayAppointments(user.getId());
 
-    if (todayList != null && !todayList.isEmpty())
+    if (!todayList.isEmpty())
         todayPreview = todayList.get(0);
 
     List<Appointment> upcomingList =
             AppointmentDAO.getUpcomingAppointments(user.getId());
 
-    if (upcomingList != null && !upcomingList.isEmpty())
+    if (!upcomingList.isEmpty())
         upcomingPreview = upcomingList.get(0);
 
 } catch(Exception e){
     e.printStackTrace();
 }
 
-request.setAttribute("pageTitle","Dashboard");
-/* ================= DYNAMIC GREETING ================= */
+/* ================= GREETING ================= */
 
 java.time.LocalTime currentTime = java.time.LocalTime.now();
 String greetingText;
 
-if(currentTime.isBefore(java.time.LocalTime.NOON)){
+if(currentTime.isBefore(java.time.LocalTime.NOON))
     greetingText = "Good Morning ☀️";
-}
-else if(currentTime.isBefore(java.time.LocalTime.of(17,0))){
+else if(currentTime.isBefore(java.time.LocalTime.of(17,0)))
     greetingText = "Good Afternoon 🌤";
-}
-else{
+else
     greetingText = "Good Evening 🌙";
-}
+
+/* ================= STATS ================= */
+
+int upcomingCount =
+        AppointmentDAO.getAppointmentCount(user.getId(),"UPCOMING");
+
+int completedCount =
+        AppointmentDAO.getAppointmentCount(user.getId(),"COMPLETED");
+
+int missedCount =
+        AppointmentDAO.getAppointmentCount(user.getId(),"MISSED");
+
+request.setAttribute("pageTitle","Dashboard");
 %>
 
 <!DOCTYPE html>
@@ -96,6 +109,8 @@ else{
 
 <div class="main-content">
 <div style="max-width:1100px;margin:0 auto;padding:24px;">
+
+<!-- ================= WELCOME ================= -->
 
 <div class="welcome-card">
 
@@ -135,9 +150,38 @@ else{
 
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+<!-- ================= GRID ================= -->
 
-<div style="grid-column:1/-1;background:#fff;padding:22px;border-radius:14px;border-left:5px solid #ffd166;">
+<div class="dashboard-grid"
+     style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+
+<!-- 📊 STATS -->
+<div class="gs-card card-accent accent-stats dashboard-stats"
+     style="grid-column:1/-1;padding:22px;">
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+<div class="gs-card" style="text-align:center;">
+<h4>📅 Upcoming</h4>
+<h2><%= upcomingCount %></h2>
+</div>
+
+<div class="gs-card" style="text-align:center;">
+<h4>✅ Completed</h4>
+<h2><%= completedCount %></h2>
+</div>
+
+<div class="gs-card" style="text-align:center;">
+<h4>⚠️ Missed</h4>
+<h2><%= missedCount %></h2>
+</div>
+
+</div>
+</div>
+
+<!-- 💡 DAILY TIP -->
+<div class="gs-card card-accent accent-tip daily-tip-card"
+     style="grid-column:1/-1;padding:22px;">
 
 <b>💡 Daily Health Tip</b>
 
@@ -148,8 +192,8 @@ else{
 </div>
 
 <!-- 📅 NEXT APPOINTMENT -->
-
-<div style="background:#fff;padding:20px;border-radius:14px;">
+<div class="gs-card card-accent accent-appointment"
+     style="padding:20px;">
 
 <h4 style="margin-bottom:15px;">📅 Next Appointment</h4>
 
@@ -161,9 +205,8 @@ String appointmentLabel = "";
 
 if (preview != null) {
     java.time.LocalDate today = java.time.LocalDate.now();
-    java.time.LocalDate apptDate = preview.getAppointmentDate();
-
-    long days = java.time.temporal.ChronoUnit.DAYS.between(today, apptDate);
+    long days = java.time.temporal.ChronoUnit.DAYS
+            .between(today, preview.getAppointmentDate());
 
     if (days == 0) appointmentLabel = "Today";
     else if (days == 1) appointmentLabel = "Tomorrow";
@@ -173,77 +216,49 @@ if (preview != null) {
 
 <% if (preview != null) { %>
 
-<a href="appointments.jsp" style="text-decoration:none;color:inherit;display:block;">
-
 <div class="appointment-card dashboard-appointment">
-
-<div class="appointment-date">
-<%
-java.time.LocalDate d = preview.getAppointmentDate();
-%>
-<span class="day"><%= d.getDayOfMonth() %></span>
-<span class="month"><%= d.getMonth().toString().substring(0,3) %></span>
-</div>
 
 <div class="appointment-info">
 
-<h5 style="margin:0;"><%= preview.getTitle() %></h5>
+<h5><%= preview.getTitle() %></h5>
 
-<p style="margin:4px 0;">
+<p>
 <%= preview.getDoctorName() %> •
 <%= preview.getAppointmentTime() %>
 </p>
 
-<!-- ✅ COUNTDOWN (FIXED POSITION) -->
-<p id="countdown" class="text-muted" style="margin-top:6px;"></p>
+<p id="countdown" class="text-muted"></p>
 
-<p class="text-muted" style="margin:0;">
+<p class="text-muted">
 <%= preview.getHospitalName() %>
 </p>
-
-<div class="appointment-meta">
 
 <span class="status-badge upcoming">
 <%= preview.getStatus() %>
 </span>
 
-<% if(!appointmentLabel.isEmpty()) { %>
-<span class="appt-label">
-<%= appointmentLabel %>
-</span>
-<% } %>
-
-</div>
-
 </div>
 </div>
-
-</a>
 
 <% } else { %>
-
-<span class="text-muted">
-No upcoming appointments scheduled.
-</span>
-
+<span class="text-muted">No upcoming appointments scheduled.</span>
 <% } %>
 
 </div>
 
-<div style="background:#fff;padding:20px;border-radius:14px;">
+<div class="gs-card" style="padding:20px;">
 💊 Today’s Medicines
 </div>
 
-<div style="background:#fff;padding:20px;border-radius:14px;">
+<div class="gs-card" style="padding:20px;">
 🧪 Recent Lab Report
 </div>
 
 </div>
-
 </div>
 </div>
 
-<!-- ===== COUNTDOWN SCRIPT (UNCHANGED LOGIC) ===== -->
+<!-- COUNTDOWN -->
 <script>
 (function(){
 

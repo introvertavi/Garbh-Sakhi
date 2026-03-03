@@ -6277,3 +6277,152 @@ body {
     transform: scale(1.08);
     transition: 0.2s ease;
 }
+
+/* =========================
+   DASHBOARD SPACING SYSTEM
+========================= */
+
+/* main dashboard sections */
+.main-content .gs-card,
+.main-content > div > div {
+    margin-bottom: 22px;
+}
+
+/* stats row spacing */
+.dashboard-stats {
+    margin: 18px 0 10px;
+}
+
+/* individual stat cards */
+.dashboard-stats .gs-card {
+    padding: 22px 16px;
+    border-radius: 14px;
+}
+
+/* daily tip breathing space */
+.daily-tip-card {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+/* grid spacing improvement */
+.dashboard-grid {
+    gap: 24px !important;
+}
+/* =========================
+   DASHBOARD SPACING FIX
+   (Stats ↔ Daily Tip gap)
+========================= */
+
+/* space below stats row */
+.dashboard-stats {
+    margin-bottom: 24px;
+}
+
+/* space above daily tip card */
+.daily-tip-card {
+    margin-top: 8px;
+}
+.gs-card {
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fff7fb 100%
+    );
+    
+    border-radius: 16px;
+    border: 1px solid rgba(255, 120, 170, 0.08);
+    
+    box-shadow:
+        0 6px 18px rgba(255, 120, 170, 0.08);
+}
+.gs-card:hover{
+    transform: translateY(-3px);
+    box-shadow:
+        0 12px 28px rgba(255, 120, 170, 0.15);
+    transition: all .25s ease;
+}
+.main-content{
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(255,170,200,0.12),
+            transparent 40%
+        );
+}
+.card-accent{
+    position: relative;
+    overflow: hidden;
+}
+
+.card-accent::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:4px;
+    border-radius:16px 16px 0 0;
+}
+/* Appointments */
+.accent-appointment::before{
+    background: linear-gradient(90deg,#ff7aa8,#ff9ec2);
+}
+
+/* Health Tip */
+.accent-tip::before{
+    background: linear-gradient(90deg,#ffd166,#ffe08a);
+}
+
+/* Stats */
+.accent-stats::before{
+    background: linear-gradient(90deg,#b8a8ff,#d4c9ff);
+}
+/* Remove underline from buttons */
+.btn-primary{
+    text-decoration: none !important;
+}
+a.btn-primary{
+    text-decoration: none;
+    display: inline-block;
+}
+/* ===== MEDICINES MODULE ===== */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.empty-state{
+  padding:28px;
+  text-align:center;
+  color:#7b8794;
+}
+
+.medicine-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.medicine-dose{
+  display:block;
+  font-size:13px;
+  color:#8a94a6;
+}
+
+.chip{
+  background:#ffe3ef;
+  color:#ff4f93;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  margin-left:6px;
+}
+
+.chip.soft{
+  background:#eef4ff;
+  color:#5a78ff;
+}

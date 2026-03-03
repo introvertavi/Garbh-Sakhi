@@ -77,5 +77,3 @@
   .content-wrapper, .main-content{ margin-left:0; padding-top:calc(var(--gs-header-h) + 12px); }
 }
 </style>
-
-
