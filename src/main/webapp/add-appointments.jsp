@@ -33,7 +33,7 @@
       <h2 style="margin-bottom:20px;">➕ Add Appointment</h2>
 
       <!-- ✅ FIXED ACTION -->
-      <form method="post" action="add appointment">
+      <form method="post" action="add-appointment">
 
         <div class="row-2">
           <div class="field">
