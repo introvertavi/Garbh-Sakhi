@@ -17,7 +17,6 @@ request.setAttribute("pageTitle","Medicines");
 
 <title>Medicines - Garbh Sakhi</title>
 
-<!-- SAME FILES AS DASHBOARD -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/style.css">
@@ -36,7 +35,6 @@ request.setAttribute("pageTitle","Medicines");
 <jsp:include page="components/bottom-nav.jsp"/>
 <jsp:include page="components/fab-emergency.jsp"/>
 
-<!-- MAIN CONTENT (IDENTICAL TO DASHBOARD) -->
 <div class="main-content">
 <div style="max-width:1100px;margin:0 auto;padding:24px;">
 
@@ -49,54 +47,79 @@ request.setAttribute("pageTitle","Medicines");
 </div>
 
 <!-- ================= ADD MEDICINE ================= -->
-<div class="gs-card card-accent" style="padding:22px;">
+<div class="gs-card card-accent">
 
-<h4 style="margin-bottom:16px;">Add Medicine</h4>
+<h4 style="margin-bottom:20px;">Add Medicine</h4>
 
-<form method="post" action="medicines" class="gs-form">
+<form method="post" action="medicines">
 
-<div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:14px;
-margin-bottom:14px;
-">
+<div class="row-2">
 
-<input name="medicineName" placeholder="Medicine Name" required>
+<div class="field">
+<label>Medicine Name</label>
+<input type="text" name="medicineName" placeholder="e.g. Iron Tablet" required>
+</div>
 
-<input name="dosage" placeholder="Dosage (e.g. 1 tablet)">
+<div class="field">
+<label>Dosage</label>
+<input type="text" name="dosage" placeholder="e.g. 1 tablet">
+</div>
 
+</div>
+
+<div class="row-2">
+
+<div class="field">
+<label>Frequency</label>
 <select name="frequency">
 <option>Daily</option>
 <option>Weekly</option>
 <option>As Needed</option>
 </select>
+</div>
 
+<div class="field">
+<label>Time of Day</label>
 <select name="timeOfDay">
 <option>Morning</option>
 <option>Afternoon</option>
 <option>Night</option>
 <option>3 Times</option>
 </select>
-
-<input type="date" name="startDate">
-<input type="date" name="endDate">
+</div>
 
 </div>
 
-<textarea name="notes" placeholder="Notes (optional)"></textarea>
+<div class="row-2">
 
-<br><br>
+<div class="field">
+<label>Start Date</label>
+<input type="date" name="startDate">
+</div>
 
-<button class="primary-btn">
-+ Add Medicine
+<div class="field">
+<label>End Date</label>
+<input type="date" name="endDate">
+</div>
+
+</div>
+
+<div class="field">
+<label>Notes</label>
+<textarea name="notes" rows="3" placeholder="Notes (optional)"></textarea>
+</div>
+
+<div class="actions">
+<button type="submit" class="btn-primary">
+➕ Add Medicine
 </button>
+</div>
 
 </form>
 </div>
 
 <!-- ================= MEDICINE LIST ================= -->
-<div class="gs-card card-accent" style="padding:22px;margin-top:20px;">
+<div class="gs-card card-accent" style="margin-top:20px;">
 
 <h4>Your Medicines</h4>
 
