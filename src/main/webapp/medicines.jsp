@@ -3,10 +3,22 @@
 <%@ page import="com.garbhsakhi.model.Medicine" %>
 
 <%
+request.setAttribute("pageTitle","Medicines");
+
 List<Medicine> medicines =
     (List<Medicine>) request.getAttribute("medicines");
 
-request.setAttribute("pageTitle","Medicines");
+if (medicines == null) {
+    com.garbhsakhi.model.User user =
+        (com.garbhsakhi.model.User) session.getAttribute("user");
+
+    if (user != null) {
+        com.garbhsakhi.dao.MedicineDAO dao =
+            new com.garbhsakhi.dao.MedicineDAO();
+
+        medicines = dao.getMedicinesByUser(user.getId());
+    }
+}
 %>
 
 <!DOCTYPE html>
@@ -136,7 +148,7 @@ if (medicines == null || medicines.isEmpty()) {
 for (Medicine m : medicines) {
 %>
 
-<div class="appointment-card" style="margin-top:12px;">
+<div class="appointment-card" style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
 
 <div class="appointment-info">
 
@@ -155,6 +167,21 @@ for (Medicine m : medicines) {
 </span>
 
 </div>
+
+<div style="display:flex; gap:8px;">
+
+<a href="edit-medicine?id=<%=m.getId()%>" class="btn-ghost">
+<i class="bi bi-pencil"></i>
+</a>
+
+<a href="delete-medicine?id=<%=m.getId()%>"
+   onclick="return confirm('Delete this medicine?');"
+   class="btn-ghost">
+<i class="bi bi-trash"></i>
+</a>
+
+</div>
+
 </div>
 
 <%
