@@ -65,6 +65,10 @@ public class MedicineDAO {
                 m.setNotes(rs.getString("notes"));
                 m.setStatus(rs.getString("status"));
 
+                m.setTakenMorning(rs.getBoolean("taken_morning"));
+                m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
+                m.setTakenNight(rs.getBoolean("taken_night"));
+
                 list.add(m);
             }
 
@@ -121,6 +125,10 @@ public class MedicineDAO {
                 m.setNotes(rs.getString("notes"));
                 m.setStatus(rs.getString("status"));
 
+                m.setTakenMorning(rs.getBoolean("taken_morning"));
+                m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
+                m.setTakenNight(rs.getBoolean("taken_night"));
+
                 return m;
             }
 
@@ -130,29 +138,109 @@ public class MedicineDAO {
 
         return null;
     }
-// ===== UPDATE MEDICINE =====
-public boolean updateMedicine(Medicine med) {
 
-    String sql = "UPDATE medicines SET medicine_name=?, dosage=?, frequency=?, time_of_day=?, start_date=?, end_date=?, notes=? WHERE id=?";
+    // ===== UPDATE MEDICINE =====
+    public boolean updateMedicine(Medicine med) {
 
-    try (Connection con = DatabaseConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "UPDATE medicines SET medicine_name=?, dosage=?, frequency=?, time_of_day=?, start_date=?, end_date=?, notes=? WHERE id=?";
 
-        ps.setString(1, med.getMedicineName());
-        ps.setString(2, med.getDosage());
-        ps.setString(3, med.getFrequency());
-        ps.setString(4, med.getTimeOfDay());
-        ps.setDate(5, med.getStartDate());
-        ps.setDate(6, med.getEndDate());
-        ps.setString(7, med.getNotes());
-        ps.setInt(8, med.getId());
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-        return ps.executeUpdate() > 0;
+            ps.setString(1, med.getMedicineName());
+            ps.setString(2, med.getDosage());
+            ps.setString(3, med.getFrequency());
+            ps.setString(4, med.getTimeOfDay());
+            ps.setDate(5, med.getStartDate());
+            ps.setDate(6, med.getEndDate());
+            ps.setString(7, med.getNotes());
+            ps.setInt(8, med.getId());
 
-    } catch (Exception e) {
-        e.printStackTrace();
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
-    return false;
-}
+    // ===== TODAY MEDICINES =====
+    public List<Medicine> getTodayMedicines(int userId) {
+
+        List<Medicine> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM medicines WHERE user_id=? AND status='ACTIVE' " +
+                     "AND (start_date IS NULL OR start_date <= CURRENT_DATE) " +
+                     "AND (end_date IS NULL OR end_date >= CURRENT_DATE) " +
+                     "ORDER BY created_at DESC";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Medicine m = new Medicine();
+
+                m.setId(rs.getInt("id"));
+                m.setUserId(rs.getInt("user_id"));
+                m.setMedicineName(rs.getString("medicine_name"));
+                m.setDosage(rs.getString("dosage"));
+                m.setFrequency(rs.getString("frequency"));
+                m.setTimeOfDay(rs.getString("time_of_day"));
+                m.setStartDate(rs.getDate("start_date"));
+                m.setEndDate(rs.getDate("end_date"));
+                m.setNotes(rs.getString("notes"));
+                m.setStatus(rs.getString("status"));
+
+                m.setTakenMorning(rs.getBoolean("taken_morning"));
+                m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
+                m.setTakenNight(rs.getBoolean("taken_night"));
+
+                list.add(m);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    // ===== MARK MEDICINE TAKEN =====
+    public void markMedicineTaken(int medicineId, String timeOfDay) {
+
+        String column = "";
+
+        switch(timeOfDay){
+
+            case "morning":
+                column = "taken_morning";
+                break;
+
+            case "afternoon":
+                column = "taken_afternoon";
+                break;
+
+            case "night":
+                column = "taken_night";
+                break;
+        }
+
+        String sql = "UPDATE medicines SET " + column + " = TRUE WHERE id = ?";
+
+        try(Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, medicineId);
+            ps.executeUpdate();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }

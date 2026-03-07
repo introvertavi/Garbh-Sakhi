@@ -62,6 +62,40 @@ try {
     e.printStackTrace();
 }
 
+/* ================= TODAY MEDICINES ================= */
+
+List<com.garbhsakhi.model.Medicine> todayMedicines =
+        new com.garbhsakhi.dao.MedicineDAO()
+                .getTodayMedicines(user.getId());
+
+/* ================= MEDICINE GROUPING ================= */
+
+List<com.garbhsakhi.model.Medicine> morningMeds = new java.util.ArrayList<>();
+List<com.garbhsakhi.model.Medicine> afternoonMeds = new java.util.ArrayList<>();
+List<com.garbhsakhi.model.Medicine> nightMeds = new java.util.ArrayList<>();
+
+for(com.garbhsakhi.model.Medicine m : todayMedicines){
+
+    if(m.getTimeOfDay() == null) continue;
+
+    String t = m.getTimeOfDay().toLowerCase();
+
+    if(t.contains("morning")){
+        morningMeds.add(m);
+    }
+    else if(t.contains("afternoon")){
+        afternoonMeds.add(m);
+    }
+    else if(t.contains("night")){
+        nightMeds.add(m);
+    }
+    else if(t.contains("3")){
+        morningMeds.add(m);
+        afternoonMeds.add(m);
+        nightMeds.add(m);
+    }
+}
+
 /* ================= GREETING ================= */
 
 java.time.LocalTime currentTime = java.time.LocalTime.now();
@@ -195,7 +229,9 @@ request.setAttribute("pageTitle","Dashboard");
 <div class="gs-card card-accent accent-appointment"
      style="padding:20px;">
 
-<h4 style="margin-bottom:15px;">📅 Next Appointment</h4>
+<h4 class="appointment-title">
+<i class="bi bi-calendar-heart"></i> Next Appointment
+</h4>
 
 <%
 Appointment preview =
@@ -246,8 +282,179 @@ if (preview != null) {
 
 </div>
 
-<div class="gs-card" style="padding:20px;">
-💊 Today’s Medicines
+<div class="gs-card card-accent accent-medicine" style="padding:20px;">
+
+<h4 class="medicine-title">💊 Today’s Medicines</h4>
+
+<%
+int totalMeds = morningMeds.size() + afternoonMeds.size() + nightMeds.size();
+
+int takenCount = 0;
+
+for(com.garbhsakhi.model.Medicine m : morningMeds)
+    if(m.isTakenMorning()) takenCount++;
+
+for(com.garbhsakhi.model.Medicine m : afternoonMeds)
+    if(m.isTakenAfternoon()) takenCount++;
+
+for(com.garbhsakhi.model.Medicine m : nightMeds)
+    if(m.isTakenNight()) takenCount++;
+
+int progress = totalMeds == 0 ? 0 : (takenCount * 100 / totalMeds);
+int missedMeds = totalMeds - takenCount;
+%>
+
+<div class="medicine-progress">
+
+<div class="progress-text">
+<%= takenCount %> / <%= totalMeds %> taken
+</div>
+
+<div class="progress-bar">
+<div class="progress-fill <%= progress == 100 ? "progress-complete" : "" %>"
+     style="width:<%= progress %>%"></div>
+</div>
+
+</div>
+<%
+if(todayMedicines == null || todayMedicines.isEmpty()){
+%>
+
+<p class="text-muted">No medicines scheduled for today.</p>
+
+<%
+} else {
+%>
+<% if(missedMeds > 0) { %>
+
+<div class="medicine-alert">
+⚠️ You missed <b><%= missedMeds %></b> medicine<%= missedMeds > 1 ? "s" : "" %> today
+</div>
+
+<% } %>
+<!-- MORNING -->
+<% if(!morningMeds.isEmpty()){ %>
+
+<b style="display:block;margin-top:10px;">🌅 Morning</b>
+
+<% for(com.garbhsakhi.model.Medicine m : morningMeds){ %>
+
+<div class="mini-med-card">
+
+<div class="med-info">
+<span class="med-name"><%= m.getMedicineName() %></span>
+
+<span class="med-dose text-muted">
+<%= m.getDosage()==null?"":m.getDosage() %>
+</span>
+</div>
+
+<div class="med-action">
+
+<% if(!m.isTakenMorning()) { %>
+
+<form action="<%=request.getContextPath()%>/medicine/taken" method="post">
+<input type="hidden" name="id" value="<%= m.getId() %>">
+<input type="hidden" name="time" value="morning">
+
+<button class="btn-taken">Mark Taken</button>
+</form>
+
+<% } else { %>
+
+<span class="badge-taken">✓ Taken</span>
+
+<% } %>
+
+</div>
+</div>
+
+<% } } %>
+<div class="medicine-group-divider"></div>
+
+<!-- AFTERNOON -->
+<% if(!afternoonMeds.isEmpty()){ %>
+
+<b style="display:block;margin-top:14px;">☀️ Afternoon</b>
+
+<% for(com.garbhsakhi.model.Medicine m : afternoonMeds){ %>
+
+<div class="mini-med-card">
+
+<div class="med-info">
+<span class="med-name"><%= m.getMedicineName() %></span>
+
+<span class="med-dose text-muted">
+<%= m.getDosage()==null?"":m.getDosage() %>
+</span>
+</div>
+
+<div class="med-action">
+
+<% if(!m.isTakenAfternoon()) { %>
+
+<form action="<%=request.getContextPath()%>/medicine/taken" method="post">
+<input type="hidden" name="id" value="<%= m.getId() %>">
+<input type="hidden" name="time" value="afternoon">
+
+<button class="btn-taken">Mark Taken</button>
+</form>
+
+<% } else { %>
+
+<span class="badge-taken">✓ Taken</span>
+
+<% } %>
+
+</div>
+</div>
+
+<% } } %>
+<div class="medicine-group-divider"></div>
+
+<!-- NIGHT -->
+<% if(!nightMeds.isEmpty()){ %>
+
+<b style="display:block;margin-top:14px;">🌙 Night</b>
+
+<% for(com.garbhsakhi.model.Medicine m : nightMeds){ %>
+
+<div class="mini-med-card">
+
+<div class="med-info">
+<span class="med-name"><%= m.getMedicineName() %></span>
+
+<span class="med-dose text-muted">
+<%= m.getDosage()==null?"":m.getDosage() %>
+</span>
+</div>
+
+<div class="med-action">
+
+<% if(!m.isTakenNight()) { %>
+
+<form action="<%=request.getContextPath()%>/medicine/taken" method="post">
+<input type="hidden" name="id" value="<%= m.getId() %>">
+<input type="hidden" name="time" value="night">
+
+<button class="btn-taken">Mark Taken</button>
+</form>
+
+<% } else { %>
+
+<span class="badge-taken">✓ Taken</span>
+
+<% } %>
+
+</div>
+</div>
+
+<% } } %>
+
+<%
+}
+%>
+
 </div>
 
 <div class="gs-card" style="padding:20px;">
@@ -263,7 +470,9 @@ if (preview != null) {
 (function(){
 
 const apptTime = '<%= preview != null ? preview.getAppointmentTime().toString() : "" %>';
-if(!apptTime) return;
+const apptDate = '<%= preview != null ? preview.getAppointmentDate().toString() : "" %>';
+
+if(!apptTime || !apptDate) return;
 
 function updateCountdown(){
 
@@ -271,8 +480,8 @@ function updateCountdown(){
     if(!el) return;
 
     const now = new Date();
-    const today = now.toISOString().split("T")[0];
-    const target = new Date(today + "T" + apptTime);
+
+    const target = new Date(apptDate + "T" + apptTime);
 
     const diff = target - now;
 
@@ -281,10 +490,14 @@ function updateCountdown(){
         return;
     }
 
-    const hrs = Math.floor(diff / 3600000);
-    const mins = Math.floor((diff % 3600000) / 60000);
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hrs = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const mins = Math.floor((diff % (1000*60*60)) / 60000);
 
-    el.innerText = "⏳ Starts in " + hrs + "h " + mins + "m";
+    if(days > 0)
+        el.innerText = "⏳ Starts in " + days + "d " + hrs + "h";
+    else
+        el.innerText = "⏳ Starts in " + hrs + "h " + mins + "m";
 }
 
 updateCountdown();
@@ -292,6 +505,5 @@ setInterval(updateCountdown,60000);
 
 })();
 </script>
-
 </body>
 </html>

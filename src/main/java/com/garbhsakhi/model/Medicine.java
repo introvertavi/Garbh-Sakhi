@@ -17,6 +17,10 @@ public class Medicine {
 
     private String notes;
     private String status;
+    
+    private boolean takenMorning;
+    private boolean takenAfternoon;
+    private boolean takenNight;
 
     // ===== Getters & Setters =====
 
@@ -49,4 +53,27 @@ public class Medicine {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public boolean isTakenMorning() {
+    return takenMorning;
+}
+
+public void setTakenMorning(boolean takenMorning) {
+    this.takenMorning = takenMorning;
+}
+
+public boolean isTakenAfternoon() {
+    return takenAfternoon;
+}
+
+public void setTakenAfternoon(boolean takenAfternoon) {
+    this.takenAfternoon = takenAfternoon;
+}
+
+public boolean isTakenNight() {
+    return takenNight;
+}
+
+public void setTakenNight(boolean takenNight) {
+    this.takenNight = takenNight;
+}
 }

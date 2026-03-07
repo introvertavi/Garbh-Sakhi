@@ -2192,11 +2192,14 @@ a:focus {
     margin-bottom: var(--spacing-sm);
 }
 
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--success), var(--primary-color));
-    border-radius: 6px;
-    transition: width var(--transition-normal);
+.progress-fill{
+    height:100%;
+    background:#ffb86c;
+    transition:width 0.4s ease;
+}
+
+.progress-complete{
+    background:#6bdc8b;
 }
 
 .progress-percentage {
@@ -6365,8 +6368,9 @@ body {
     border-radius:16px 16px 0 0;
 }
 /* Appointments */
-.accent-appointment::before{
-    background: linear-gradient(90deg,#ff7aa8,#ff9ec2);
+.accent-appointment{
+    border-left:4px solid #ff6b9a;
+    padding-left:16px;
 }
 
 /* Health Tip */
@@ -6527,4 +6531,124 @@ border-radius:10px;
 margin-top:6px;
 display:flex;
 gap:8px;
+}
+
+.mini-med-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:8px 10px;
+margin-top:6px;
+
+border-radius:8px;
+background:#faf8fc;
+}
+.btn-taken{
+    background:#a8dadc;
+    border:none;
+    padding:6px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.btn-taken:hover{
+    background:#95cfd2;
+}
+
+.badge-taken{
+    background:#caffbf;
+    color:#2d6a4f;
+    padding:5px 10px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:500;
+}
+.mini-med-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#f9fafc;
+    padding:10px 12px;
+    border-radius:10px;
+    margin-top:8px;
+}
+
+.med-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.med-name{
+    font-weight:600;
+    font-size:14px;
+}
+
+.med-dose{
+    font-size:12px;
+}
+
+.med-action{
+    display:flex;
+    align-items:center;
+}
+
+.btn-taken{
+    background:#a8dadc;
+    border:none;
+    padding:5px 10px;
+    border-radius:8px;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.btn-taken:hover{
+    background:#95cfd2;
+}
+
+.badge-taken{
+    background:#caffbf;
+    color:#2d6a4f;
+    padding:5px 10px;
+    border-radius:10px;
+    font-size:12px;
+}
+.accent-medicine{
+    border-left:4px solid #ffb86c;
+}
+.medicine-title{
+    color:#ffb86c;
+}
+.appointment-title{
+    color:#ff6b9a;
+    margin-bottom:15px;
+    font-weight:600;
+}
+.appointment-title i{
+    color:#ff6b9a;
+}
+.progress-text{
+    font-size:12px;
+    color:#666;
+    margin-bottom:6px;
+    text-align:left;
+}
+.medicine-group-divider{
+    height:1px;
+    background:#ececec;
+    margin:14px 0;
+  }
+  .medicine-group-divider{
+    height:1px;
+    background:#ececec;
+    margin:18px 0;
+}
+.medicine-alert{
+    margin-top:10px;
+    padding:8px 12px;
+    border-radius:8px;
+    background:#fff3cd;
+    color:#856404;
+    font-size:13px;
 }
