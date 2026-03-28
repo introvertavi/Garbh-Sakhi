@@ -539,8 +539,30 @@ if(todayMedicines == null || todayMedicines.isEmpty()){
 <% } %>
 
 </div>
-<div class="gs-card" style="padding:20px;">
-🧪 Recent Lab Report
+<div class="card">
+    <h3>Recent Lab Reports</h3>
+
+    <%
+    List<com.garbhsakhi.model.LabReport> recentReports =
+        (List<com.garbhsakhi.model.LabReport>) request.getAttribute("recentReports");
+
+    if (recentReports != null && !recentReports.isEmpty()) {
+        for (com.garbhsakhi.model.LabReport r : recentReports) {
+    %>
+
+        <div class="report-item">
+            <span><%= r.getTitle() %></span>
+            <a href="<%= r.getFilePath() %>" target="_blank">View</a>
+        </div>
+
+    <%
+        }
+    } else {
+    %>
+        <p>No reports uploaded</p>
+    <%
+    }
+    %>
 </div>
 
 </div>

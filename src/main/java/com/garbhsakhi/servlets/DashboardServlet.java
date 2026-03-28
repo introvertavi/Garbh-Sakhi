@@ -1,11 +1,14 @@
 package com.garbhsakhi.servlets;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.List;
 
 import com.garbhsakhi.dao.AppointmentDAO;
+import com.garbhsakhi.dao.LabReportDAO;
 import com.garbhsakhi.dao.MedicineDAO; // ✅ ADDED
 import com.garbhsakhi.model.Appointment;
+import com.garbhsakhi.model.LabReport;
 import com.garbhsakhi.model.User;
 
 import jakarta.servlet.ServletException;
@@ -79,7 +82,17 @@ public class DashboardServlet extends HttpServlet {
             if (nextToday != null) {
             totalNotifications += 1;
             }
-            
+            // Get DB connection
+            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+
+            // Lab Reports
+            LabReportDAO labDao = new LabReportDAO(conn);
+            List<LabReport> recentReports = labDao.getReportsByUser(user.getId())
+                                                  .stream()
+                                                  .limit(3)
+                                                  .toList();
+
+            request.setAttribute("recentReports", recentReports);
             request.setAttribute("totalNotifications", totalNotifications);
         } catch (Exception e) {
             e.printStackTrace();

@@ -196,7 +196,7 @@ int percent = (total == 0) ? 0 : (done * 100 / total);
 </div>
 
 <div class="progress-bar">
-    <div class="progress-fill" style="width:<%= percent %>%"></div>
+    <div class="progress-fill" style="width: <%= percent %>%"></div>
 </div>
 
 <div class="dose-row">

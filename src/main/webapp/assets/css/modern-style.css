@@ -6864,3 +6864,18 @@ background:#faf8fc;
   color: #888;
   padding: 10px;
 }
+.report-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+@media (min-width: 768px) {
+    .report-item {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
