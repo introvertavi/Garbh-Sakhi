@@ -64,7 +64,10 @@ public class DashboardServlet extends HttpServlet {
                     AppointmentDAO.getNextTodayAppointment(user.getId());
 
             request.setAttribute("nextTodayAppointment", nextToday);
-
+            
+            // ===== ADD THIS (appointment notification) =====
+            request.setAttribute("upcomingNotification", nextToday);
+            
             // ✅ ===== MEDICINE NOTIFICATIONS (ADDED) =====
             int pendingCount = medicineDAO.getPendingDoseCount(user.getId());
             int missedCount = medicineDAO.getMissedDoseCount(user.getId());
@@ -72,6 +75,11 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("pendingCount", pendingCount);
             request.setAttribute("missedCount", missedCount);
             int totalNotifications = pendingCount + missedCount;
+
+            if (nextToday != null) {
+            totalNotifications += 1;
+            }
+            
             request.setAttribute("totalNotifications", totalNotifications);
         } catch (Exception e) {
             e.printStackTrace();

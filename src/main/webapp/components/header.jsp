@@ -37,11 +37,22 @@
     Integer pending = (Integer) request.getAttribute("pendingCount");
     Integer missed = (Integer) request.getAttribute("missedCount");
     %>
+    
+    <%
+    com.garbhsakhi.model.Appointment upcoming =
+      (com.garbhsakhi.model.Appointment) request.getAttribute("upcomingNotification");
+    %>
 
     <% if (pending != null && pending > 0) { %>
       <div class="notif-item">🔔 <%= pending %> pending medicine(s)</div>
     <% } %>
 
+    <% if (upcoming != null) { %>
+      <div class="notif-item">
+         📅 Upcoming: <%= upcoming.getTitle() %> (<%= upcoming.getAppointmentTime() %>)
+      </div>
+    <% } %>
+    
     <% if (missed != null && missed > 0) { %>
       <div class="notif-item danger">⚠️ <%= missed %> missed dose(s)</div>
     <% } %>
