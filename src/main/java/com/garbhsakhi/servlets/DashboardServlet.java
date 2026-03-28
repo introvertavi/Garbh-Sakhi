@@ -71,7 +71,8 @@ public class DashboardServlet extends HttpServlet {
 
             request.setAttribute("pendingCount", pendingCount);
             request.setAttribute("missedCount", missedCount);
-
+            int totalNotifications = pendingCount + missedCount;
+            request.setAttribute("totalNotifications", totalNotifications);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("dashboardError",

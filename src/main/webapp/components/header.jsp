@@ -16,7 +16,43 @@
 
   <!-- Right icons -->
   <div class="gs-actions">
-    <button class="gs-icon" title="Notifications"><i class="ri-notification-line"></i></button>
+    <div class="notification-wrapper">
+
+  <button class="gs-icon notification-bell" onclick="toggleNotifications()" title="Notifications">
+    <i class="ri-notification-line"></i>
+
+    <%
+    Integer total = (Integer) request.getAttribute("totalNotifications");
+    if (total != null && total > 0) {
+    %>
+      <span class="notification-count"><%= total %></span>
+    <% } %>
+
+  </button>
+
+  <!-- DROPDOWN -->
+  <div id="notificationDropdown" class="notification-dropdown">
+
+    <%
+    Integer pending = (Integer) request.getAttribute("pendingCount");
+    Integer missed = (Integer) request.getAttribute("missedCount");
+    %>
+
+    <% if (pending != null && pending > 0) { %>
+      <div class="notif-item">🔔 <%= pending %> pending medicine(s)</div>
+    <% } %>
+
+    <% if (missed != null && missed > 0) { %>
+      <div class="notif-item danger">⚠️ <%= missed %> missed dose(s)</div>
+    <% } %>
+
+    <% if ((pending == null || pending == 0) && (missed == null || missed == 0)) { %>
+      <div class="notif-empty">No notifications 🎉</div>
+    <% } %>
+
+  </div>
+
+</div>
     <a href="profile.jsp" class="gs-avatar-link" title="Profile">
       <img src="<%= request.getContextPath() %>/assets/garbh_sakhi_logo.png" class="gs-avatar" alt="Profile">
     </a>
@@ -234,3 +270,18 @@ gsOverlay?.addEventListener('click', closeDrawer);
     <button type="submit">Logout</button>
 </form>
 
+<script>
+function toggleNotifications() {
+  const box = document.getElementById("notificationDropdown");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// close when clicking outside
+document.addEventListener("click", function(e) {
+  const wrapper = document.querySelector(".notification-wrapper");
+  if (wrapper && !wrapper.contains(e.target)) {
+    const box = document.getElementById("notificationDropdown");
+    if (box) box.style.display = "none";
+  }
+});
+</script>
