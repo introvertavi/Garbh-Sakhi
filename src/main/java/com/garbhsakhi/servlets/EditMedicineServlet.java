@@ -53,7 +53,8 @@ public class EditMedicineServlet extends HttpServlet {
                 med.setEndDate(Date.valueOf(end));
 
             med.setNotes(req.getParameter("notes"));
-
+// ✅ ADD THIS
+med.setStatus(req.getParameter("status"));
             medicineDAO.updateMedicine(med);
 
         } catch (Exception e) {

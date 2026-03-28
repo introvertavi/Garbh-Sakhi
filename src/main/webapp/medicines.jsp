@@ -148,7 +148,11 @@ if (medicines == null || medicines.isEmpty()) {
 for (Medicine m : medicines) {
 %>
 
-<div class="appointment-card" style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
+<div class="appointment-card 
+<%= m.getComputedStatus().equalsIgnoreCase("COMPLETED") ? "completed-card" : "" %>
+<%= m.getComputedStatus().equalsIgnoreCase("STOPPED") ? "stopped-card" : "" %>
+"
+style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
 
 <div class="appointment-info">
 
@@ -158,8 +162,88 @@ for (Medicine m : medicines) {
 <%= m.getDosage()==null?"":m.getDosage() %>
 </p>
 
-<span class="status-badge upcoming">
-<%= m.getFrequency() %>
+<p class="text-muted">
+Start: <%= m.getStartDate() %> | End: <%= m.getEndDate() %>
+</p>
+<%
+int total = 0;
+int done = 0;
+
+String time = m.getTimeOfDay();
+
+if ("Morning".equalsIgnoreCase(time) || "3 Times".equalsIgnoreCase(time)) {
+    total++;
+    if (m.isTakenMorning()) done++;
+}
+
+if ("Afternoon".equalsIgnoreCase(time) || "3 Times".equalsIgnoreCase(time)) {
+    total++;
+    if (m.isTakenAfternoon()) done++;
+}
+
+if ("Night".equalsIgnoreCase(time) || "3 Times".equalsIgnoreCase(time)) {
+    total++;
+    if (m.isTakenNight()) done++;
+}
+
+int percent = (total == 0) ? 0 : (done * 100 / total);
+%>
+
+<div class="progress-section">
+
+<div class="progress-label">
+    Progress: <%= done %>/<%= total %>
+</div>
+
+<div class="progress-bar">
+    <div class="progress-fill" style="width:<%= percent %>%"></div>
+</div>
+
+<div class="dose-row">
+
+<% if (time.equalsIgnoreCase("Morning") || time.equalsIgnoreCase("3 Times")) { %>
+<a href="medicines?action=take&id=<%=m.getId()%>&time=morning"
+   class="dose <%= m.isTakenMorning() ? "done" : "" %>">
+   M
+</a>
+<% } %>
+
+<% if (time.equalsIgnoreCase("Afternoon") || time.equalsIgnoreCase("3 Times")) { %>
+<a href="medicines?action=take&id=<%=m.getId()%>&time=afternoon"
+   class="dose <%= m.isTakenAfternoon() ? "done" : "" %>">
+   A
+</a>
+<% } %>
+
+<% if (time.equalsIgnoreCase("Night") || time.equalsIgnoreCase("3 Times")) { %>
+<a href="medicines?action=take&id=<%=m.getId()%>&time=night"
+   class="dose <%= m.isTakenNight() ? "done" : "" %>">
+   N
+</a>
+<% } %>
+
+</div>
+
+</div>
+
+<span class="status-badge <%= m.getComputedStatus().toLowerCase() %>">
+
+<%
+String status = m.getComputedStatus();
+%>
+
+<% if ("COMPLETED".equalsIgnoreCase(status)) { %>
+    <i class="ri-check-line"></i>
+<% } else if ("STOPPED".equalsIgnoreCase(status)) { %>
+    <i class="ri-close-line"></i>
+<% } else if ("EXPIRED".equalsIgnoreCase(status)) { %>
+    <i class="ri-time-line"></i>
+<% } else { %>
+    <i class="ri-play-line"></i>
+<% } %>
+
+<%= "STOPPED".equalsIgnoreCase(status) ? "Discontinued" : status %>
+
 </span>
 
 <span class="status-badge completed">
@@ -168,7 +252,7 @@ for (Medicine m : medicines) {
 
 </div>
 
-<div style="display:flex; gap:8px;">
+<div class="medicine-actions">
 
 <a href="edit-medicine?id=<%=m.getId()%>" class="btn-ghost">
 <i class="bi bi-pencil"></i>
@@ -179,6 +263,20 @@ for (Medicine m : medicines) {
    class="btn-ghost">
 <i class="bi bi-trash"></i>
 </a>
+
+<% if ("ACTIVE".equalsIgnoreCase(m.getComputedStatus())) { %>
+
+<a href="medicines?action=complete&id=<%=m.getId()%>" 
+   class="btn-small success">
+✓
+</a>
+
+<a href="medicines?action=stop&id=<%=m.getId()%>" 
+   class="btn-small danger">
+✕
+</a>
+
+<% } %>
 
 </div>
 

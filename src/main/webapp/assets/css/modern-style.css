@@ -6652,3 +6652,125 @@ background:#faf8fc;
     color:#856404;
     font-size:13px;
 }
+.accent-reminder{
+    border-left:4px solid #6bc5ff;
+}
+
+.medicine-reminder{
+    margin-top:10px;
+    padding:12px;
+    border-radius:10px;
+    background:#f6faff;
+}
+/* ===== ENHANCED STATUS BADGES ===== */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ACTIVE */
+.status-badge.active {
+    background: #e0f7fa;
+    color: #00796b;
+}
+
+/* COMPLETED */
+.status-badge.completed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* STOPPED (Discontinued) */
+.status-badge.stopped {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* EXPIRED */
+.status-badge.expired {
+    background: #f3e5f5;
+    color: #6a1b9a;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* completed or stopped fade */
+.appointment-card.completed-card {
+    opacity: 0.7;
+}
+
+.appointment-card.stopped-card {
+    opacity: 0.6;
+}
+.progress-section {
+    margin-top: 10px;
+}
+
+.progress-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #666;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4caf50;
+    border-radius: 10px;
+}
+
+.dose-row {
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+}
+
+.dose {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #eee;
+}
+
+.dose.done {
+    background: #4caf50;
+    color: white;
+}
+
+.dose {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.dose:hover {
+    transform: scale(1.1);
+}
+
+.alert-card {
+    background: #fff3cd;
+    color: #856404;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}

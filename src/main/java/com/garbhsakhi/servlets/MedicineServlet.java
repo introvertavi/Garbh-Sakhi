@@ -1,16 +1,19 @@
 package com.garbhsakhi.servlets;
 
+import java.io.IOException;
+import java.sql.Date;
+import java.util.List;
+
 import com.garbhsakhi.dao.MedicineDAO;
 import com.garbhsakhi.model.Medicine;
 import com.garbhsakhi.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
-import java.io.IOException;
-import java.sql.Date;
-import java.util.List;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/medicines")
 public class MedicineServlet extends HttpServlet {
@@ -33,7 +36,19 @@ public class MedicineServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
+        // ===== HANDLE ACTIONS =====
+        String action = req.getParameter("action");
 
+        if ("take".equals(action)) {
+
+        int id = Integer.parseInt(req.getParameter("id"));
+        String time = req.getParameter("time");
+
+        medicineDAO.markMedicineTaken(id, time);
+
+    res.sendRedirect(req.getContextPath() + "/medicines");
+    return;
+}
         // fetch medicines
         List<Medicine> medicines =
                 medicineDAO.getMedicinesByUser(user.getId());
@@ -63,7 +78,7 @@ public class MedicineServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
-
+        
         try {
             Medicine med = new Medicine();
 

@@ -1,9 +1,13 @@
 package com.garbhsakhi.dao;
 
-import com.garbhsakhi.model.Medicine;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import com.garbhsakhi.model.Medicine;
 
 public class MedicineDAO {
 
@@ -38,7 +42,7 @@ public class MedicineDAO {
 
     // ===== GET USER MEDICINES =====
     public List<Medicine> getMedicinesByUser(int userId) {
-
+        autoExpireMedicines();
         List<Medicine> list = new ArrayList<>();
 
         String sql = "SELECT * FROM medicines WHERE user_id=? ORDER BY created_at DESC";
@@ -69,6 +73,19 @@ public class MedicineDAO {
                 m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
                 m.setTakenNight(rs.getBoolean("taken_night"));
 
+                // ✅ NEW FIELD
+                m.setLastTakenDate(rs.getDate("last_taken_date"));
+
+                // ✅ DAILY RESET LOGIC
+                Date today = new Date(System.currentTimeMillis());
+
+                if (m.getLastTakenDate() == null || !m.getLastTakenDate().equals(today)) {
+                    m.setTakenMorning(false);
+                    m.setTakenAfternoon(false);
+                    m.setTakenNight(false);
+                }
+
+                // ✅ ALWAYS ADD
                 list.add(m);
             }
 
@@ -128,6 +145,9 @@ public class MedicineDAO {
                 m.setTakenMorning(rs.getBoolean("taken_morning"));
                 m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
                 m.setTakenNight(rs.getBoolean("taken_night"));
+
+                // ✅ ADD HERE ALSO
+                m.setLastTakenDate(rs.getDate("last_taken_date"));
 
                 return m;
             }
@@ -201,6 +221,8 @@ public class MedicineDAO {
                 m.setTakenAfternoon(rs.getBoolean("taken_afternoon"));
                 m.setTakenNight(rs.getBoolean("taken_night"));
 
+                m.setLastTakenDate(rs.getDate("last_taken_date"));
+
                 list.add(m);
             }
 
@@ -211,7 +233,7 @@ public class MedicineDAO {
         return list;
     }
 
-    // ===== MARK MEDICINE TAKEN =====
+    // ===== MARK MEDICINE TAKEN (TOGGLE + DATE) =====
     public void markMedicineTaken(int medicineId, String timeOfDay) {
 
         String column = "";
@@ -231,7 +253,8 @@ public class MedicineDAO {
                 break;
         }
 
-        String sql = "UPDATE medicines SET " + column + " = TRUE WHERE id = ?";
+        String sql = "UPDATE medicines SET " + column + " = NOT " + column +
+                     ", last_taken_date = CURRENT_DATE WHERE id = ?";
 
         try(Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)) {
@@ -243,4 +266,114 @@ public class MedicineDAO {
             e.printStackTrace();
         }
     }
+
+    // ===== MARK AS COMPLETED =====
+    public boolean markCompleted(int id) {
+
+        String sql = "UPDATE medicines SET status='COMPLETED' WHERE id=?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // ===== STOP MEDICINE =====
+    public boolean stopMedicine(int id) {
+
+        String sql = "UPDATE medicines SET status='STOPPED' WHERE id=?";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // ===== AUTO EXPIRE MEDICINES =====
+    public void autoExpireMedicines() {
+
+        String sql = "UPDATE medicines SET status='COMPLETED' " +
+                     "WHERE end_date < CURRENT_DATE AND status='ACTIVE'";
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+public int getPendingDoseCount(int userId) {
+
+    int count = 0;
+
+    String sql = "SELECT * FROM medicines WHERE user_id=? AND status='ACTIVE'";
+
+    try (Connection con = DatabaseConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, userId);
+
+        ResultSet rs = ps.executeQuery();
+
+        Date today = new Date(System.currentTimeMillis());
+
+        while (rs.next()) {
+
+            Date lastTaken = rs.getDate("last_taken_date");
+
+            boolean takenMorning = rs.getBoolean("taken_morning");
+            boolean takenAfternoon = rs.getBoolean("taken_afternoon");
+            boolean takenNight = rs.getBoolean("taken_night");
+
+            String time = rs.getString("time_of_day");
+
+            boolean isToday = (lastTaken != null && lastTaken.equals(today));
+
+            if (!isToday) {
+                // nothing taken today
+                if (time.equals("Morning")) count++;
+                else if (time.equals("Afternoon")) count++;
+                else if (time.equals("Night")) count++;
+                else if (time.equals("3 Times")) count += 3;
+            } else {
+                if (time.equals("Morning") && !takenMorning) count++;
+                if (time.equals("Afternoon") && !takenAfternoon) count++;
+                if (time.equals("Night") && !takenNight) count++;
+
+                if (time.equals("3 Times")) {
+                    if (!takenMorning) count++;
+                    if (!takenAfternoon) count++;
+                    if (!takenNight) count++;
+                }
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return count;
+}
+
+public int getMissedDoseCount(int id) {
+	
+	throw new UnsupportedOperationException("Unimplemented method 'getMissedDoseCount'");
+}
 }

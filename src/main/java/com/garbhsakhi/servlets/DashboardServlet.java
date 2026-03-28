@@ -1,6 +1,10 @@
 package com.garbhsakhi.servlets;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.garbhsakhi.dao.AppointmentDAO;
+import com.garbhsakhi.dao.MedicineDAO; // ✅ ADDED
 import com.garbhsakhi.model.Appointment;
 import com.garbhsakhi.model.User;
 
@@ -10,9 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -31,6 +32,9 @@ public class DashboardServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
+
+        // ✅ ADDED
+        MedicineDAO medicineDAO = new MedicineDAO();
 
         try {
 
@@ -60,6 +64,13 @@ public class DashboardServlet extends HttpServlet {
                     AppointmentDAO.getNextTodayAppointment(user.getId());
 
             request.setAttribute("nextTodayAppointment", nextToday);
+
+            // ✅ ===== MEDICINE NOTIFICATIONS (ADDED) =====
+            int pendingCount = medicineDAO.getPendingDoseCount(user.getId());
+            int missedCount = medicineDAO.getMissedDoseCount(user.getId());
+
+            request.setAttribute("pendingCount", pendingCount);
+            request.setAttribute("missedCount", missedCount);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,7 +5,16 @@
 <%@ page import="com.garbhsakhi.model.Appointment" %>
 <%@ page import="java.util.List" %>
 <%@ page session="true" %>
+<%
+Integer pending = (Integer) request.getAttribute("pendingCount");
+if (pending != null && pending > 0) {
+%>
 
+<div class="alert-card">
+    🔔 You have <%= pending %> pending doses today
+</div>
+
+<% } %>
 <%
 Integer userId = (Integer) session.getAttribute("userId");
 if (userId == null) {
@@ -302,6 +311,37 @@ for(com.garbhsakhi.model.Medicine m : nightMeds)
 
 int progress = totalMeds == 0 ? 0 : (takenCount * 100 / totalMeds);
 int missedMeds = totalMeds - takenCount;
+
+com.garbhsakhi.model.Medicine nextMedicine = null;
+String nextTime = "";
+
+for(com.garbhsakhi.model.Medicine m : morningMeds){
+    if(!m.isTakenMorning()){
+        nextMedicine = m;
+        nextTime = "Morning";
+        break;
+    }
+}
+
+if(nextMedicine == null){
+    for(com.garbhsakhi.model.Medicine m : afternoonMeds){
+        if(!m.isTakenAfternoon()){
+            nextMedicine = m;
+            nextTime = "Afternoon";
+            break;
+        }
+    }
+}
+
+if(nextMedicine == null){
+    for(com.garbhsakhi.model.Medicine m : nightMeds){
+        if(!m.isTakenNight()){
+            nextMedicine = m;
+            nextTime = "Night";
+            break;
+        }
+    }
+}
 %>
 
 <div class="medicine-progress">
@@ -456,7 +496,29 @@ if(todayMedicines == null || todayMedicines.isEmpty()){
 %>
 
 </div>
+<div class="gs-card card-accent accent-reminder" style="padding:20px;">
 
+<h4>⏰ Next Medicine</h4>
+
+<% if(nextMedicine != null){ %>
+
+<div class="medicine-reminder">
+
+<b><%= nextMedicine.getMedicineName() %></b>
+
+<p class="text-muted">
+<%= nextTime %> • <%= nextMedicine.getDosage()==null?"":nextMedicine.getDosage() %>
+</p>
+
+</div>
+
+<% } else { %>
+
+<p class="text-success">🎉 All medicines taken for today!</p>
+
+<% } %>
+
+</div>
 <div class="gs-card" style="padding:20px;">
 🧪 Recent Lab Report
 </div>

@@ -81,6 +81,28 @@ request.setAttribute("pageTitle","Medicines");
 <div class="field">
 <label>Notes</label>
 <textarea name="notes"><%=m.getNotes()%></textarea>
+
+</div>
+<div class="field">
+<label>Status</label>
+<select name="status">
+
+    <option value="ACTIVE"
+        <%= "ACTIVE".equalsIgnoreCase(m.getStatus()) ? "selected" : "" %>>
+        Active
+    </option>
+
+    <option value="COMPLETED"
+        <%= "COMPLETED".equalsIgnoreCase(m.getStatus()) ? "selected" : "" %>>
+        Completed
+    </option>
+
+    <option value="STOPPED"
+        <%= "STOPPED".equalsIgnoreCase(m.getStatus()) ? "selected" : "" %>>
+        Stopped
+    </option>
+
+</select>
 </div>
 
 <br>

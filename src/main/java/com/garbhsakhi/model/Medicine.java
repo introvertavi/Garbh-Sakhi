@@ -17,11 +17,12 @@ public class Medicine {
 
     private String notes;
     private String status;
-    
+
+    // Dose tracking
     private boolean takenMorning;
     private boolean takenAfternoon;
     private boolean takenNight;
-
+    private Date lastTakenDate;
     // ===== Getters & Setters =====
 
     public int getId() { return id; }
@@ -53,27 +54,27 @@ public class Medicine {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    public boolean isTakenMorning() {
-    return takenMorning;
-}
+    
+    public boolean isTakenMorning() { return takenMorning; }
+    public void setTakenMorning(boolean takenMorning) { this.takenMorning = takenMorning; }
 
-public void setTakenMorning(boolean takenMorning) {
-    this.takenMorning = takenMorning;
-}
+    public boolean isTakenAfternoon() { return takenAfternoon; }
+    public void setTakenAfternoon(boolean takenAfternoon) { this.takenAfternoon = takenAfternoon; }
 
-public boolean isTakenAfternoon() {
-    return takenAfternoon;
-}
+    public boolean isTakenNight() { return takenNight; }
+    public void setTakenNight(boolean takenNight) { this.takenNight = takenNight; }
 
-public void setTakenAfternoon(boolean takenAfternoon) {
-    this.takenAfternoon = takenAfternoon;
-}
+    public Date getLastTakenDate() { return lastTakenDate; }
+    public void setLastTakenDate(Date lastTakenDate) { this.lastTakenDate = lastTakenDate; }
+    // ===== PHASE 2: SMART STATUS LOGIC =====
 
-public boolean isTakenNight() {
-    return takenNight;
-}
-
-public void setTakenNight(boolean takenNight) {
-    this.takenNight = takenNight;
-}
+    public String getComputedStatus() {
+        if ("ACTIVE".equalsIgnoreCase(status) && endDate != null) {
+            Date today = new Date(System.currentTimeMillis());
+            if (endDate.before(today)) {
+                return "EXPIRED";
+            }
+        }
+        return status;
+    }
 }
