@@ -151,6 +151,26 @@ request.setAttribute("pageTitle","Dashboard");
 <jsp:include page="components/fab-emergency.jsp" />
 
 <div class="main-content">
+<%
+Integer missed = (Integer) request.getAttribute("missedCount");
+%>
+
+<!-- ===== MEDICINE ALERTS ===== -->
+
+<% if (pending != null && pending > 0) { %>
+<div class="alert-card warning">
+    <span>🔔</span>
+    You have <strong><%= pending %></strong> pending dose(s) today
+</div>
+<% } %>
+
+<% if (missed != null && missed > 0) { %>
+<div class="alert-card danger">
+    <span>⚠️</span>
+    You missed <strong><%= missed %></strong> dose(s) yesterday
+</div>
+<% } %>
+
 <div style="max-width:1100px;margin:0 auto;padding:24px;">
 
 <!-- ================= WELCOME ================= -->

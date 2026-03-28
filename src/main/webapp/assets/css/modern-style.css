@@ -6774,3 +6774,35 @@ background:#faf8fc;
     margin-bottom: 16px;
     font-weight: 600;
 }
+/* ===== ALERT CARDS ===== */
+
+.alert-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* pending */
+.alert-card.warning {
+    background: #fff8e1;
+    color: #8d6e00;
+}
+
+/* missed */
+.alert-card.danger {
+    background: #fdecea;
+    color: #b71c1c;
+}
+
+/* mobile spacing */
+@media (max-width: 768px) {
+    .alert-card {
+        font-size: 13px;
+        padding: 12px;
+    }
+}
