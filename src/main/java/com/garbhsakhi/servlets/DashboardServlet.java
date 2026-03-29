@@ -10,7 +10,7 @@ import com.garbhsakhi.dao.MedicineDAO; // ✅ ADDED
 import com.garbhsakhi.model.Appointment;
 import com.garbhsakhi.model.LabReport;
 import com.garbhsakhi.model.User;
-
+import com.garbhsakhi.dao.DatabaseConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -83,7 +83,7 @@ public class DashboardServlet extends HttpServlet {
             totalNotifications += 1;
             }
             // Get DB connection
-            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+            Connection conn = DatabaseConnection.getConnection();
 
             // Lab Reports
             LabReportDAO labDao = new LabReportDAO(conn);

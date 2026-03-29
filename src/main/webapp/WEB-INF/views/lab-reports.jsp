@@ -2,71 +2,132 @@
 <%@ page import="java.util.*, com.garbhsakhi.model.LabReport" %>
 
 <%
+request.setAttribute("pageTitle","Lab Reports");
 List<LabReport> reports = (List<LabReport>) request.getAttribute("reports");
 %>
 
-<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <h2>Lab Reports</h2>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/modern-style.css">
+
+</head>
+
+<body>
+
+<jsp:include page="/components/header.jsp" />
+<jsp:include page="/components/sidebar.jsp" />
+<jsp:include page="/components/bottom-nav.jsp" />
+<jsp:include page="/components/fab-emergency.jsp" />
+
+<div class="main-content">
+
+<div style="max-width:1100px;margin:0 auto;padding:24px;">
+
+<h2 style="margin-bottom:20px;">📄 Lab Reports</h2>
+<%
+String errorMessage = (String) request.getAttribute("errorMessage");
+if (errorMessage != null) {
+%>
+    <div class="alert-card danger">
+        <span>⚠️</span> <%= errorMessage %>
+    </div>
+<%
+}
+%>
+
+<!-- ===== UPLOAD CARD ===== -->
+<div class="gs-card card-accent accent-reminder" style="padding:20px; margin-bottom:20px;">
+
+    <h4>⬆️ Upload Report</h4>
+
+    <form action="<%= request.getContextPath() %>/lab-reports" 
+          method="post" 
+          enctype="multipart/form-data"
+          style="margin-top:15px; display:flex; flex-direction:column; gap:10px;">
+
+        <input type="text" name="title" placeholder="Report Title" required class="input-field"/>
+        <input type="file" name="file" required class="input-field"/>
+
+        <button type="submit" class="btn-primary">Upload</button>
+    </form>
+
+</div>
+
+<!-- ===== REPORT LIST ===== -->
+<div class="gs-card card-accent accent-appointment" style="padding:20px;">
+
+    <h4 style="margin-bottom:15px;">📋 Your Reports</h4>
 
     <%
-    String errorMessage = (String) request.getAttribute("errorMessage");
-    if (errorMessage != null) {
+    if (reports != null && !reports.isEmpty()) {
+        for (LabReport r : reports) {
+
+        String file = r.getFilePath() != null ? r.getFilePath() : "";
+        boolean isPdf = file.toLowerCase().endsWith(".pdf");
     %>
-        <div class="alert error-alert">
-            <%= errorMessage %>
+
+    <div class="report-card">
+
+        <div class="report-left">
+            <div class="report-icon">
+                <%= isPdf ? "📄" : "🖼️" %>
+            </div>
+
+            <div class="report-text">
+                <h5><%= r.getTitle() %></h5>
+                <p class="text-muted">
+                    Uploaded: <%= r.getUploadDate() %>
+                </p>
+            </div>
         </div>
+
+        <div class="report-actions">
+
+            <a class="btn-view"
+               href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>"
+               target="_blank">
+               View
+            </a>
+
+            <a class="btn-download"
+               href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>"
+               download>
+               Download
+            </a>
+
+            <button type="button" class="btn-delete"
+                    onclick="openDeleteModal(<%= r.getId() %>)">
+                Delete
+            </button>
+
+        </div>
+
+    </div>
+
+    <%
+        }
+    } else {
+    %>
+        <p class="text-muted">No reports uploaded yet.</p>
     <%
     }
     %>
 
-    <!-- Upload Form -->
-    <form action="<%= request.getContextPath() %>/lab-reports" method="post" enctype="multipart/form-data" class="card">
-        <input type="text" name="title" placeholder="Report Title" required />
-        <input type="file" name="file" required />
-        <button type="submit">Upload</button>
-    </form>
-
-    <!-- Reports List -->
-    <div class="card">
-        <h3>Your Reports</h3>
-
-        <%
-        if (reports != null && !reports.isEmpty()) {
-            for (LabReport r : reports) {
-        %>
-
-        <div class="report-item">
-            <p><strong><%= r.getTitle() %></strong></p>
-
-            <a href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>" target="_blank">View</a>
-            <a href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>" download>Download</a>
-
-            <!-- ✅ FIXED: removed quotes -->
-            <button type="button" class="btn-delete" onclick="openDeleteModal('<%= r.getId() %>')">
-                Delete
-            </button>
-        </div>
-
-        <%
-            }
-        } else {
-        %>
-        <p>No reports uploaded yet</p>
-        <%
-        }
-        %>
-
-    </div>
-
 </div>
 
-<!-- ✅ DELETE FORM (HIDDEN) -->
+</div>
+</div>
+
+<!-- DELETE FORM -->
 <form id="deleteForm" method="post" action="delete-report">
     <input type="hidden" name="reportId" id="deleteReportId">
 </form>
 
-<!-- ✅ DELETE MODAL (IMPORTANT FIX: hidden initially) -->
+<!-- MODAL -->
 <div id="deleteModal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
         <h3>Delete Report</h3>
@@ -79,7 +140,8 @@ List<LabReport> reports = (List<LabReport>) request.getAttribute("reports");
     </div>
 </div>
 
-<!-- ✅ SCRIPT -->
+<script src="assets/js/main.js"></script>
+
 <script>
 let selectedReportId = null;
 
@@ -90,7 +152,6 @@ function openDeleteModal(reportId) {
 
 function closeDeleteModal() {
     document.getElementById("deleteModal").style.display = "none";
-    selectedReportId = null;
 }
 
 function confirmDelete() {
@@ -98,3 +159,6 @@ function confirmDelete() {
     document.getElementById("deleteForm").submit();
 }
 </script>
+
+</body>
+</html>
