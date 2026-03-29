@@ -7465,3 +7465,9 @@ background:#faf8fc;
 .report-card {
     cursor: pointer;
 }
+
+.left-line {
+    border-left: 4px solid #6ec1e4; /* soft pastel blue */
+    padding-left: 16px;
+}
+

@@ -13,6 +13,12 @@ List<LabReport> reports = (List<LabReport>) request.getAttribute("reports");
 
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/modern-style.css">
+<style>
+/* Remove left accent line ONLY on this page */
+.gs-card.card-accent {
+    border-left: none !important;
+}
+</style>
 
 </head>
 
@@ -40,7 +46,7 @@ if (errorMessage != null) {
 %>
 
 <!-- ===== UPLOAD CARD ===== -->
-<div class="gs-card card-accent accent-reminder" style="padding:20px; margin-bottom:20px;">
+<div class="gs-card" style="padding:20px; margin-bottom:20px;">
 
     <h4>⬆️ Upload Report</h4>
 
@@ -58,7 +64,7 @@ if (errorMessage != null) {
 </div>
 
 <!-- ===== REPORT LIST ===== -->
-<div class="gs-card card-accent accent-appointment" style="padding:20px;">
+<div class="gs-card" style="padding:20px;">
 
     <h4 style="margin-bottom:15px;">📋 Your Reports</h4>
 

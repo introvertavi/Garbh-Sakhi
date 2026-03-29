@@ -544,7 +544,7 @@ if(todayMedicines == null || todayMedicines.isEmpty()){
 <% } %>
 
 </div>
-<div class="gs-card card-accent accent-reports" style="padding:20px;">
+<div class="gs-card card-accent accent-reports left-line" style="padding:20px;">
 
 <h4>📄 Recent Lab Reports</h4>
 

@@ -94,7 +94,6 @@
     <div class="auth-top">
       <img src="assets/garbh_sakhi_logo.png" alt="Garbh Sakhi" class="auth-logo" />
       <div id="landingTitle" class="auth-title">Welcome to Garbh Sakhi</div>
-      <div class="auth-sub">Your AI-enabled pregnancy wellness companion.</div>
     </div>
 
     <div style="text-align:center;">
