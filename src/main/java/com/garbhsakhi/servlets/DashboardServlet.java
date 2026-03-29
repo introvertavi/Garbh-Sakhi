@@ -85,14 +85,27 @@ public class DashboardServlet extends HttpServlet {
             // Get DB connection
             Connection conn = DatabaseConnection.getConnection();
 
-            // Lab Reports
-            LabReportDAO labDao = new LabReportDAO(conn);
-            List<LabReport> recentReports = labDao.getReportsByUser(user.getId())
-                                                  .stream()
-                                                  .limit(3)
-                                                  .toList();
+LabReportDAO labDao = new LabReportDAO(conn);
 
-            request.setAttribute("recentReports", recentReports);
+List<LabReport> recentReports = labDao.getReportsByUser(user.getId());
+
+// 🔥 DEBUG START
+System.out.println("===== DASHBOARD DEBUG =====");
+System.out.println("User ID: " + user.getId());
+System.out.println("Logged in user ID: " + user.getId());
+System.out.println("Reports fetched: " + recentReports.size());
+
+for (LabReport r : recentReports) {
+    System.out.println("Report Title: " + r.getTitle());
+}
+System.out.println("===========================");
+// 🔥 DEBUG END
+
+if (recentReports != null && recentReports.size() > 3) {
+    recentReports = recentReports.subList(0, 3);
+}
+
+request.setAttribute("recentReports", recentReports);
             request.setAttribute("totalNotifications", totalNotifications);
         } catch (Exception e) {
             e.printStackTrace();

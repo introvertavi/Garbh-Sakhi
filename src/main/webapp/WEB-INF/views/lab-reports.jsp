@@ -128,15 +128,21 @@ if (errorMessage != null) {
 </form>
 
 <!-- MODAL -->
-<div id="deleteModal" class="modal-overlay" style="display:none;">
-    <div class="modal-box">
-        <h3>Delete Report</h3>
-        <p>Are you sure you want to delete this report?</p>
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-card">
+
+        <div class="modal-icon">🗑️</div>
+
+        <h3>Delete Lab Report?</h3>
+
+        <p>This action cannot be undone.  
+        The report will be permanently removed.</p>
 
         <div class="modal-actions">
-            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-            <button type="button" class="btn-confirm" onclick="confirmDelete()">Delete</button>
+            <button class="btn cancel-btn" onclick="closeModal()">Cancel</button>
+            <a id="confirmDeleteBtn" class="btn delete-btn">Delete</a>
         </div>
+
     </div>
 </div>
 
@@ -145,13 +151,20 @@ if (errorMessage != null) {
 <script>
 let selectedReportId = null;
 
-function openDeleteModal(reportId) {
-    selectedReportId = reportId;
+function openDeleteModal(id) {
     document.getElementById("deleteModal").style.display = "flex";
+    document.getElementById("confirmDeleteBtn").href = "<%=request.getContextPath()%>/deleteReport?id=" + id;
 }
 
-function closeDeleteModal() {
+function closeModal() {
     document.getElementById("deleteModal").style.display = "none";
+}
+
+window.onclick = function(e) {
+    const modal = document.getElementById("deleteModal");
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
 }
 
 function confirmDelete() {

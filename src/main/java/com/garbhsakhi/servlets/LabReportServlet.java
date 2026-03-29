@@ -1,5 +1,6 @@
 package com.garbhsakhi.servlets;
 
+import com.garbhsakhi.dao.DatabaseConnection;
 import com.garbhsakhi.dao.LabReportDAO;
 import com.garbhsakhi.model.LabReport;
 import com.garbhsakhi.model.User;
@@ -50,7 +51,7 @@ public class LabReportServlet extends HttpServlet {
             }
 
             // ✅ GET DB CONNECTION
-            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+            Connection conn = DatabaseConnection.getConnection();
 
             if (conn == null) {
                 response.getWriter().println("DB Connection is NULL");
@@ -121,7 +122,7 @@ public class LabReportServlet extends HttpServlet {
             filePart.write(filePath);
 
             // ✅ SAVE TO DB
-            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+            Connection conn = DatabaseConnection.getConnection();
 
             LabReportDAO dao = new LabReportDAO(conn);
 

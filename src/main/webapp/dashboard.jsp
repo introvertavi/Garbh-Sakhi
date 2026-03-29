@@ -3,6 +3,9 @@
 <%@ page import="com.garbhsakhi.util.PregnancyUtil" %>
 <%@ page import="com.garbhsakhi.dao.AppointmentDAO" %>
 <%@ page import="com.garbhsakhi.model.Appointment" %>
+<%@ page import="com.garbhsakhi.dao.LabReportDAO" %>
+<%@ page import="com.garbhsakhi.dao.DatabaseConnection" %>
+<%@ page import="com.garbhsakhi.model.LabReport" %>
 <%@ page import="java.util.List" %>
 <%@ page session="true" %>
 <%
@@ -130,6 +133,8 @@ int missedCount =
 
 request.setAttribute("pageTitle","Dashboard");
 %>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -539,33 +544,56 @@ if(todayMedicines == null || todayMedicines.isEmpty()){
 <% } %>
 
 </div>
-<div class="card">
-    <h3>Recent Lab Reports</h3>
+<div class="gs-card card-accent accent-reports" style="padding:20px;">
 
-    <%
-    List<com.garbhsakhi.model.LabReport> recentReports =
-        (List<com.garbhsakhi.model.LabReport>) request.getAttribute("recentReports");
+<h4>📄 Recent Lab Reports</h4>
 
-    if (recentReports != null && !recentReports.isEmpty()) {
-        for (com.garbhsakhi.model.LabReport r : recentReports) {
-    %>
+<%
+List<LabReport> reports = new java.util.ArrayList<>();
+
+if (user != null) {
+    try {
+        java.sql.Connection conn = DatabaseConnection.getConnection();
+        LabReportDAO dao = new LabReportDAO(conn);
+
+        reports = dao.getReportsByUser(user.getId());
+
+        if (reports != null && reports.size() > 3) {
+            reports = reports.subList(0, 3);
+        }
+
+        System.out.println("JSP Reports Count: " + reports.size());
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+%>
+
+<% if (reports != null && !reports.isEmpty()) { %>
+
+    <% for (com.garbhsakhi.model.LabReport r : reports) { %>
 
         <div class="report-item">
-            <span><%= r.getTitle() %></span>
-            <a href="<%= r.getFilePath() %>" target="_blank">View</a>
+
+            <span>📄 <%= r.getTitle() %></span>
+
+            <a href="viewReport?id=<%= r.getId() %>" class="view-btn">
+                View
+            </a>
+
         </div>
 
-    <%
-        }
-    } else {
-    %>
-        <p>No reports uploaded</p>
-    <%
-    }
-    %>
-</div>
+    <% } %>
+
+<% } else { %>
+
+    <p class="text-muted">No lab reports uploaded yet</p>
+
+<% } %>
 
 </div>
+
 </div>
 </div>
 

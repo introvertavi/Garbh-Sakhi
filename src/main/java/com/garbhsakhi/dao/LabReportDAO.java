@@ -12,7 +12,7 @@ public class LabReportDAO {
         this.conn = conn;
     }
 
-    // ADD
+    // ================= ADD REPORT =================
     public void addReport(LabReport report) throws Exception {
         String sql = "INSERT INTO lab_reports (user_id, title, file_path) VALUES (?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -22,12 +22,14 @@ public class LabReportDAO {
         ps.executeUpdate();
     }
 
-    // GET ALL
+    // ================= GET REPORTS =================
     public List<LabReport> getReportsByUser(int userId) throws Exception {
         List<LabReport> list = new ArrayList<>();
+
         String sql = "SELECT * FROM lab_reports WHERE user_id=? ORDER BY upload_date DESC";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, userId);
+
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
@@ -39,10 +41,11 @@ public class LabReportDAO {
             r.setUploadDate(rs.getTimestamp("upload_date"));
             list.add(r);
         }
+
         return list;
     }
 
-    // DELETE
+    // ================= DELETE REPORT =================
     public void deleteReport(int id) throws Exception {
         String sql = "DELETE FROM lab_reports WHERE id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -50,16 +53,18 @@ public class LabReportDAO {
         ps.executeUpdate();
     }
 
-    // ✅ NEW: GET FILE PATH BY ID (required for file deletion)
+    // ================= GET FILE PATH (FIXED) =================
     public String getFilePathById(int id) throws Exception {
         String sql = "SELECT file_path FROM lab_reports WHERE id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
+
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
             return rs.getString("file_path");
         }
+
         return null;
     }
 }

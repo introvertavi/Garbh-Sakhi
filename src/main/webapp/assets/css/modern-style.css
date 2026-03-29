@@ -7089,3 +7089,98 @@ background:#faf8fc;
         transform: scale(1);
     }
 }
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+/* ===== MODAL CARD ===== */
+.modal-card {
+    background: #fff;
+    padding: 26px 22px;
+    width: 340px;
+    border-radius: 22px;
+    text-align: center;
+    animation: modalPop 0.25s ease;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    border: 1px solid #f3d1dc;
+}
+
+/* ===== ICON ===== */
+.modal-icon {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+/* ===== TEXT ===== */
+.modal-card h3 {
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.modal-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+/* ===== BUTTONS ===== */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-actions .btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+}
+
+/* Cancel */
+.cancel-btn {
+    background: #f3f3f3;
+}
+
+.cancel-btn:hover {
+    background: #e7e7e7;
+}
+
+/* Delete */
+.delete-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4d6d);
+    color: white;
+}
+
+.delete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(255, 77, 109, 0.3);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
