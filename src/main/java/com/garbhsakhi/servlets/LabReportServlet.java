@@ -17,23 +17,58 @@ public class LabReportServlet extends HttpServlet {
 
     private static final String UPLOAD_DIR = "uploads/lab-reports";
 
+    // ✅ FILE VALIDATION CONSTANTS
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+    private static final String[] ALLOWED_TYPES = {
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/jpg"
+    };
+
+    // ✅ FILE TYPE CHECK METHOD
+    private boolean isValidFileType(String contentType) {
+        for (String type : ALLOWED_TYPES) {
+            if (type.equalsIgnoreCase(contentType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
+            // ✅ CHECK USER SESSION
             User user = (User) request.getSession().getAttribute("user");
 
-            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-            LabReportDAO dao = new LabReportDAO(conn);
+            if (user == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
+            // ✅ GET DB CONNECTION
+            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+
+            if (conn == null) {
+                response.getWriter().println("DB Connection is NULL");
+                return;
+            }
+
+            LabReportDAO dao = new LabReportDAO(conn);
             List<LabReport> reports = dao.getReportsByUser(user.getId());
+
             request.setAttribute("reports", reports);
 
+            // ✅ FORWARD TO JSP
             request.getRequestDispatcher("/WEB-INF/views/lab-reports.jsp")
-       .forward(request, response);
+                   .forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            response.getWriter().println("ERROR: " + e.getMessage());
         }
     }
 
@@ -41,10 +76,39 @@ public class LabReportServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            // ✅ CHECK USER
             User user = (User) request.getSession().getAttribute("user");
+
+            if (user == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
             String title = request.getParameter("title");
             Part filePart = request.getPart("file");
+
+            // ✅ FILE NOT SELECTED
+            if (filePart == null || filePart.getSize() == 0) {
+                request.setAttribute("errorMessage", "Please select a file to upload.");
+                doGet(request, response);
+                return;
+            }
+
+            // ✅ FILE SIZE VALIDATION
+            if (filePart.getSize() > MAX_FILE_SIZE) {
+                request.setAttribute("errorMessage", "File size must be less than 5MB.");
+                doGet(request, response);
+                return;
+            }
+
+            // ✅ FILE TYPE VALIDATION
+            String contentType = filePart.getContentType();
+
+            if (!isValidFileType(contentType)) {
+                request.setAttribute("errorMessage", "Only PDF and Image files (JPG, PNG) are allowed.");
+                doGet(request, response);
+                return;
+            }
 
             String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
 
@@ -56,8 +120,9 @@ public class LabReportServlet extends HttpServlet {
             String filePath = uploadPath + File.separator + fileName;
             filePart.write(filePath);
 
-            // Save to DB
+            // ✅ SAVE TO DB
             Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
+
             LabReportDAO dao = new LabReportDAO(conn);
 
             LabReport report = new LabReport();
@@ -71,6 +136,7 @@ public class LabReportServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
+            response.getWriter().println("ERROR: " + e.getMessage());
         }
     }
 }

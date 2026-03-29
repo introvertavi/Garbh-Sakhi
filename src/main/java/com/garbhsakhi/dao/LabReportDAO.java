@@ -49,4 +49,17 @@ public class LabReportDAO {
         ps.setInt(1, id);
         ps.executeUpdate();
     }
+
+    // ✅ NEW: GET FILE PATH BY ID (required for file deletion)
+    public String getFilePathById(int id) throws Exception {
+        String sql = "SELECT file_path FROM lab_reports WHERE id=?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("file_path");
+        }
+        return null;
+    }
 }
