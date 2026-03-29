@@ -562,8 +562,6 @@ if (user != null) {
             reports = reports.subList(0, 3);
         }
 
-        System.out.println("JSP Reports Count: " + reports.size());
-
     } catch (Exception e) {
         e.printStackTrace();
     }
@@ -572,25 +570,47 @@ if (user != null) {
 
 <% if (reports != null && !reports.isEmpty()) { %>
 
-    <% for (com.garbhsakhi.model.LabReport r : reports) { %>
+    <% for (LabReport r : reports) { 
+        String file = r.getFilePath() != null ? r.getFilePath() : "";
+        boolean isPdf = file.toLowerCase().endsWith(".pdf");
+    %>
 
-        <div class="report-item">
+    <div class="report-card">
 
-            <span>📄 <%= r.getTitle() %></span>
+        <div class="report-header">
+            <div>
+                <h5 class="report-title"><%= r.getTitle() %></h5>
+                <p class="report-date">Uploaded: <%= r.getUploadDate() %></p>
+            </div>
 
-            <a href="viewReport?id=<%= r.getId() %>" class="view-btn">
+            <span class="file-badge <%= isPdf ? "pdf" : "image" %>">
+                <%= isPdf ? "PDF" : "Image" %>
+            </span>
+        </div>
+
+        <div class="report-actions">
+
+            <a href="<%= request.getContextPath() %>/view-report?file=<%= file %>"
+               class="btn-view"
+               target="_blank">
                 View
             </a>
 
+            <button class="btn-delete"onclick="openDeleteModal(<%= r.getId() %>)">
+                Delete
+            </button>
+
         </div>
 
-    <% } %>
+    </div>
+
+    <% } %>   <!-- ✅ CLOSE FOR LOOP -->
 
 <% } else { %>
 
     <p class="text-muted">No lab reports uploaded yet</p>
 
-<% } %>
+<% } %>   <!-- ✅ CLOSE IF -->
 
 </div>
 
@@ -637,5 +657,48 @@ setInterval(updateCountdown,60000);
 
 })();
 </script>
+
+<script>
+let selectedReportId = null;
+
+function openDeleteModal(id) {
+    selectedReportId = id;
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+function confirmDelete() {
+    document.getElementById("deleteReportId").value = selectedReportId;
+    document.getElementById("deleteForm").submit();
+}
+
+window.onclick = function(e) {
+    const modal = document.getElementById("deleteModal");
+    if (e.target === modal) {
+        closeModal();
+    }
+}
+</script>
+
+<form id="deleteForm" method="post" action="<%=request.getContextPath()%>/delete-report">
+    <input type="hidden" name="reportId" id="deleteReportId">
+</form>
+
+<!-- DELETE MODAL -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Delete Report</h3>
+        <p>Are you sure you want to delete this report?</p>
+
+        <div class="modal-actions">
+            <button onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
+            <button class="btn delete-btn" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

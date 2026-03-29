@@ -1,7 +1,5 @@
 package com.garbhsakhi.servlets;
 
-import com.garbhsakhi.model.User;
-
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -11,41 +9,46 @@ import java.io.*;
 @WebServlet("/view-report")
 public class ViewReportServlet extends HttpServlet {
 
+    // 🔥 SAME BASE PATH AS UPLOAD
+    private static final String BASE_PATH = "/home/avinash/";
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        User user = (User) request.getSession().getAttribute("user");
+        String filePath = request.getParameter("file");
 
-        if (user == null) {
-            response.sendRedirect("login.jsp");
+        if (filePath == null || filePath.isEmpty()) {
+            response.getWriter().write("Invalid file");
             return;
         }
 
-        String fileName = request.getParameter("file");
-
-        if (fileName == null) {
-            response.getWriter().println("File not found");
-            return;
+        // remove leading slash
+        if (filePath.startsWith("/")) {
+            filePath = filePath.substring(1);
         }
 
-        String filePath = getServletContext().getRealPath("") +
-                File.separator + "uploads/lab-reports/" + fileName;
+        // 🔥 BUILD ABSOLUTE PATH
+        File file = new File(BASE_PATH + filePath);
 
-        File file = new File(filePath);
+        System.out.println("FINAL PATH: " + file.getAbsolutePath());
 
         if (!file.exists()) {
-            response.getWriter().println("File does not exist");
+            response.getWriter().write("File does not exist");
             return;
         }
 
-        // Set content type
-        if (fileName.endsWith(".pdf")) {
+        // 🔥 CONTENT TYPE
+        if (filePath.toLowerCase().endsWith(".pdf")) {
             response.setContentType("application/pdf");
-        } else {
+        } else if (filePath.toLowerCase().endsWith(".png")) {
+            response.setContentType("image/png");
+        } else if (filePath.toLowerCase().endsWith(".jpg") || filePath.toLowerCase().endsWith(".jpeg")) {
             response.setContentType("image/jpeg");
+        } else {
+            response.setContentType("application/octet-stream");
         }
 
-        response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + "\"");
+        response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
 
         FileInputStream fis = new FileInputStream(file);
         OutputStream os = response.getOutputStream();

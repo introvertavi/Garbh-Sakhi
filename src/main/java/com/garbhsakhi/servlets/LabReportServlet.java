@@ -113,7 +113,8 @@ public class LabReportServlet extends HttpServlet {
 
             String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
 
-            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+            // 🔥 ABSOLUTE PATH (FINAL FIX)
+            String uploadPath = "/home/avinash/uploads/lab-reports";
 
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();

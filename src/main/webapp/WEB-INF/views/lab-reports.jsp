@@ -87,24 +87,23 @@ if (errorMessage != null) {
 
         <div class="report-actions">
 
-            <a class="btn-view"
-               href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>"
-               target="_blank">
-               View
-            </a>
+    <a class="btn-view"
+       href="<%= request.getContextPath() %>/view-report?file=<%= r.getFilePath() %>"
+       target="_blank">
+       View
+    </a>
 
-            <a class="btn-download"
-               href="view-report?file=<%= r.getFilePath().substring(r.getFilePath().lastIndexOf("/") + 1) %>"
-               download>
-               Download
-            </a>
+    <a class="btn-download"
+       href="<%= request.getContextPath() %>/view-report?file=<%= r.getFilePath() %>"
+       download>
+       Download
+    </a>
 
-            <button type="button" class="btn-delete"
-                    onclick="openDeleteModal(<%= r.getId() %>)">
-                Delete
-            </button>
+    <button type="button" class="btn-delete"onclick="openDeleteModal(<%= r.getId() %>)">
+        Delete
+    </button>
 
-        </div>
+</div>
 
     </div>
 
@@ -123,7 +122,7 @@ if (errorMessage != null) {
 </div>
 
 <!-- DELETE FORM -->
-<form id="deleteForm" method="post" action="delete-report">
+<form id="deleteForm" method="post" action="<%=request.getContextPath()%>/delete-report">
     <input type="hidden" name="reportId" id="deleteReportId">
 </form>
 
@@ -140,7 +139,7 @@ if (errorMessage != null) {
 
         <div class="modal-actions">
             <button class="btn cancel-btn" onclick="closeModal()">Cancel</button>
-            <a id="confirmDeleteBtn" class="btn delete-btn">Delete</a>
+            <button class="btn delete-btn" onclick="confirmDelete()">Delete</button>
         </div>
 
     </div>
@@ -152,24 +151,24 @@ if (errorMessage != null) {
 let selectedReportId = null;
 
 function openDeleteModal(id) {
+    selectedReportId = id;
     document.getElementById("deleteModal").style.display = "flex";
-    document.getElementById("confirmDeleteBtn").href = "<%=request.getContextPath()%>/deleteReport?id=" + id;
 }
 
 function closeModal() {
     document.getElementById("deleteModal").style.display = "none";
 }
 
-window.onclick = function(e) {
-    const modal = document.getElementById("deleteModal");
-    if (e.target === modal) {
-        modal.style.display = "none";
-    }
-}
-
 function confirmDelete() {
     document.getElementById("deleteReportId").value = selectedReportId;
     document.getElementById("deleteForm").submit();
+}
+
+window.onclick = function(e) {
+    const modal = document.getElementById("deleteModal");
+    if (e.target === modal) {
+        closeModal();
+    }
 }
 </script>
 
