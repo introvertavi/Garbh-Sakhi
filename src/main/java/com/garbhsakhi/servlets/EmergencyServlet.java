@@ -6,7 +6,6 @@ import com.garbhsakhi.dao.DatabaseConnection;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.WebServlet;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -48,7 +47,7 @@ public class EmergencyServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e); // 🔥 force error visibility
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,9 +76,6 @@ public class EmergencyServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         System.out.println("ACTION: " + action);
-        System.out.println("LABEL: " + request.getParameter("label"));
-        System.out.println("NAME: " + request.getParameter("name"));
-        System.out.println("PHONE: " + request.getParameter("phone"));
 
         try (Connection conn = DatabaseConnection.getConnection()) {
 
@@ -87,37 +83,60 @@ public class EmergencyServlet extends HttpServlet {
 
             EmergencyDAO dao = new EmergencyDAO(conn);
 
+            // ✅ ADD CONTACT
             if ("add".equals(action)) {
+
+                String label = request.getParameter("label");
+                String name = request.getParameter("name");
+                String phone = request.getParameter("phone");
+
+                System.out.println("ADDING: " + label + " | " + name + " | " + phone);
 
                 EmergencyContact c = new EmergencyContact();
                 c.setUserId(userId);
-                c.setLabel(request.getParameter("label"));
-                c.setName(request.getParameter("name"));
-                c.setPhone(request.getParameter("phone"));
+                c.setLabel(label);
+                c.setName(name);
+                c.setPhone(phone);
 
                 boolean inserted = dao.addContact(c);
-
                 System.out.println("INSERT SUCCESS: " + inserted);
             }
 
+            // ✅ DELETE CONTACT
             else if ("delete".equals(action)) {
 
                 int id = Integer.parseInt(request.getParameter("id"));
+
                 System.out.println("DELETE ID: " + id + " USER: " + userId);
 
                 boolean deleted = dao.deleteContact(id, userId);
-
                 System.out.println("DELETE SUCCESS: " + deleted);
             }
 
+            // 🚨 EMERGENCY TRIGGER (REAL LOGIC)
             else if ("trigger".equals(action)) {
 
                 System.out.println("🚨 EMERGENCY TRIGGERED FOR USER: " + userId);
+
+                List<EmergencyContact> contacts = dao.getContactsByUser(userId);
+
+                if (contacts.isEmpty()) {
+                    System.out.println("⚠️ No emergency contacts found");
+                    request.getSession().setAttribute("msg", "⚠️ No emergency contacts found!");
+                } else {
+
+                    for (EmergencyContact c : contacts) {
+                        System.out.println("📞 Alerting: " + c.getName() + " (" + c.getPhone() + ")");
+                    }
+
+                    request.getSession().setAttribute("msg",
+                            "🚨 Emergency alert sent to " + contacts.size() + " contact(s)!");
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e); // 🔥 crash if error
+            throw new RuntimeException(e);
         }
 
         response.sendRedirect(request.getContextPath() + "/emergency");

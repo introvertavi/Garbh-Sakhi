@@ -6,7 +6,15 @@
     request.setAttribute("pageTitle", "Emergency");
     List<EmergencyContact> contacts = (List<EmergencyContact>) request.getAttribute("contacts");
 %>
-
+<%
+String msg = (String) session.getAttribute("msg");
+if (msg != null) {
+%>
+  <div class="alert-success"><%= msg %></div>
+<%
+  session.removeAttribute("msg");
+}
+%>
 <jsp:include page="components/header.jsp" />
 <jsp:include page="components/sidebar.jsp" />
 <jsp:include page="components/bottom-nav.jsp" />
