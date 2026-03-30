@@ -4,11 +4,8 @@
 <%@ page session="true" %>
 
 <%
-    // ✅ AUTH CHECK (SESSION-BASED)
-    Integer userId = (Integer) session.getAttribute("userId");
     User user = (User) session.getAttribute("user");
-
-    if (userId == null || user == null) {
+    if (user == null) {
         response.sendRedirect("login.jsp");
         return;
     }
@@ -16,183 +13,162 @@
     int pregWeek = 0;
     String trimester = "N/A";
     String babyFruit = null;
-
     if (user.getDueDate() != null && !user.getDueDate().isEmpty()) {
         try {
             pregWeek = PregnancyUtil.getPregnancyWeek(user.getDueDate());
             if (pregWeek > 0) {
                 int t = (pregWeek - 1) / 13 + 1;
-                trimester = (t <= 3) ? ("Trimester " + t) : "Late";
+                trimester = (t <= 3) ? ("Trimester " + t) : "Post-term";
                 babyFruit = PregnancyUtil.getFruitForWeek(pregWeek);
             }
         } catch (Exception ignore) {}
     }
-
     request.setAttribute("pageTitle", "Profile");
 %>
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/style.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/modern-style.css">
+</head>
+<body>
 
 <jsp:include page="components/header.jsp" />
 <jsp:include page="components/sidebar.jsp" />
 <jsp:include page="components/bottom-nav.jsp" />
 <jsp:include page="components/fab-emergency.jsp" />
 
-<!-- ================= PROFILE ================= -->
+<div class="main-content">
 <div class="content-wrapper">
 
-  <div class="profile-container">
+<!-- ================= PROFILE ================= -->
+<div class="profile-container">
+    <div class="page-header">
+        <h2><i class="bi bi-person-circle"></i> Your Profile</h2>
+    </div>
 
     <section class="profile-grid">
+        <!-- LEFT : PROFILE SUMMARY -->
+        <div class="gs-card profile-summary-card">
+            <div class="avatar-wrapper">
+                <img id="avatarPreview" class="avatar"
+                     src="<%= (user.getAvatarPath()!=null && !user.getAvatarPath().isEmpty())
+                           ? user.getAvatarPath()
+                           : (request.getContextPath()+"/assets/garbh_sakhi_logo.png") %>"
+                     alt="Profile Avatar">
+                <button type="button" class="change-avatar-btn" id="changeAvatarBtn" title="Change profile picture">
+                    <i class="bi bi-camera-fill"></i>
+                </button>
+            </div>
 
-      <!-- LEFT : PROFILE SUMMARY -->
-      <div class="gs-card profile-left">
+            <h3 class="profile-name"><%= user.getFullName() != null ? user.getFullName() : "User" %></h3>
+            <p class="profile-username">@<%= (user.getName() != null && !user.getName().isBlank()) ? user.getName() : "-" %></p>
 
-        <div class="avatar-wrap">
-          <img
-            id="avatarPreview"
-            class="avatar"
-            src="<%= (user.getAvatarPath()!=null && !user.getAvatarPath().isEmpty())
-                  ? user.getAvatarPath()
-                  : (request.getContextPath()+"/assets/garbh_sakhi_logo.png") %>"
-            alt="Profile Avatar">
+            <div class="profile-info">
+                <div class="info-item">
+                    <i class="bi bi-cake2"></i>
+                    <span>Age: <%= user.getAge() > 0 ? user.getAge() : "-" %></span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-telephone"></i>
+                    <span><%= (user.getPhone() != null && !user.getPhone().isBlank()) ? user.getPhone() : "-" %></span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-calendar-heart"></i>
+                    <span>Pregnancy: Week <%= pregWeek %></span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-pie-chart"></i>
+                    <span>Trimester: <%= trimester %></span>
+                </div>
+                <% if (babyFruit != null) { %>
+                <div class="info-item">
+                    <i class="bi bi-apple"></i>
+                    <span>Baby is the size of a <%= babyFruit %></span>
+                </div>
+                <% } %>
+            </div>
 
-          <div class="avatar-actions">
-            <button type="button" class="btn-ghost" id="changeAvatarBtn">Change</button>
-            <button type="button" class="btn-ghost" id="removeAvatarBtn">Remove</button>
-            <input type="file" id="avatarInput" accept="image/*" hidden>
-          </div>
+            <!-- MODIFIED: Logout button is now a styled link here -->
+            <a href="<%= request.getContextPath() %>/logout" class="btn-logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
         </div>
 
-        <!-- ✅ UPDATED: Username + Phone display (ONLY CHANGE) -->
-        <ul class="profile-summary">
-          <li class="name">
-            <strong><%= user.getFullName() != null ? user.getFullName() : "-" %></strong>
-          </li>
+        <!-- RIGHT : PROFILE FORM -->
+        <div class="gs-card profile-form-card">
+            <h4>Edit your details</h4>
+            <form action="profile" method="post" enctype="multipart/form-data">
+                <!-- MODIFIED: Avatar file input is now inside the form -->
+                <input type="file" id="avatarInput" name="avatar" accept="image/*" hidden>
 
-          <li>
-            Username:
-            <%= (user.getName() != null && !user.getName().isBlank())
-                  ? user.getName()
-                  : "-" %>
-          </li>
-
-          <li>
-            Age:
-            <%= user.getAge() > 0 ? user.getAge() : "-" %>
-          </li>
-
-          <li>
-            Phone:
-            <%= (user.getPhone() != null && !user.getPhone().isBlank())
-                  ? user.getPhone()
-                  : "-" %>
-          </li>
-
-          <li>Pregnancy: Week <%= pregWeek %></li>
-          <li>Trimester: <%= trimester %></li>
-
-          <% if (babyFruit != null) { %>
-            <li>Baby size: <%= babyFruit %></li>
-          <% } %>
-        </ul>
-
-      </div>
-
-      <!-- RIGHT : PROFILE FORM -->
-      <div class="gs-card profile-form">
-
-        <h2>Your Profile</h2>
-
-        <form action="profile" method="post" enctype="multipart/form-data">
-
-          <div class="field">
-            <label>Full name</label>
-            <input name="full_name" value="<%= user.getFullName() %>" required>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label>Username</label>
-              <input name="username" value="<%= user.getName() %>">
-            </div>
-            <div class="field">
-              <label>Age</label>
-              <input type="number" name="age" value="<%= user.getAge() %>">
-            </div>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label>Phone</label>
-              <input name="phone" value="<%= user.getPhone() %>">
-            </div>
-            <div class="field">
-              <label>Due date</label>
-              <input type="date" name="due_date" value="<%= user.getDueDate() %>">
-            </div>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label>Doctor Name</label>
-              <input name="doctor_name" value="<%= user.getDoctorName() %>">
-            </div>
-            <div class="field">
-              <label>Hospital / Clinic</label>
-              <input name="hospital_name" value="<%= user.getHospitalName() %>">
-            </div>
-          </div>
-
-          <div class="field">
-            <label>Complications</label>
-            <textarea name="complications"><%= user.getComplications() %></textarea>
-          </div>
-
-          <div class="actions">
-            <button type="submit" class="btn-save">Save Profile</button>
-            <a href="dashboard.jsp" class="btn-ghost">Back</a>
-          </div>
-
-        </form>
-
-      </div>
-
+                <div class="field">
+                    <label>Full name</label>
+                    <input name="full_name" class="input-field" value="<%= user.getFullName() != null ? user.getFullName() : "" %>" required>
+                </div>
+                <div class="row-2">
+                    <div class="field">
+                        <label>Username</label>
+                        <input name="username" class="input-field" value="<%= user.getName() != null ? user.getName() : "" %>">
+                    </div>
+                    <div class="field">
+                        <label>Age</label>
+                        <input type="number" name="age" class="input-field" value="<%= user.getAge() > 0 ? user.getAge() : "" %>">
+                    </div>
+                </div>
+                <div class="row-2">
+                    <div class="field">
+                        <label>Phone</label>
+                        <input name="phone" class="input-field" value="<%= user.getPhone() != null ? user.getPhone() : "" %>">
+                    </div>
+                    <div class="field">
+                        <label>Due date</label>
+                        <input type="date" name="due_date" class="input-field" value="<%= user.getDueDate() != null ? user.getDueDate() : "" %>">
+                    </div>
+                </div>
+                <div class="row-2">
+                    <div class="field">
+                        <label>Doctor Name</label>
+                        <input name="doctor_name" class="input-field" value="<%= user.getDoctorName() != null ? user.getDoctorName() : "" %>">
+                    </div>
+                    <div class="field">
+                        <label>Hospital / Clinic</label>
+                        <input name="hospital_name" class="input-field" value="<%= user.getHospitalName() != null ? user.getHospitalName() : "" %>">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Known Complications</label>
+                    <textarea name="complications" class="input-field" rows="3"><%= user.getComplications() != null ? user.getComplications() : "" %></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <a href="dashboard.jsp" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
     </section>
-
-  </div>
 </div>
-
-<!-- ================= PROFILE PAGE CSS ================= -->
-<style>
-.profile-container{
-  max-width:1100px;
-  margin:0 auto;
-  padding:24px;
-  box-sizing:border-box;
-}
-
-.profile-grid{
-  display:grid;
-  grid-template-columns:340px 1fr;
-  gap:24px;
-}
-
-@media (max-width:900px){
-  .profile-grid{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+</div>
 
 <script>
 const avatarInput = document.getElementById('avatarInput');
-document.getElementById('changeAvatarBtn')
-  ?.addEventListener('click', () => avatarInput.click());
+const avatarPreview = document.getElementById('avatarPreview');
+const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+
+// When the 'Change' button is clicked, trigger the hidden file input
+changeAvatarBtn?.addEventListener('click', () => avatarInput.click());
+
+// When a new file is selected, update the preview
+avatarInput?.addEventListener('change', () => {
+    const file = avatarInput.files[0];
+    if (file) {
+        avatarPreview.src = URL.createObjectURL(file);
+    }
+});
 </script>
 
-<form action="<%= request.getContextPath() %>/logout" method="get">
-    <button type="submit">Logout</button>
-</form>
-
+</body>
+</html>
