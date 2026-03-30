@@ -70,22 +70,28 @@ List<Appointment> missed   = (List<Appointment>) request.getAttribute("missedApp
 <h3 style="margin-bottom:12px;">Today's Appointments</h3>
 <% if (today == null || today.isEmpty()) { %>
   <p class="muted">No appointments today.</p>
-<% } else { for (Appointment a : today) { %>
-  <%@ include file="appointment-card.jsp" %>
+<% } else { for (Appointment a : today) {
+    request.setAttribute("appointment", a);
+%>
+  <jsp:include page="appointment-card.jsp" />
 <% }} %>
 
-<h3 style="margin:20px 0 12px;">Upcoming Appointments</h3>
+<h3 class="section-title">Upcoming Appointments</h3>
 <% if (upcoming == null || upcoming.isEmpty()) { %>
   <p class="muted">No upcoming appointments.</p>
-<% } else { for (Appointment a : upcoming) { %>
-  <%@ include file="appointment-card.jsp" %>
+<% } else { for (Appointment a : upcoming) {
+    request.setAttribute("appointment", a);
+%>
+  <jsp:include page="appointment-card.jsp" />
 <% }} %>
 
-<h3 style="margin:20px 0 12px;color:#e5484d;">Missed Appointments</h3>
+<h3 class="section-title missed-title">Missed Appointments</h3>
 <% if (missed == null || missed.isEmpty()) { %>
   <p class="muted">No missed appointments.</p>
-<% } else { for (Appointment a : missed) { %>
-  <%@ include file="appointment-card.jsp" %>
+<% } else { for (Appointment a : missed) {
+    request.setAttribute("appointment", a);
+%>
+  <jsp:include page="appointment-card.jsp" />
 <% }} %>
 
 </div><!-- /appt-list -->
@@ -105,8 +111,12 @@ flatpickr("#appointmentCalendar", {
 // ── Completion animation ──
 function markCompleted(checkbox) {
   const card = checkbox.closest(".appointment-item");
-  if (card) card.classList.add("completing");
-  setTimeout(() => checkbox.closest("form").submit(), 600);
+  if (card) {
+      card.classList.add("completing");
+  }
+  setTimeout(() => {
+      checkbox.closest("form").submit();
+  }, 600);
 }
 
 // ── Auto-refresh every 60 s ──
