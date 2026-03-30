@@ -50,16 +50,15 @@
         <!-- LOGOUT -->
         <form action="<%= request.getContextPath() %>/logout"
               method="get"
-              style="margin-top:14px;">
+              style="margin-top:20px;">
           <button type="submit"
-                  class="btn-danger"
-                  style="width:auto;padding:8px 16px;border-radius:12px;">
+                  class="btn-danger">
             Logout
           </button>
         </form>
-      </div> <!-- ✅ ACCOUNT CLOSED PROPERLY -->
+      </div>
 
-      <!-- DANGER ZONE (SEPARATE CARD) -->
+      <!-- DANGER ZONE -->
       <div class="gs-card settings-card danger-zone">
         <h3>Danger Zone</h3>
 
@@ -88,59 +87,54 @@
   box-sizing:border-box;
 }
 
-/* CONTENT WRAPPER */
 .content-wrapper{
   width:100%;
   max-width:720px;
   padding-left:16px;
-  padding-right:64px; /* base breathing space */
+  padding-right:64px;
 }
 
-/* DESKTOP: heavy visual compensation */
 @media(min-width:901px){
-  .page-container{
-    padding-left:260px; /* sidebar width */
-  }
-
-  .content-wrapper{
-    padding-right:140px; /* 🔥 STRONG optical balance */
-  }
+  .page-container{ padding-left:260px; }
+  .content-wrapper{ padding-right:140px; }
 }
 
-/* LARGE DESKTOP / WIDE SCREENS */
 @media(min-width:1280px){
-  .content-wrapper{
-    padding-right:180px; /* 🔥🔥 very premium spacing */
-  }
+  .content-wrapper{ padding-right:180px; }
 }
 
-/* MOBILE */
 @media(max-width:900px){
   .page-container{
     padding-left:0;
     padding-bottom:90px;
   }
-
   .content-wrapper{
     padding-left:16px;
     padding-right:16px;
   }
 }
 
-/* STACK */
 .center-stack{
   width:100%;
   display:flex;
   flex-direction:column;
-  gap:20px;
+  gap:24px;
 }
 
-/* CARDS */
+/* ── IMPROVED CARDS ── */
 .settings-card{
-  padding:22px;
-  border-radius:18px;
+  padding:28px 26px;
+  border-radius:20px;
   background:#fff;
-  box-shadow:0 8px 22px rgba(0,0,0,.08);
+  box-shadow:0 8px 25px rgba(0,0,0,0.07);
+  margin-bottom:4px;
+}
+
+.settings-card h3{
+  margin:0 0 22px 0;
+  font-size:19px;
+  font-weight:600;
+  color:#1e293b;
 }
 
 /* TOGGLES */
@@ -148,14 +142,25 @@
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-top:14px;
+  padding:16px 0;
+  border-top:1px solid #f1f5f9;
 }
 
-/* SWITCH */
+.toggle-row:first-child{
+  border-top:none;
+  padding-top:4px;
+}
+
+.toggle-row span{
+  font-size:15.5px;
+  color:#374151;
+}
+
+/* SWITCH - Slightly improved */
 .switch{
   position:relative;
-  width:44px;
-  height:24px;
+  width:46px;
+  height:25px;
 }
 .switch input{ display:none; }
 .slider{
@@ -169,19 +174,20 @@
 .slider:before{
   content:"";
   position:absolute;
-  height:18px;
-  width:18px;
+  height:19px;
+  width:19px;
   left:3px;
   top:3px;
   background:#fff;
   border-radius:50%;
   transition:.3s;
+  box-shadow:0 2px 4px rgba(0,0,0,0.1);
 }
 .switch input:checked + .slider{
   background:#ff6b9a;
 }
 .switch input:checked + .slider:before{
-  transform:translateX(20px);
+  transform:translateX(21px);
 }
 
 /* LINKS */
@@ -189,12 +195,12 @@
   color:#3b82f6;
   font-weight:500;
   text-decoration:none;
-}
-.link.danger{
-  color:#ff3b5f;
+  display:block;
+  padding:8px 0;
+  font-size:15.5px;
 }
 
-/* DANGER */
+/* DANGER ZONE */
 .danger-zone{
   background:#fff3f6;
   border:1px solid #ffb3c4;
@@ -204,9 +210,18 @@
   background:#ff3b5f;
   color:#fff;
   border:none;
-  padding:10px 18px;
+  padding:12px 24px;
   border-radius:12px;
   font-weight:600;
   cursor:pointer;
+  width:100%;
+  margin-top:8px;
+}
+
+/* Logout button - better alignment */
+.settings-card form .btn-danger {
+  width: auto;
+  padding: 10px 22px;
+  margin-top: 12px;
 }
 </style>
