@@ -30,6 +30,7 @@
       padding: 28px;
       box-sizing: border-box;
       margin: 24px;
+      text-align: center; /* ensures everything inside is centered */
     }
 
     .auth-top {
@@ -66,6 +67,8 @@
     }
 
     .btn-primary {
+      display: block;              /* important for centering */
+      margin: 12px auto 0;         /* centers horizontally */
       background: linear-gradient(180deg,#ffb3cf,#ff7aa6);
       color:#fff;
       border:none;
@@ -84,6 +87,11 @@
     @media (max-width:420px){
       .auth-card { padding:18px; margin:12px; border-radius:12px; }
       .auth-title { font-size:20px; }
+
+      /* optional: better mobile UX */
+      .btn-primary {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -94,14 +102,13 @@
     <div class="auth-top">
       <img src="assets/garbh_sakhi_logo.png" alt="Garbh Sakhi" class="auth-logo" />
       <div id="landingTitle" class="auth-title">Welcome to Garbh Sakhi</div>
-      <div class="auth-sub">Your pregnancy wellness companion.</div>
+      <div class="auth-sub">Caring for you and your baby, every step of the way.</div>
     </div>
 
-    <div style="text-align:center;">
-      <button class="btn-primary" onclick="location.href='signup.jsp'">
-        Create Account
-      </button>
-    </div>
+    <!-- Centered Button -->
+    <button class="btn-primary" onclick="location.href='signup.jsp'">
+      Create Account
+    </button>
 
     <div class="cta" style="margin-top:18px;">
       <div style="margin:0 auto; text-align:center; width:100%;">
