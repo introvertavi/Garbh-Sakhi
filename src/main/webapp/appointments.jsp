@@ -11,7 +11,6 @@ if (user == null) {
     return;
 }
 
-/* ✅ Always ensure servlet loads data */
 if (request.getAttribute("todayAppointments") == null) {
     response.sendRedirect("appointments");
     return;
@@ -27,11 +26,7 @@ request.setAttribute("pageTitle", "Appointments");
 
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/modern-style.css">
-
-<!-- ✅ ICON FIX (NEW) -->
-<link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
@@ -63,129 +58,62 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.c
 </div>
 </div>
 
-<!-- APPOINTMENTS -->
+<!-- APPOINTMENTS LIST -->
 <div class="appt-list gs-card">
 
 <%
-List<Appointment> today =
-(List<Appointment>) request.getAttribute("todayAppointments");
-
-List<Appointment> upcoming =
-(List<Appointment>) request.getAttribute("upcomingAppointments");
-
-List<Appointment> missed =
-(List<Appointment>) request.getAttribute("missedAppointments");
+List<Appointment> today    = (List<Appointment>) request.getAttribute("todayAppointments");
+List<Appointment> upcoming = (List<Appointment>) request.getAttribute("upcomingAppointments");
+List<Appointment> missed   = (List<Appointment>) request.getAttribute("missedAppointments");
 %>
 
-<!-- ================= TODAY ================= -->
 <h3 style="margin-bottom:12px;">Today's Appointments</h3>
+<% if (today == null || today.isEmpty()) { %>
+  <p class="muted">No appointments today.</p>
+<% } else { for (Appointment a : today) { %>
+  <%@ include file="appointment-card.jsp" %>
+<% }} %>
 
-<%
-if (today == null || today.isEmpty()) {
-%>
-<p class="muted">No appointments today.</p>
-<%
-} else {
-for (Appointment a : today) {
-%>
-
-<%@ include file="appointment-card.jsp" %>
-
-<%
-}}
-%>
-
-<!-- ================= UPCOMING ================= -->
 <h3 style="margin:20px 0 12px;">Upcoming Appointments</h3>
+<% if (upcoming == null || upcoming.isEmpty()) { %>
+  <p class="muted">No upcoming appointments.</p>
+<% } else { for (Appointment a : upcoming) { %>
+  <%@ include file="appointment-card.jsp" %>
+<% }} %>
 
-<%
-if (upcoming == null || upcoming.isEmpty()) {
-%>
-<p class="muted">No upcoming appointments.</p>
-<%
-} else {
-for (Appointment a : upcoming) {
-%>
-
-<%@ include file="appointment-card.jsp" %>
-
-<%
-}}
-%>
-
-<!-- ================= MISSED ================= -->
 <h3 style="margin:20px 0 12px;color:#e5484d;">Missed Appointments</h3>
+<% if (missed == null || missed.isEmpty()) { %>
+  <p class="muted">No missed appointments.</p>
+<% } else { for (Appointment a : missed) { %>
+  <%@ include file="appointment-card.jsp" %>
+<% }} %>
 
-<%
-if (missed == null || missed.isEmpty()) {
-%>
-<p class="muted">No missed appointments.</p>
-<%
-} else {
-for (Appointment a : missed) {
-%>
-
-<%@ include file="appointment-card.jsp" %>
-
-<%
-}}
-%>
-
-</div>
-</div>
-</div>
+</div><!-- /appt-list -->
+</div><!-- /appt-layout -->
+</div><!-- /gs-card -->
 </div>
 </div>
 
 <script>
+// ── Flatpickr (init ONCE) ──
 flatpickr("#appointmentCalendar", {
-inline:true,
-defaultDate:"today",
-dateFormat:"d-m-Y"
-});
-</script>
-<script>
-function markCompleted(checkbox) {
-
-    const card = checkbox.closest(".appointment-item");
-
-    // animation
-    card.classList.add("completing");
-
-    setTimeout(() => {
-        checkbox.closest("form").submit();
-    }, 600); // animation duration
-}
-</script>
-<script>
-flatpickr("#appointmentCalendar", {
-inline:true,
-defaultDate:"today",
-dateFormat:"d-m-Y"
+  inline: true,
+  defaultDate: "today",
+  dateFormat: "d-m-Y"
 });
 
-// ✅ completion animation (ONLY ADDITION)
+// ── Completion animation ──
 function markCompleted(checkbox) {
-
-    const card = checkbox.closest(".appointment-item");
-
-    if(card){
-        card.classList.add("completing");
-    }
-
-    setTimeout(() => {
-        checkbox.closest("form").submit();
-    }, 600);
+  const card = checkbox.closest(".appointment-item");
+  if (card) card.classList.add("completing");
+  setTimeout(() => checkbox.closest("form").submit(), 600);
 }
-</script>
-<script>
-// =============================
-// AUTO REFRESH EVERY 60 SECONDS
-// =============================
+
+// ── Auto-refresh every 60 s ──
 setInterval(() => {
-    fetch("appointments?refresh=true")
-        .then(() => location.reload());
-}, 60000); // 1 minute
+  fetch("appointments?refresh=true").then(() => location.reload());
+}, 60000);
 </script>
+
 </body>
 </html>
