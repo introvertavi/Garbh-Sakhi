@@ -17,7 +17,7 @@
     <li><a href="medicines.jsp"    class="<%= sidebarPageTitle.equals("Medicines")    ? "active" : "" %>"><i class="ri-capsule-line"></i>Medicines</a></li>
     <li><a href="profile.jsp"      class="<%= sidebarPageTitle.equals("Profile")      ? "active" : "" %>"><i class="ri-user-line"></i>Profile</a></li>
     <li><a href="lab-reports"   class="<%= sidebarPageTitle.equals("Lab Reports")  ? "active" : "" %>"><i class="ri-file-list-3-line"></i>Lab Reports</a></li>
-    <li><a href="emergency.jsp"    class="<%= sidebarPageTitle.equals("Emergency")    ? "active" : "" %>"><i class="ri-phone-line"></i>Emergency</a></li>
+    <li><a href="emergency"    class="<%= sidebarPageTitle.equals("Emergency")    ? "active" : "" %>"><i class="ri-phone-line"></i>Emergency</a></li>
     <li><a href="settings.jsp"     class="<%= sidebarPageTitle.equals("Settings")     ? "active" : "" %>"><i class="ri-settings-3-line"></i>Settings</a></li>
   </ul>
 </aside>

@@ -1,31 +1,34 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!-- 🌸 Emergency Floating Action Button -->
-<div class="fab-emergency" title="Emergency" onclick="triggerEmergency()">
-  <i class="ri-phone-fill"></i>
-</div>
+<form action="<%= request.getContextPath() %>/emergency" method="post"
+      onsubmit="return confirmEmergency()">
+
+  <input type="hidden" name="action" value="trigger"/>
+
+  <button type="submit" class="fab-emergency" title="Emergency">
+    <i class="ri-phone-fill"></i>
+  </button>
+
+</form>
 
 <script>
-  function triggerEmergency() {
-    // small placeholder — implement SMS / call logic later
-    if (confirm('🚨 Trigger emergency alert? This will notify saved contacts.')) {
-      // TODO: call server endpoint to send alerts
-      alert('Emergency alert triggered (stub).');
-    }
-  }
+function confirmEmergency() {
+  return confirm("🚨 Are you sure you want to trigger emergency alert?");
+}
 </script>
 
 <style>
-/* 🌸 Emergency FAB – consistent pastel theme */
 .fab-emergency {
   position: fixed;
-  bottom: calc(var(--gs-bottomnav-h, 70px) + 22px); /* avoids overlap with bottom nav */
+  bottom: calc(var(--gs-bottomnav-h, 70px) + 22px);
   right: 22px;
   width: 64px;
   height: 64px;
   background: linear-gradient(135deg, #ff8ab4, #ff4f93);
   color: #fff;
   border-radius: 50%;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,13 +39,11 @@
   transition: all 0.25s ease;
 }
 
-/* Hover glow effect */
 .fab-emergency:hover {
   transform: scale(1.08);
   box-shadow: 0 10px 28px rgba(255, 79, 147, 0.35);
 }
 
-/* Responsive mobile tweaks */
 @media (max-width: 900px) {
   .fab-emergency {
     bottom: calc(var(--gs-bottomnav-h, 64px) + 16px);

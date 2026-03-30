@@ -8,9 +8,20 @@
 
     <display-name>Garbh Sakhi Application</display-name>
 
-    <!-- ✅ FIXED: correct welcome file -->
+    <!-- Welcome File -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <!-- 🔥 Emergency Servlet Mapping -->
+    <servlet>
+        <servlet-name>EmergencyServlet</servlet-name>
+        <servlet-class>com.garbhsakhi.servlets.EmergencyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EmergencyServlet</servlet-name>
+        <url-pattern>/emergency</url-pattern>
+    </servlet-mapping>
 
 </web-app>
