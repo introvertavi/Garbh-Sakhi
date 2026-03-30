@@ -560,7 +560,7 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
 
 /* --- Section Spacing --- */
 .section-title {
-  margin-top: 30px; /* This creates the separation */
+  margin-top: 30px; 
   margin-bottom: 12px;
 }
 
@@ -575,16 +575,17 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
   gap: 16px;
   padding: 16px;
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid #f0f0f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
   margin-bottom: 16px;
   transition: all 0.3s ease-in-out;
+  border-left: 4px solid var(--appointment-border);
 }
 
 .appointment-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* --- Card Completing Animation --- */
@@ -596,26 +597,30 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
 /* --- Date Section --- */
 .appt-date {
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
-  background-color: #fce8f3; /* A soft pink background */
-  color: #c23e85;          /* A matching darker pink for text */
-  border-radius: 10px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #f5d0d0 0%, #fae7f0 100%);
+  color: #a52a8d;          /* A deeper pink for text */
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .appt-date .day {
-  font-size: 24px;
+  font-size: 28px;
   line-height: 1;
+  font-weight: 700;
 }
 
 .appt-date .month {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* --- Info Section --- */
@@ -628,6 +633,7 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
   color: #333;
   display: block;
   margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .info-line {
@@ -640,7 +646,7 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
 }
 
 .info-line i {
-  color: #c23e85;
+  color: #a52a8d;
 }
 
 /* --- Actions Section --- */
@@ -661,13 +667,14 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
 .time-and-status .time {
   color: #555;
   font-weight: 500;
-  background-color: #f5f5f5;
-  padding: 4px 8px;
-  border-radius: 6px;
+  background-color: rgba(245, 245, 245, 0.9);
+  padding: 4px 12px;
+  border-radius: 8px;
   font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  border-left: 3px solid var(--appointment-border);
 }
 
 .action-buttons {
@@ -678,24 +685,31 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
 
 /* --- Status Badge --- */
 .status-badge {
-    padding: 3px 10px;
-    border-radius: 12px;
+    padding: 4px 12px;
+    border-radius: 14px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     color: white;
+    font-weight: 600;
 }
-.status-badge.upcoming { background-color: #3b82f6; }
-.status-badge.completed { background-color: #22c55e; }
-.status-badge.missed { background-color: #ef4444; }
+.status-badge.upcoming { 
+  background: linear-gradient(135deg, #b74298 0%, #d166d9 100%); 
+}
+.status-badge.completed { 
+  background: linear-gradient(135deg, #22c55e 0%, #5cd18b 100%); 
+}
+.status-badge.missed { 
+  background: linear-gradient(135deg, #e5484d 0%, #f66c7a 100%); 
+}
 
 /* --- Custom Checkbox for Completion --- */
 .complete-checkbox {
   position: relative;
   display: block;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
 }
 .complete-checkbox input {
   position: absolute;
@@ -708,17 +722,18 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
   position: absolute;
   top: 0;
   left: 0;
-  height: 24px;
-  width: 24px;
-  background-color: #eee;
+  height: 26px;
+  width: 26px;
+  background-color: #f0f0f0;
   border-radius: 50%;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .complete-checkbox:hover .checkmark {
-  background-color: #ccc;
+  background-color: #e0e0e0;
 }
 .complete-checkbox input:checked ~ .checkmark {
-  background-color: #22c55e;
+  background-color: var(--completed-color);
 }
 .checkmark:after {
   content: "";
@@ -729,11 +744,100 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
   display: block;
 }
 .complete-checkbox .checkmark:after {
-  left: 9px;
+  left: 10px;
   top: 5px;
-  width: 5px;
-  height: 10px;
+  width: 6px;
+  height: 12px;
   border: solid white;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
+}
+
+/* --- Color Palette for Appointment Sections --- */
+:root {
+  --today-color: #f5d0d0;      /* Light pink for today */
+  --today-text: #c23e85;       /* Deeper pink for text */
+  --upcoming-color: #e6f7ff;   /* Soft blue for upcoming */
+  --upcoming-text: #1890ff;    /* Bright blue for text */
+  --missed-color: #fff0f0;     /* Light red for missed */
+  --missed-text: #cf1322;      /* Deep red for text */
+}
+
+/* --- Section Header Styling --- */
+.section-title {
+  margin-top: 30px;
+  margin-bottom: 12px;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, var(--today-color), transparent);
+  border-left: 4px solid var(--today-color);
+  border-radius: 0 8px 8px 0;
+}
+
+.missed-title {
+  background: linear-gradient(90deg, var(--missed-color), transparent);
+  border-left: 4px solid var(--missed-color);
+  color: var(--missed-text);
+}
+
+.upcoming-title {
+  background: linear-gradient(90deg, var(--upcoming-color), transparent);
+  border-left: 4px solid var(--upcoming-color);
+  color: var(--upcoming-text);
+}
+
+/* --- Updated Appointment Item Colors --- */
+.appointment-item {
+  border-left: 4px solid var(--appointment-border);
+}
+
+/* For today's appointments */
+.appointment-item.today {
+  border-left-color: var(--today-color);
+  border-left: 4px solid var(--today-color);
+}
+
+/* For upcoming appointments */
+.appointment-item.upcoming {
+  border-left-color: var(--upcoming-color);
+  border-left: 4px solid var(--upcoming-color);
+}
+
+/* For missed appointments */
+.appointment-item.missed {
+  border-left-color: var(--missed-color);
+  border-left: 4px solid var(--missed-color);
+}
+
+/* --- Date Section Color Enhancements --- */
+.appt-date {
+  background: linear-gradient(135deg, var(--today-color) 0%, #fff 100%);
+  color: var(--today-text);
+}
+
+.appt-date.today {
+  background: linear-gradient(135deg, var(--today-color) 0%, #fff 100%);
+  color: var(--today-text);
+}
+
+.appt-date.upcoming {
+  background: linear-gradient(135deg, var(--upcoming-color) 0%, #fff 100%);
+  color: var(--upcoming-text);
+}
+
+.appt-date.missed {
+  background: linear-gradient(135deg, var(--missed-color) 0%, #fff 100%);
+  color: var(--missed-text);
+}
+
+/* --- Status Badges with Improved Gradients --- */
+.status-badge.upcoming {
+  background: linear-gradient(135deg, var(--upcoming-color) 0%, var(--upcoming-text) 100%);
+}
+
+.status-badge.missed {
+  background: linear-gradient(135deg, var(--missed-color) 0%, var(--missed-text) 100%);
+}
+
+.status-badge.today {
+  background: linear-gradient(135deg, var(--today-color) 0%, var(--today-text) 100%);
 }
