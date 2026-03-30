@@ -5,15 +5,17 @@ public class EmergencyContact {
     private int id;
     private int userId;
     private String label;
+    private String relationship;
     private String name;
     private String phone;
 
     public EmergencyContact() {}
 
-    public EmergencyContact(int id, int userId, String label, String name, String phone) {
+    public EmergencyContact(int id, int userId, String label, String relationship, String name, String phone) {
         this.id = id;
         this.userId = userId;
         this.label = label;
+        this.relationship = relationship;
         this.name = name;
         this.phone = phone;
     }
@@ -26,6 +28,9 @@ public class EmergencyContact {
 
     public String getLabel() { return label; }
     public void setLabel(String label) { this.label = label; }
+
+    public String getRelationship() { return relationship; }
+    public void setRelationship(String relationship) { this.relationship = relationship; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

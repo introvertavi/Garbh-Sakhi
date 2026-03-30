@@ -28,6 +28,7 @@ public class EmergencyDAO {
                 c.setId(rs.getInt("id"));
                 c.setUserId(rs.getInt("user_id"));
                 c.setLabel(rs.getString("label"));
+                c.setRelationship(rs.getString("relationship"));
                 c.setName(rs.getString("name"));
                 c.setPhone(rs.getString("phone"));
                 list.add(c);
@@ -43,13 +44,14 @@ public class EmergencyDAO {
     // ADD CONTACT
     public boolean addContact(EmergencyContact c) {
         try {
-            String sql = "INSERT INTO emergency_contacts(user_id,label,name,phone) VALUES(?,?,?,?)";
+            String sql = "INSERT INTO emergency_contacts(user_id,label,relationship,name,phone) VALUES(?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setInt(1, c.getUserId());
             ps.setString(2, c.getLabel());
-            ps.setString(3, c.getName());
-            ps.setString(4, c.getPhone());
+            ps.setString(3, c.getRelationship());
+            ps.setString(4, c.getName());
+            ps.setString(5, c.getPhone());
 
             int rows = ps.executeUpdate();
             System.out.println("ROWS INSERTED: " + rows);

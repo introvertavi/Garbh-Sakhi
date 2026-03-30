@@ -87,14 +87,16 @@ public class EmergencyServlet extends HttpServlet {
             if ("add".equals(action)) {
 
                 String label = request.getParameter("label");
+                String relationship = request.getParameter("relationship");
                 String name = request.getParameter("name");
                 String phone = request.getParameter("phone");
 
-                System.out.println("ADDING: " + label + " | " + name + " | " + phone);
+                System.out.println("ADDING: " + label + " | " + relationship + " | " + name + " | " + phone);
 
                 EmergencyContact c = new EmergencyContact();
                 c.setUserId(userId);
                 c.setLabel(label);
+                c.setRelationship(relationship);
                 c.setName(name);
                 c.setPhone(phone);
 
