@@ -1,4 +1,5 @@
 # Garbh Sakhi – Pregnancy Wellness App
+# 🤰 Garbh Sakhi – AI-Enabled Pregnancy Wellness & Appointment Tracker
 
 Garbh Sakhi is a full-stack web application designed to assist pregnant women in managing their health, appointments, medications, and wellness throughout pregnancy.
 
@@ -141,8 +142,6 @@ mvn clean install
 
 This will generate a .war file in the target/ directory.
 
----
-
 🚀 Step 5: Deploy on Tomcat
 Copy the WAR file:
 target/garbh-sakhi.war
@@ -167,9 +166,6 @@ Password hashing
 Session-based authentication
 Input validation
 File type & size validation for uploads
-
----
-
 📸 Screenshots
 
 (Add screenshots here: Dashboard, Appointments, Medicines, Lab Reports)
@@ -197,3 +193,15 @@ Avinash Vishwakarma
 
 Pregnancy requires continuous care, tracking, and support.
 Garbh Sakhi aims to simplify this journey by providing a smart, reliable, and easy-to-use digital companion.
+
+
+---
+
+If you stop here, it’s already solid.
+
+But if you want this to actually impress recruiters:
+- Add **real screenshots**
+- Add a **demo video link**
+- Push it cleanly on GitHub with proper commits
+
+If you want, I’ll help you turn this into a **top-tier portfolio project (not just assignment level)**.
