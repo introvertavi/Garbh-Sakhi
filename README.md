@@ -192,15 +192,3 @@ Avinash Vishwakarma
 
 Pregnancy requires continuous care, tracking, and support.
 Garbh Sakhi aims to simplify this journey by providing a smart, reliable, and easy-to-use digital companion.
-
-
----
-
-If you stop here, it’s already solid.
-
-But if you want this to actually impress recruiters:
-- Add **real screenshots**
-- Add a **demo video link**
-- Push it cleanly on GitHub with proper commits
-
-If you want, I’ll help you turn this into a **top-tier portfolio project (not just assignment level)**.
