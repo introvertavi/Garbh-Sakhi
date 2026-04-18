@@ -1,7 +1,6 @@
 package com.garbhsakhi.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.List;
 
 import com.garbhsakhi.dao.AppointmentDAO;
@@ -30,7 +29,7 @@ public class DashboardServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
@@ -82,39 +81,25 @@ public class DashboardServlet extends HttpServlet {
             if (nextToday != null) {
             totalNotifications += 1;
             }
-            // Get DB connection
-            Connection conn = DatabaseConnection.getConnection();
+            try (var conn = DatabaseConnection.getConnection()) {
+                LabReportDAO labDao = new LabReportDAO(conn);
+                List<LabReport> recentReports = labDao.getReportsByUser(user.getId());
 
-LabReportDAO labDao = new LabReportDAO(conn);
+                if (recentReports != null && recentReports.size() > 3) {
+                    recentReports = recentReports.subList(0, 3);
+                }
 
-List<LabReport> recentReports = labDao.getReportsByUser(user.getId());
-
-// 🔥 DEBUG START
-System.out.println("===== DASHBOARD DEBUG =====");
-System.out.println("User ID: " + user.getId());
-System.out.println("Logged in user ID: " + user.getId());
-System.out.println("Reports fetched: " + recentReports.size());
-
-for (LabReport r : recentReports) {
-    System.out.println("Report Title: " + r.getTitle());
-}
-System.out.println("===========================");
-// 🔥 DEBUG END
-
-if (recentReports != null && recentReports.size() > 3) {
-    recentReports = recentReports.subList(0, 3);
-}
-
-request.setAttribute("recentReports", recentReports);
+                request.setAttribute("recentReports", recentReports);
+            }
             request.setAttribute("totalNotifications", totalNotifications);
+            request.setAttribute("pageTitle", "Dashboard");
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("dashboardError",
                     "Unable to load dashboard data.");
         }
 
-        // ✅ KEEP JSP LOCATION
-        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp")
+        request.getRequestDispatcher("/dashboard.jsp")
                 .forward(request, response);
     }
 }

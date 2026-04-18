@@ -145,7 +145,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Save Changes</button>
-                    <a href="dashboard.jsp" class="btn-secondary">Cancel</a>
+                    <a href="<%= request.getContextPath() %>/dashboard" class="btn-secondary">Cancel</a>
                 </div>
             </form>
         </div>

@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
             if (!user.isProfileComplete()) {
                 response.sendRedirect(request.getContextPath() + "/onboarding.jsp");
             } else {
-                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/dashboard");
             }
 
         } catch (Exception e) {

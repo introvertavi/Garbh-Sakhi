@@ -12,7 +12,7 @@
   </div>
 
   <ul class="gs-side-menu">
-    <li><a href="dashboard.jsp"   class="<%= sidebarPageTitle.equals("Dashboard")   ? "active" : "" %>"><i class="ri-home-5-line"></i>Dashboard</a></li>
+    <li><a href="<%= request.getContextPath() %>/dashboard"   class="<%= sidebarPageTitle.equals("Dashboard")   ? "active" : "" %>"><i class="ri-home-5-line"></i>Dashboard</a></li>
     <li><a href="appointments.jsp" class="<%= sidebarPageTitle.equals("Appointments") ? "active" : "" %>"><i class="ri-calendar-check-line"></i>Appointments</a></li>
     <li><a href="medicines.jsp"    class="<%= sidebarPageTitle.equals("Medicines")    ? "active" : "" %>"><i class="ri-capsule-line"></i>Medicines</a></li>
     <li><a href="profile.jsp"      class="<%= sidebarPageTitle.equals("Profile")      ? "active" : "" %>"><i class="ri-user-line"></i>Profile</a></li>

@@ -43,7 +43,7 @@
       <div class="gs-card settings-card">
         <h3>Account</h3>
 
-        <a href="<%= request.getContextPath() %>/change-password.jsp" class="link">
+        <a href="<%= request.getContextPath() %>/change-password" class="link">
           Change Password
         </a>
 

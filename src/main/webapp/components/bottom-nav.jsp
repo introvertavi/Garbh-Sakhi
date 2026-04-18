@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
 
 <nav class="bottom-nav">
-  <a href="dashboard.jsp" class="<%= request.getAttribute("pageTitle").equals("Dashboard") ? "active" : "" %>">
+  <a href="<%= request.getContextPath() %>/dashboard" class="<%= request.getAttribute("pageTitle").equals("Dashboard") ? "active" : "" %>">
     <i class="ri-home-5-line"></i>
     <span>Home</span>
   </a>

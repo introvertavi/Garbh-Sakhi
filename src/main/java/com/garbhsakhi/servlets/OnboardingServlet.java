@@ -43,7 +43,9 @@ public class OnboardingServlet extends HttpServlet {
             UPDATE users
             SET
                 full_name = ?,
+                name = ?,
                 age = ?,
+                phone = ?,
                 due_date = ?,
                 doctor_name = ?,
                 hospital_name = ?,
@@ -56,18 +58,22 @@ public class OnboardingServlet extends HttpServlet {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, fullName);
-            ps.setInt(2, age);
-            ps.setDate(3, dueDate);
-            ps.setString(4, doctor);
-            ps.setString(5, hospital);
-            ps.setString(6, complications);
-            ps.setInt(7, userId);
+            ps.setString(2, username);
+            ps.setInt(3, age);
+            ps.setString(4, phone);
+            ps.setDate(5, dueDate);
+            ps.setString(6, doctor);
+            ps.setString(7, hospital);
+            ps.setString(8, complications);
+            ps.setInt(9, userId);
 
             ps.executeUpdate();
 
             // 🔥 UPDATE SESSION USER (ONCE, CORRECTLY)
             user.setFullName(fullName);
+            user.setName(username);
             user.setAge(age);
+            user.setPhone(phone);
             user.setDueDate(dueDate.toString());
             user.setDoctorName(doctor);
             user.setHospitalName(hospital);
@@ -77,7 +83,7 @@ public class OnboardingServlet extends HttpServlet {
             session.setAttribute("user", user);
 
             // ✅ REDIRECT
-            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/dashboard");
 
         } catch (Exception e) {
             e.printStackTrace();

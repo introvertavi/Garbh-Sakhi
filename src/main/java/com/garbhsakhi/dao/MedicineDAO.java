@@ -373,7 +373,69 @@ public int getPendingDoseCount(int userId) {
 }
 
 public int getMissedDoseCount(int id) {
-	
-	throw new UnsupportedOperationException("Unimplemented method 'getMissedDoseCount'");
+    int count = 0;
+
+    String sql = """
+        SELECT time_of_day, taken_morning, taken_afternoon, taken_night, last_taken_date
+        FROM medicines
+        WHERE user_id = ?
+          AND status = 'ACTIVE'
+          AND (start_date IS NULL OR start_date <= CURRENT_DATE - INTERVAL '1 day')
+          AND (end_date IS NULL OR end_date >= CURRENT_DATE - INTERVAL '1 day')
+    """;
+
+    try (Connection con = DatabaseConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+        Date yesterday = new Date(System.currentTimeMillis() - (24L * 60 * 60 * 1000));
+
+        while (rs.next()) {
+            String time = rs.getString("time_of_day");
+            Date lastTaken = rs.getDate("last_taken_date");
+
+            if (time == null) {
+                continue;
+            }
+
+            boolean tookYesterday = lastTaken != null && lastTaken.equals(yesterday);
+
+            if (!tookYesterday) {
+                count += getScheduledDoseCount(time);
+                continue;
+            }
+
+            if ("Morning".equalsIgnoreCase(time) && !rs.getBoolean("taken_morning")) {
+                count++;
+            } else if ("Afternoon".equalsIgnoreCase(time) && !rs.getBoolean("taken_afternoon")) {
+                count++;
+            } else if ("Night".equalsIgnoreCase(time) && !rs.getBoolean("taken_night")) {
+                count++;
+            } else if ("3 Times".equalsIgnoreCase(time)) {
+                if (!rs.getBoolean("taken_morning")) count++;
+                if (!rs.getBoolean("taken_afternoon")) count++;
+                if (!rs.getBoolean("taken_night")) count++;
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return count;
+}
+
+private int getScheduledDoseCount(String timeOfDay) {
+    if ("3 Times".equalsIgnoreCase(timeOfDay)) {
+        return 3;
+    }
+    if ("Morning".equalsIgnoreCase(timeOfDay)
+            || "Afternoon".equalsIgnoreCase(timeOfDay)
+            || "Night".equalsIgnoreCase(timeOfDay)) {
+        return 1;
+    }
+    return 0;
 }
 }

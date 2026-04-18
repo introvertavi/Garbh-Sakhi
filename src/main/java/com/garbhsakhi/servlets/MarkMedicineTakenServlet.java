@@ -28,6 +28,6 @@ public class MarkMedicineTakenServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        res.sendRedirect(req.getContextPath() + "/dashboard.jsp");
+        res.sendRedirect(req.getContextPath() + "/dashboard");
     }
 }

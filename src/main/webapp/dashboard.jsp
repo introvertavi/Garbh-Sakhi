@@ -224,9 +224,11 @@ Integer missed = (Integer) request.getAttribute("missedCount");
      style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
 
 <!-- 📊 STATS -->
+
 <div class="gs-card card-accent accent-stats dashboard-stats"
      style="grid-column:1/-1;padding:22px;">
 
+<h2 style="margin-bottom:16px;">📅 Appointments</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
 
 <div class="gs-card" style="text-align:center;">
@@ -245,6 +247,7 @@ Integer missed = (Integer) request.getAttribute("missedCount");
 </div>
 
 </div>
+
 </div>
 
 <!-- 💡 DAILY TIP -->
@@ -318,7 +321,7 @@ if (preview != null) {
 
 <div class="gs-card card-accent accent-medicine" style="padding:20px;">
 
-<h4 class="medicine-title">💊 Today’s Medicines</h4>
+<h4 class="medicine-title">💊 Today's Medicines</h4>
 
 <%
 int totalMeds = morningMeds.size() + afternoonMeds.size() + nightMeds.size();
@@ -570,7 +573,7 @@ if (user != null) {
 
 <% if (reports != null && !reports.isEmpty()) { %>
 
-    <% for (LabReport r : reports) { 
+    <% for (LabReport r : reports) {
         String file = r.getFilePath() != null ? r.getFilePath() : "";
         boolean isPdf = file.toLowerCase().endsWith(".pdf");
     %>
@@ -596,7 +599,8 @@ if (user != null) {
                 View
             </a>
 
-            <button class="btn-delete"onclick="openDeleteModal(<%= r.getId() %>)">
+            <!-- FIX: added space before onclick -->
+            <button class="btn-delete" onclick="openDeleteModal(<%= r.getId() %>)">
                 Delete
             </button>
 
@@ -670,6 +674,10 @@ function closeModal() {
     document.getElementById("deleteModal").style.display = "none";
 }
 
+function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+
 function confirmDelete() {
     document.getElementById("deleteReportId").value = selectedReportId;
     document.getElementById("deleteForm").submit();
@@ -678,7 +686,7 @@ function confirmDelete() {
 window.onclick = function(e) {
     const modal = document.getElementById("deleteModal");
     if (e.target === modal) {
-        closeModal();
+        closeDeleteModal();
     }
 }
 </script>
@@ -694,8 +702,9 @@ window.onclick = function(e) {
         <p>Are you sure you want to delete this report?</p>
 
         <div class="modal-actions">
-            <button onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
-            <button class="btn delete-btn" onclick="confirmDelete()">Delete</button>
+            <!-- FIX: added type="button" to both buttons -->
+            <button type="button" onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
+            <button type="button" class="btn delete-btn" onclick="confirmDelete()">Delete</button>
         </div>
     </div>
 </div>

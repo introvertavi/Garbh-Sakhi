@@ -11,7 +11,7 @@
     }
 
     if (user.isProfileComplete()) {
-        response.sendRedirect("dashboard.jsp");
+        response.sendRedirect(request.getContextPath() + "/dashboard");
         return;
     }
 %>
