@@ -116,9 +116,9 @@ Make sure you have the following installed:
 
 ### 📥 Step 1: Clone the Repository
 
-```bash
 git clone https://github.com/your-username/garbh-sakhi.git
 cd garbh-sakhi
+
 🛢️ Step 2: Setup Database (PostgreSQL)
 Create database:
 CREATE DATABASE garbh_sakhi;
@@ -127,7 +127,7 @@ CREATE USER garbh_sakhi_user WITH PASSWORD 'your_password';
 GRANT ALL PRIVILEGES ON DATABASE garbh_sakhi TO garbh_sakhi_user;
 Create required tables (users, appointments, medicines, lab_reports, etc.)
 
-👉 Use tools like pgAdmin or DBeaver to run SQL scripts.
+Use tools like pgAdmin or DBeaver to run SQL scripts.
 
 🔐 Step 3: Configure Database Connection
 
@@ -136,6 +136,7 @@ Update your database configuration in the project:
 DB_URL=jdbc:postgresql://localhost:5432/garbh_sakhi
 DB_USER=garbh_sakhi_user
 DB_PASSWORD=your_password
+
 🏗️ Step 4: Build the Project
 mvn clean install
 
@@ -147,6 +148,7 @@ target/garbh-sakhi.war
 Paste it into:
 <TOMCAT_HOME>/webapps/
 Start Tomcat server
+
 🌐 Step 6: Run the Application
 
 Open your browser and go to:
@@ -167,7 +169,14 @@ Input validation
 File type & size validation for uploads
 📸 Screenshots
 
-(Add screenshots here: Dashboard, Appointments, Medicines, Lab Reports)
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/eb506afc-7c1f-4ba0-9e0f-1466962b4899" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/a39a80ec-2f8c-4bdd-8699-631f48c67e03" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/bf6a127f-35bb-4ab5-995d-acf7cc2d295a" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/0f7176d0-720e-4427-b25b-04d936fe3ff7" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/76fd6f71-3ee7-4dc1-9b99-6ba9945c251e" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/55264976-69d7-4ee5-b4e6-1dd53a4ad9ab" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/5ccc38c2-b436-4e7e-ad8f-cbfdecba973c" />
+
 
 🧠 Future Enhancements
 AI chatbot for pregnancy guidance
