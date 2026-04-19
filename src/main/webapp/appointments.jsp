@@ -65,6 +65,7 @@ request.setAttribute("pageTitle", "Appointments");
 List<Appointment> today    = (List<Appointment>) request.getAttribute("todayAppointments");
 List<Appointment> upcoming = (List<Appointment>) request.getAttribute("upcomingAppointments");
 List<Appointment> missed   = (List<Appointment>) request.getAttribute("missedAppointments");
+List<Appointment> completed = (List<Appointment>) request.getAttribute("completedAppointments");
 %>
 
 <h3 style="margin-bottom:12px;">Today's Appointments</h3>
@@ -89,6 +90,15 @@ List<Appointment> missed   = (List<Appointment>) request.getAttribute("missedApp
 <% if (missed == null || missed.isEmpty()) { %>
   <p class="muted">No missed appointments.</p>
 <% } else { for (Appointment a : missed) {
+    request.setAttribute("appointment", a);
+%>
+  <jsp:include page="appointment-card.jsp" />
+<% }} %>
+
+<h3 class="section-title">Completed Appointments</h3>
+<% if (completed == null || completed.isEmpty()) { %>
+  <p class="muted">No completed appointments.</p>
+<% } else { for (Appointment a : completed) {
     request.setAttribute("appointment", a);
 %>
   <jsp:include page="appointment-card.jsp" />

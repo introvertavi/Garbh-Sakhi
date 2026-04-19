@@ -41,12 +41,16 @@ public class AppointmentListServlet extends HttpServlet {
         List<Appointment> today = new ArrayList<>();
         List<Appointment> upcoming = new ArrayList<>();
         List<Appointment> missed = new ArrayList<>();
+        List<Appointment> completed = new ArrayList<>();
 
         LocalDate now = LocalDate.now();
 
         for (Appointment a : all) {
 
-            if ("MISSED".equalsIgnoreCase(a.getStatus())) {
+            if ("COMPLETED".equalsIgnoreCase(a.getStatus())) {
+                completed.add(a);
+            }
+            else if ("MISSED".equalsIgnoreCase(a.getStatus())) {
                 missed.add(a);
             }
             else if (a.getAppointmentDate().equals(now)) {
@@ -60,6 +64,7 @@ public class AppointmentListServlet extends HttpServlet {
         request.setAttribute("todayAppointments", today);
         request.setAttribute("upcomingAppointments", upcoming);
         request.setAttribute("missedAppointments", missed);
+        request.setAttribute("completedAppointments", completed);
 
         request.getRequestDispatcher("appointments.jsp")
                .forward(request, response);

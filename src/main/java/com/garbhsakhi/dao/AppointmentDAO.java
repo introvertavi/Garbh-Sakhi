@@ -146,14 +146,19 @@ public class AppointmentDAO {
     }
 
    // ✅ MARK APPOINTMENT AS COMPLETED
-public static void markCompleted(int id){
+public static void markCompleted(int id, int userId){
 
-    String sql = "UPDATE appointments SET status='COMPLETED' WHERE id=?";
+    String sql = """
+        UPDATE appointments
+        SET status='COMPLETED'
+        WHERE id=? AND user_id=?
+    """;
 
     try(Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)){
 
         ps.setInt(1,id);
+        ps.setInt(2,userId);
         ps.executeUpdate();
 
     }catch(Exception e){
