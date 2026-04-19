@@ -144,7 +144,8 @@ if (msg != null) {
           </div>
         </div>
 
-        <!-- Existing Contacts List -->
+      <!-- Existing Contacts List -->
+      <div style="height: 8px;"></div>
         <% if (contacts != null && !contacts.isEmpty()) { %>
           <% for (EmergencyContact c : contacts) { %>
             <div class="gs-card emergency-card personal-contact-card">
@@ -156,7 +157,7 @@ if (msg != null) {
                   <p>Phone: <%= c.getPhone() %></p>
                 </div>
               </div>
-              
+          
               <div class="contact-actions">
                 <a href="tel:<%= c.getPhone() %>" class="btn-call">Call</a>
                 
@@ -371,7 +372,9 @@ if (msg != null) {
 .btn-call {
   background: linear-gradient(135deg, #34d399, #22c55e);
   color: #fff;
-  padding: 12px 20px;
+  padding: 0 20px;
+  height: 44px;
+  line-height: 44px;
   border-radius: 12px;
   font-weight: 600;
   text-decoration: none;
@@ -379,6 +382,8 @@ if (msg != null) {
   white-space: nowrap;
   flex-shrink: 0;
   transition: transform 0.15s, box-shadow 0.15s;
+  display: inline-flex;
+  align-items: center;
 }
 .btn-call:hover {
   transform: translateY(-1px);
@@ -390,6 +395,15 @@ if (msg != null) {
   gap: 8px;
   align-items: center;
   flex-shrink: 0;
+  line-height: 0;
+}
+
+.contact-actions form {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
 }
 
 .btn-delete-sm {
@@ -450,6 +464,9 @@ if (msg != null) {
   background-repeat: no-repeat;
   background-position: right 12px center;
   cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .btn-save {
