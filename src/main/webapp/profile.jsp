@@ -24,6 +24,20 @@
         } catch (Exception ignore) {}
     }
     request.setAttribute("pageTitle", "Profile");
+
+    String avatarUrl = request.getContextPath() + "/assets/garbh_sakhi_logo.png";
+    if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
+        String storedAvatarPath = user.getAvatarPath().trim();
+        if (storedAvatarPath.startsWith("http://")
+                || storedAvatarPath.startsWith("https://")
+                || storedAvatarPath.startsWith(request.getContextPath() + "/")) {
+            avatarUrl = storedAvatarPath;
+        } else if (storedAvatarPath.startsWith("/")) {
+            avatarUrl = request.getContextPath() + storedAvatarPath;
+        } else {
+            avatarUrl = request.getContextPath() + "/" + storedAvatarPath;
+        }
+    }
 %>
 
 <!DOCTYPE html>
@@ -55,9 +69,8 @@
         <div class="gs-card profile-summary-card">
             <div class="avatar-wrapper">
                 <img id="avatarPreview" class="avatar"
-                     src="<%= (user.getAvatarPath()!=null && !user.getAvatarPath().isEmpty())
-                           ? user.getAvatarPath()
-                           : (request.getContextPath()+"/assets/garbh_sakhi_logo.png") %>"
+                     src="<%= avatarUrl %>"
+                     onerror="this.onerror=null;this.src='<%= request.getContextPath() %>/assets/garbh_sakhi_logo.png';"
                      alt="Profile Avatar">
                 <button type="button" class="change-avatar-btn" id="changeAvatarBtn" title="Change profile picture">
                     <i class="bi bi-camera-fill"></i>

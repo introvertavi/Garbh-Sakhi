@@ -11,6 +11,16 @@ import com.garbhsakhi.model.Medicine;
 
 public class MedicineDAO {
 
+    private void applyDailyDoseState(Medicine medicine) {
+        Date today = new Date(System.currentTimeMillis());
+
+        if (medicine.getLastTakenDate() == null || !medicine.getLastTakenDate().equals(today)) {
+            medicine.setTakenMorning(false);
+            medicine.setTakenAfternoon(false);
+            medicine.setTakenNight(false);
+        }
+    }
+
     // ===== ADD MEDICINE =====
     public boolean addMedicine(Medicine med) {
 
@@ -76,14 +86,7 @@ public class MedicineDAO {
                 // ✅ NEW FIELD
                 m.setLastTakenDate(rs.getDate("last_taken_date"));
 
-                // ✅ DAILY RESET LOGIC
-                Date today = new Date(System.currentTimeMillis());
-
-                if (m.getLastTakenDate() == null || !m.getLastTakenDate().equals(today)) {
-                    m.setTakenMorning(false);
-                    m.setTakenAfternoon(false);
-                    m.setTakenNight(false);
-                }
+                applyDailyDoseState(m);
 
                 // ✅ ALWAYS ADD
                 list.add(m);
@@ -148,6 +151,8 @@ public class MedicineDAO {
 
                 // ✅ ADD HERE ALSO
                 m.setLastTakenDate(rs.getDate("last_taken_date"));
+
+                applyDailyDoseState(m);
 
                 return m;
             }
@@ -223,6 +228,8 @@ public class MedicineDAO {
 
                 m.setLastTakenDate(rs.getDate("last_taken_date"));
 
+                applyDailyDoseState(m);
+
                 list.add(m);
             }
 
@@ -253,13 +260,44 @@ public class MedicineDAO {
                 break;
         }
 
-        String sql = "UPDATE medicines SET " + column + " = NOT " + column +
-                     ", last_taken_date = CURRENT_DATE WHERE id = ?";
+        if (column.isEmpty()) {
+            return;
+        }
+
+        String sql = """
+            UPDATE medicines
+            SET taken_morning = CASE
+                    WHEN last_taken_date = CURRENT_DATE THEN
+                        CASE WHEN ? = 'taken_morning' THEN NOT taken_morning ELSE taken_morning END
+                    ELSE
+                        CASE WHEN ? = 'taken_morning' THEN TRUE ELSE FALSE END
+                END,
+                taken_afternoon = CASE
+                    WHEN last_taken_date = CURRENT_DATE THEN
+                        CASE WHEN ? = 'taken_afternoon' THEN NOT taken_afternoon ELSE taken_afternoon END
+                    ELSE
+                        CASE WHEN ? = 'taken_afternoon' THEN TRUE ELSE FALSE END
+                END,
+                taken_night = CASE
+                    WHEN last_taken_date = CURRENT_DATE THEN
+                        CASE WHEN ? = 'taken_night' THEN NOT taken_night ELSE taken_night END
+                    ELSE
+                        CASE WHEN ? = 'taken_night' THEN TRUE ELSE FALSE END
+                END,
+                last_taken_date = CURRENT_DATE
+            WHERE id = ?
+        """;
 
         try(Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, medicineId);
+            ps.setString(1, column);
+            ps.setString(2, column);
+            ps.setString(3, column);
+            ps.setString(4, column);
+            ps.setString(5, column);
+            ps.setString(6, column);
+            ps.setInt(7, medicineId);
             ps.executeUpdate();
 
         } catch(Exception e){
