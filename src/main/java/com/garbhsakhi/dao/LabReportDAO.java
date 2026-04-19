@@ -46,18 +46,20 @@ public class LabReportDAO {
     }
 
     // ================= DELETE REPORT =================
-    public void deleteReport(int id) throws Exception {
-        String sql = "DELETE FROM lab_reports WHERE id=?";
+    public void deleteReport(int id, int userId) throws Exception {
+        String sql = "DELETE FROM lab_reports WHERE id=? AND user_id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
+        ps.setInt(2, userId);
         ps.executeUpdate();
     }
 
     // ================= GET FILE PATH (FIXED) =================
-    public String getFilePathById(int id) throws Exception {
-        String sql = "SELECT file_path FROM lab_reports WHERE id=?";
+    public String getFilePathById(int id, int userId) throws Exception {
+        String sql = "SELECT file_path FROM lab_reports WHERE id=? AND user_id=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
+        ps.setInt(2, userId);
 
         ResultSet rs = ps.executeQuery();
 

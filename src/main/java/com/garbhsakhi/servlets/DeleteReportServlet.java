@@ -1,5 +1,6 @@
 package com.garbhsakhi.servlets;
 
+import com.garbhsakhi.dao.DatabaseConnection;
 import com.garbhsakhi.dao.LabReportDAO;
 import com.garbhsakhi.model.User;
 
@@ -26,25 +27,23 @@ public class DeleteReportServlet extends HttpServlet {
 
             int reportId = Integer.parseInt(request.getParameter("reportId"));
 
-            Connection conn = (Connection) getServletContext().getAttribute("DBConnection");
-            LabReportDAO dao = new LabReportDAO(conn);
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                LabReportDAO dao = new LabReportDAO(conn);
 
-            // ✅ GET FILE PATH BEFORE DELETE
-            String filePath = dao.getFilePathById(reportId);
+                // Only allow deleting the logged-in user's reports.
+                String filePath = dao.getFilePathById(reportId, user.getId());
 
-            // ✅ DELETE FROM DB
-            dao.deleteReport(reportId);
+                dao.deleteReport(reportId, user.getId());
 
-            // ✅ DELETE FILE FROM SERVER
-            if (filePath != null) {
-                String fullPath = getServletContext().getRealPath("") + File.separator + filePath;
-                File file = new File(fullPath);
-                if (file.exists()) {
-                    file.delete();
+                if (filePath != null) {
+                    File file = new File("/home/avinash", filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
                 }
             }
 
-            response.sendRedirect("lab-reports");
+            response.sendRedirect(request.getContextPath() + "/lab-reports");
 
         } catch (Exception e) {
             e.printStackTrace();

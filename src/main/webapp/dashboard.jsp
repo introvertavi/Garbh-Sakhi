@@ -590,7 +590,7 @@ if (user != null) {
             </a>
 
             <!-- FIX: added space before onclick -->
-            <button class="btn-delete" onclick="openDeleteModal(<%= r.getId() %>)">
+            <button type="button" class="btn-delete" onclick="openDeleteModal(<%= r.getId() %>)">
                 Delete
             </button>
 
@@ -657,7 +657,14 @@ let selectedReportId = null;
 
 function openDeleteModal(id) {
     selectedReportId = id;
-    document.getElementById("deleteModal").style.display = "flex";
+    const modal = document.getElementById("deleteModal");
+    if (!modal) {
+        if (window.confirm("Delete this report permanently?")) {
+            confirmDelete();
+        }
+        return;
+    }
+    modal.style.display = "flex";
 }
 
 function closeModal() {
@@ -665,10 +672,12 @@ function closeModal() {
 }
 
 function closeDeleteModal() {
+    selectedReportId = null;
     document.getElementById("deleteModal").style.display = "none";
 }
 
 function confirmDelete() {
+    if (selectedReportId == null) return;
     document.getElementById("deleteReportId").value = selectedReportId;
     document.getElementById("deleteForm").submit();
 }
@@ -689,12 +698,12 @@ window.onclick = function(e) {
 <div id="deleteModal" class="modal-overlay">
     <div class="modal-box">
         <h3>Delete Report</h3>
-        <p>Are you sure you want to delete this report?</p>
+        <p>Are you sure you want to delete this report and its uploaded file?</p>
 
         <div class="modal-actions">
             <!-- FIX: added type="button" to both buttons -->
             <button type="button" onclick="closeDeleteModal()" class="btn-cancel">Cancel</button>
-            <button type="button" class="btn delete-btn" onclick="confirmDelete()">Delete</button>
+            <button type="button" class="btn delete-btn" onclick="confirmDelete()">Yes, Delete</button>
         </div>
     </div>
 </div>
