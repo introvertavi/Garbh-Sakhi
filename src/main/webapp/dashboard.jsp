@@ -308,35 +308,55 @@ for(com.garbhsakhi.model.Medicine m : nightMeds)
     if(m.isTakenNight()) takenCount++;
 
 int progress = totalMeds == 0 ? 0 : (takenCount * 100 / totalMeds);
-int missedMeds = totalMeds - takenCount;
+java.time.LocalTime nowTime = java.time.LocalTime.now();
+java.time.LocalTime morningDeadline = java.time.LocalTime.of(9, 0);
+java.time.LocalTime afternoonDeadline = java.time.LocalTime.of(14, 0);
+java.time.LocalTime nightDeadline = java.time.LocalTime.of(20, 0);
+
+int dueMeds = 0;
+int missedMeds = 0;
 
 com.garbhsakhi.model.Medicine nextMedicine = null;
 String nextTime = "";
 
-for(com.garbhsakhi.model.Medicine m : morningMeds){
-    if(!m.isTakenMorning()){
-        nextMedicine = m;
-        nextTime = "Morning";
-        break;
-    }
-}
-
-if(nextMedicine == null){
-    for(com.garbhsakhi.model.Medicine m : afternoonMeds){
-        if(!m.isTakenAfternoon()){
-            nextMedicine = m;
-            nextTime = "Afternoon";
-            break;
+for(com.garbhsakhi.model.Medicine m : morningMeds) {
+    if (!m.isTakenMorning()) {
+        if (!nowTime.isBefore(morningDeadline)) {
+            missedMeds++;
+        } else {
+            dueMeds++;
+            if (nextMedicine == null) {
+                nextMedicine = m;
+                nextTime = "Morning";
+            }
         }
     }
 }
 
-if(nextMedicine == null){
-    for(com.garbhsakhi.model.Medicine m : nightMeds){
-        if(!m.isTakenNight()){
-            nextMedicine = m;
-            nextTime = "Night";
-            break;
+for(com.garbhsakhi.model.Medicine m : afternoonMeds) {
+    if (!m.isTakenAfternoon()) {
+        if (!nowTime.isBefore(afternoonDeadline)) {
+            missedMeds++;
+        } else {
+            dueMeds++;
+            if (nextMedicine == null) {
+                nextMedicine = m;
+                nextTime = "Afternoon";
+            }
+        }
+    }
+}
+
+for(com.garbhsakhi.model.Medicine m : nightMeds) {
+    if (!m.isTakenNight()) {
+        if (!nowTime.isBefore(nightDeadline)) {
+            missedMeds++;
+        } else {
+            dueMeds++;
+            if (nextMedicine == null) {
+                nextMedicine = m;
+                nextTime = "Night";
+            }
         }
     }
 }

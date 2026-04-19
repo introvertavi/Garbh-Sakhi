@@ -7,12 +7,12 @@
     <span>Home</span>
   </a>
 
-  <a href="appointments.jsp" class="<%= request.getAttribute("pageTitle").equals("Appointments") ? "active" : "" %>">
+  <a href="<%= request.getContextPath() %>/appointments" class="<%= request.getAttribute("pageTitle").equals("Appointments") ? "active" : "" %>">
     <i class="ri-calendar-check-line"></i>
     <span>Appointments</span>
   </a>
 
-  <a href="medicines.jsp" class="<%= request.getAttribute("pageTitle").equals("Medicines") ? "active" : "" %>">
+  <a href="<%= request.getContextPath() %>/medicines" class="<%= request.getAttribute("pageTitle").equals("Medicines") ? "active" : "" %>">
     <i class="ri-capsule-line"></i>
     <span>Medicines</span>
   </a>

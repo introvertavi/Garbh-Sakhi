@@ -44,7 +44,7 @@ public class MedicineServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         String time = req.getParameter("time");
 
-        medicineDAO.markMedicineTaken(id, time);
+        medicineDAO.markMedicineTaken(id, user.getId(), time);
 
     res.sendRedirect(req.getContextPath() + "/medicines");
     return;
@@ -78,6 +78,20 @@ public class MedicineServlet extends HttpServlet {
         }
 
         User user = (User) session.getAttribute("user");
+
+        String action = req.getParameter("action");
+        if ("take".equals(action)) {
+            try {
+                int id = Integer.parseInt(req.getParameter("id"));
+                String time = req.getParameter("time");
+                medicineDAO.markMedicineTaken(id, user.getId(), time);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            res.sendRedirect(req.getContextPath() + "/medicines");
+            return;
+        }
         
         try {
             Medicine med = new Medicine();

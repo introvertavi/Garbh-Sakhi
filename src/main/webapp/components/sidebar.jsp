@@ -13,8 +13,8 @@
 
   <ul class="gs-side-menu">
     <li><a href="<%= request.getContextPath() %>/dashboard"   class="<%= sidebarPageTitle.equals("Dashboard")   ? "active" : "" %>"><i class="ri-home-5-line"></i>Dashboard</a></li>
-    <li><a href="appointments.jsp" class="<%= sidebarPageTitle.equals("Appointments") ? "active" : "" %>"><i class="ri-calendar-check-line"></i>Appointments</a></li>
-    <li><a href="medicines.jsp"    class="<%= sidebarPageTitle.equals("Medicines")    ? "active" : "" %>"><i class="ri-capsule-line"></i>Medicines</a></li>
+    <li><a href="<%= request.getContextPath() %>/appointments" class="<%= sidebarPageTitle.equals("Appointments") ? "active" : "" %>"><i class="ri-calendar-check-line"></i>Appointments</a></li>
+    <li><a href="<%= request.getContextPath() %>/medicines"    class="<%= sidebarPageTitle.equals("Medicines")    ? "active" : "" %>"><i class="ri-capsule-line"></i>Medicines</a></li>
     <li><a href="profile.jsp"      class="<%= sidebarPageTitle.equals("Profile")      ? "active" : "" %>"><i class="ri-user-line"></i>Profile</a></li>
     <li><a href="lab-reports"   class="<%= sidebarPageTitle.equals("Lab Reports")  ? "active" : "" %>"><i class="ri-file-list-3-line"></i>Lab Reports</a></li>
     <li><a href="emergency"    class="<%= sidebarPageTitle.equals("Emergency")    ? "active" : "" %>"><i class="ri-phone-line"></i>Emergency</a></li>

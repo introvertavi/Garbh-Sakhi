@@ -3,8 +3,9 @@ package com.garbhsakhi.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.garbhsakhi.model.Medicine;
@@ -12,7 +13,7 @@ import com.garbhsakhi.model.Medicine;
 public class MedicineDAO {
 
     private void applyDailyDoseState(Medicine medicine) {
-        Date today = new Date(System.currentTimeMillis());
+        Date today = Date.valueOf(LocalDate.now());
 
         if (medicine.getLastTakenDate() == null || !medicine.getLastTakenDate().equals(today)) {
             medicine.setTakenMorning(false);
@@ -241,7 +242,7 @@ public class MedicineDAO {
     }
 
     // ===== MARK MEDICINE TAKEN (TOGGLE + DATE) =====
-    public void markMedicineTaken(int medicineId, String timeOfDay) {
+    public void markMedicineTaken(int medicineId, int userId, String timeOfDay) {
 
         String column = "";
 
@@ -285,7 +286,7 @@ public class MedicineDAO {
                         CASE WHEN ? = 'taken_night' THEN TRUE ELSE FALSE END
                 END,
                 last_taken_date = CURRENT_DATE
-            WHERE id = ?
+            WHERE id = ? AND user_id = ?
         """;
 
         try(Connection con = DatabaseConnection.getConnection();
@@ -298,6 +299,7 @@ public class MedicineDAO {
             ps.setString(5, column);
             ps.setString(6, column);
             ps.setInt(7, medicineId);
+            ps.setInt(8, userId);
             ps.executeUpdate();
 
         } catch(Exception e){
@@ -370,7 +372,7 @@ public int getPendingDoseCount(int userId) {
 
         ResultSet rs = ps.executeQuery();
 
-        Date today = new Date(System.currentTimeMillis());
+        Date today = Date.valueOf(LocalDate.now());
 
         while (rs.next()) {
 
@@ -428,7 +430,7 @@ public int getMissedDoseCount(int id) {
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
-        Date yesterday = new Date(System.currentTimeMillis() - (24L * 60 * 60 * 1000));
+        Date yesterday = Date.valueOf(LocalDate.now().minusDays(1));
 
         while (rs.next()) {
             String time = rs.getString("time_of_day");

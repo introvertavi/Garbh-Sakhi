@@ -143,19 +143,34 @@ if (medicines == null) {
 
             <div class="dose-buttons">
                 <% if ("Morning".equalsIgnoreCase(timeOfDay) || "3 Times".equalsIgnoreCase(timeOfDay)) { %>
-                    <a href="medicines?action=take&id=<%=m.getId()%>&time=morning" class="dose-button <%= m.isTakenMorning() ? "taken" : "" %>">
-                        <i class="bi bi-sunrise"></i> Morning
-                    </a>
+                    <form method="post" action="<%= request.getContextPath() %>/medicine/taken" class="dose-form">
+                        <input type="hidden" name="id" value="<%= m.getId() %>">
+                        <input type="hidden" name="time" value="morning">
+                        <input type="hidden" name="redirect" value="medicines">
+                        <button type="submit" class="dose-button <%= m.isTakenMorning() ? "taken" : "" %>">
+                            <i class="bi bi-sunrise"></i> <%= m.isTakenMorning() ? "Taken" : "Mark Morning" %>
+                        </button>
+                    </form>
                 <% } %>
                 <% if ("Afternoon".equalsIgnoreCase(timeOfDay) || "3 Times".equalsIgnoreCase(timeOfDay)) { %>
-                     <a href="medicines?action=take&id=<%=m.getId()%>&time=afternoon" class="dose-button <%= m.isTakenAfternoon() ? "taken" : "" %>">
-                        <i class="bi bi-sun"></i> Afternoon
-                    </a>
+                     <form method="post" action="<%= request.getContextPath() %>/medicine/taken" class="dose-form">
+                        <input type="hidden" name="id" value="<%= m.getId() %>">
+                        <input type="hidden" name="time" value="afternoon">
+                        <input type="hidden" name="redirect" value="medicines">
+                        <button type="submit" class="dose-button <%= m.isTakenAfternoon() ? "taken" : "" %>">
+                            <i class="bi bi-sun"></i> <%= m.isTakenAfternoon() ? "Taken" : "Mark Afternoon" %>
+                        </button>
+                    </form>
                 <% } %>
                 <% if ("Night".equalsIgnoreCase(timeOfDay) || "3 Times".equalsIgnoreCase(timeOfDay)) { %>
-                    <a href="medicines?action=take&id=<%=m.getId()%>&time=night" class="dose-button <%= m.isTakenNight() ? "taken" : "" %>">
-                        <i class="bi bi-moon-stars"></i> Night
-                    </a>
+                    <form method="post" action="<%= request.getContextPath() %>/medicine/taken" class="dose-form">
+                        <input type="hidden" name="id" value="<%= m.getId() %>">
+                        <input type="hidden" name="time" value="night">
+                        <input type="hidden" name="redirect" value="medicines">
+                        <button type="submit" class="dose-button <%= m.isTakenNight() ? "taken" : "" %>">
+                            <i class="bi bi-moon-stars"></i> <%= m.isTakenNight() ? "Taken" : "Mark Night" %>
+                        </button>
+                    </form>
                 <% } %>
             </div>
         </div>

@@ -1363,7 +1363,11 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--primary); outlin
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
 }
+.dose-form {
+    margin: 0;
+}
 .dose-button {
+    width: 100%;
     text-decoration: none;
     padding: 10px;
     border-radius: 8px;
