@@ -193,6 +193,3 @@ Avinash Vishwakarma
 
 Pregnancy requires continuous care, tracking, and support.
 Garbh Sakhi aims to simplify this journey by providing a smart, reliable, and easy-to-use digital companion.
-
-
----
