@@ -540,52 +540,6 @@ should always be stored as environment variables or secure secrets.
 
 ---
 
-# 📸 Screenshots
-
-## Dashboard
-
-*Add dashboard screenshot here.*
-
-```text
-screenshots/dashboard.png
-```
-
-## Appointments
-
-*Add appointments screenshot here.*
-
-```text
-screenshots/appointments.png
-```
-
-## Medicines
-
-*Add medicines screenshot here.*
-
-```text
-screenshots/medicines.png
-```
-
-## Lab Reports
-
-*Add lab reports screenshot here.*
-
-```text
-screenshots/lab-reports.png
-```
-
-## Mobile View
-
-*Add mobile UI screenshot here.*
-
-```text
-screenshots/mobile.png
-```
-
-> Screenshots are highly recommended because Garbh Sakhi has a strong visual/UI component. They make the GitHub repository much more impressive at first glance.
-
----
-
 # 🧪 Core Modules
 
 | Module         | Purpose                                   |
