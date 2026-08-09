@@ -1,5 +1,5 @@
 # Garbh Sakhi – Pregnancy Wellness App
-# 🤰 Garbh Sakhi – AI-Enabled Pregnancy Wellness & Appointment Tracker
+# 🤰 Garbh Sakhi – Pregnancy Wellness & Appointment Tracker
 
 Garbh Sakhi is a full-stack web application designed to assist pregnant women in managing their health, appointments, medications, and wellness throughout pregnancy.
 
